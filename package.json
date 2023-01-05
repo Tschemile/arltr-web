@@ -1,6 +1,6 @@
 {
-  "name": "next-js-boilerplate",
-  "version": "3.6.0",
+  "name": "all-road-lead-to-rome",
+  "version": "1.0.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -24,11 +24,14 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.1",
     "axios": "^1.2.2",
+    "i18next": "^22.4.8",
     "next": "^13.1.1",
+    "next-i18next": "^13.0.3",
     "next-seo": "^5.15.0",
     "next-sitemap": "^3.1.43",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-i18next": "^12.1.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",
@@ -106,5 +109,5 @@
       "@semantic-release/github"
     ]
   },
-  "author": "Ixartz (https://github.com/ixartz)"
+  "author": "Min-Tri"
 }
