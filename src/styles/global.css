@@ -19,3 +19,12 @@ a:hover {
 .content ul {
   @apply my-6;
 }
+
+@layer components {
+    .icon-header {
+      @apply ml-4 border-2 rounded-full p-1 bg-[#f1f3f4] 
+    } 
+    .bg-main {
+      @apply bg-[#f1f2f6]
+    }
+}
