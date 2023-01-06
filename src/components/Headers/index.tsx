@@ -1,4 +1,5 @@
 import React from 'react';
+import IconButton from '../common/IconButton';
 
 import Input from '../common/Input';
 
@@ -30,7 +31,7 @@ export default function Headers() {
           width="550px"
         />
         <div>
-          <button className="icon-header">
+          <IconButton>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -43,8 +44,8 @@ export default function Headers() {
                 clipRule="evenodd"
               />
             </svg>
-          </button>
-          <button className="icon-header">
+          </IconButton>
+          <IconButton>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -57,8 +58,8 @@ export default function Headers() {
                 clipRule="evenodd"
               />
             </svg>
-          </button>
-          <button className="icon-header">
+          </IconButton>
+          <IconButton>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -71,8 +72,8 @@ export default function Headers() {
                 clipRule="evenodd"
               />
             </svg>
-          </button>
-          <button className="icon-header">
+          </IconButton>
+          <IconButton>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -85,7 +86,7 @@ export default function Headers() {
                 clipRule="evenodd"
               />
             </svg>
-          </button>
+          </IconButton>
         </div>
       </div>
     </div>
