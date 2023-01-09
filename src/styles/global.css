@@ -27,4 +27,7 @@ a:hover {
     .bg-main {
       @apply bg-[#f1f2f6]
     }
+    .nav-item {
+      @apply flex w-full items-center rounded p-1 hover:bg-gray-400
+    }
 }
