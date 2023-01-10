@@ -1,9 +1,9 @@
-import type { ReactNode } from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
 import React from 'react';
 
 interface InputProps {
   placeholder?: string;
-  onChange?: (value: string) => void;
+  onChange?: (value: ChangeEvent<HTMLInputElement>) => void;
   icons?: ReactNode;
   width?: string;
   type?: 'text' | 'password' | 'number';
@@ -32,7 +32,7 @@ export default function Input(props: InputProps) {
         style={{ width }}
         type={type}
         name={name}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange(e)}
       />
     </div>
   );

@@ -1,7 +1,8 @@
 import React from 'react';
-import IconButton from '../common/IconButton';
 
+import IconButton from '../common/IconButton';
 import Input from '../common/Input';
+import Tooltip from '../common/Tooltip';
 import ArrowDown from '../Icons/ArrowDown';
 import Bell from '../Icons/Bell';
 import Message from '../Icons/Message';
@@ -36,16 +37,22 @@ export default function Headers() {
         />
         <div>
           <IconButton>
-            <PlusIcon />
+            <Tooltip description="Create">
+              <PlusIcon />
+            </Tooltip>
           </IconButton>
           <IconButton>
-           <Message />
+            <Tooltip description="Messages">
+              <Message />
+            </Tooltip>
           </IconButton>
           <IconButton>
-            <Bell />
+            <Tooltip description="Notifications">
+              <Bell />
+            </Tooltip>
           </IconButton>
           <IconButton>
-           <ArrowDown />
+            <ArrowDown />
           </IconButton>
         </div>
       </div>
