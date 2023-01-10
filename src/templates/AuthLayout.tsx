@@ -13,7 +13,7 @@ export default function AuthLayout(props: AuthLayoutProps) {
           <div className="w-full bg-gradient-to-tr from-[#78a6fc] to-[#3576ef] py-4 px-12 text-center text-white lg:flex lg:h-full lg:flex-col lg:justify-center">
             <div>
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJc5GL_L0h_lh6Tmf3mYsCrhywKwJKKVm2Fw&usqp=CAU"
+                src="https://www.icegif.com/wp-content/uploads/icegif-7023.gif"
                 alt="bg"
                 width={80}
                 height={80}

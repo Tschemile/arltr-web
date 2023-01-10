@@ -3,8 +3,8 @@ import React from 'react';
 
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
-import Envelope from '@/components/Icons/Envelope';
 import Lock from '@/components/Icons/Lock';
+import User from '@/components/Icons/User';
 import AuthLayout from '@/templates/AuthLayout';
 
 export default function Login() {
@@ -16,11 +16,11 @@ export default function Login() {
       </div>
       <form className="">
         <div className="my-4">
-          <p className="mb-2 text-lg font-medium">Email</p>
+          <p className="mb-2 text-lg font-medium">Email or User name</p>
           <Input
-            placeholder="name@example.com"
+            placeholder="Enter email or user name"
             width="100%"
-            icons={<Envelope />}
+            icons={<User />}
           />
         </div>
         <div className="my-4">
