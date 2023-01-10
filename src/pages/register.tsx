@@ -1,117 +1,131 @@
 import Link from 'next/link';
-import React from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useState } from 'react';
 
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
+import Envelope from '@/components/Icons/Envelope';
+import Lock from '@/components/Icons/Lock';
+import User from '@/components/Icons/User';
 import AuthLayout from '@/templates/AuthLayout';
 
 export default function Register() {
+  const [user, setUser] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    userName: '',
+    password: '',
+    gender: '',
+  });
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
   return (
     <AuthLayout>
-      <div className="mt-4 text-center">
+      <div className="text-center">
         <h2 className="mb-2 text-2xl font-medium">Create New Account</h2>
         <p>Login to manage your account.</p>
       </div>
-      <form className="mt-8">
-        <div className="my-4">
-          <p className="mb-2 text-lg font-medium">Name</p>
-          <Input
-            placeholder="Full name"
-            width="100%"
-            icons={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="h-5 w-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-                />
-              </svg>
-            }
-          />
+      <form className="">
+        <div className="my-4 grid grid-cols-2 gap-4">
+          <div className="">
+            <p className="mb-2 text-lg font-medium">First Name</p>
+            <Input
+              placeholder="Enter first name"
+              width="100%"
+              name="firstName"
+              onChange={handleChange}
+              icons={<User />}
+            />
+          </div>
+          <div className="">
+            <p className="mb-2 text-lg font-medium">Last Name</p>
+            <Input
+              placeholder="lastName"
+              width="100%"
+              name="lastName"
+              onChange={handleChange}
+              icons={<User />}
+            />
+          </div>
         </div>
         <div className="my-4">
           <p className="mb-2 text-lg font-medium">Email</p>
           <Input
             placeholder="name@example.com"
             width="100%"
-            type="password"
-            icons={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="h-5 w-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-                />
-              </svg>
-            }
+            name="email"
+            onChange={handleChange}
+            icons={<Envelope />}
           />
         </div>
-        <div className="my-4 grid grid-cols-2  gap-4">
-          <div className="">
-            <p className="mb-2 text-lg font-medium">Password</p>
-            <Input
-              placeholder="*********"
-              width="100%"
-              type="password"
-              icons={
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="h-5 w-5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
-                  />
-                </svg>
-              }
-            />
-          </div>
-          <div className="">
-            <p className="mb-2 text-lg font-medium">Confirm Password</p>
-            <Input
-              placeholder="*********"
-              width="100%"
-              type="password"
-              icons={
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="h-5 w-5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
-                  />
-                </svg>
-              }
-            />
+        <div className="my-4">
+          <p className="mb-2 text-lg font-medium">User name</p>
+          <Input
+            placeholder="Enter user name"
+            width="100%"
+            onChange={handleChange}
+            name="userName"
+            icons={<User />}
+          />
+        </div>
+        <div className="my-4">
+          <p className="mb-2 text-lg font-medium">Password</p>
+          <Input
+            placeholder="******"
+            width="100%"
+            type="password"
+            name="password"
+            onChange={handleChange}
+            icons={<Lock />}
+          />
+        </div>
+        <div className="my-4">
+          <p className="mb-2 text-lg font-medium">Gender</p>
+          <div className="flex items-center">
+            <div className="pr-8">
+              <input
+                type="radio"
+                id="male"
+                name="gender"
+                value="male"
+                onChange={handleChange}
+              />
+              <label className="pl-2" htmlFor="male">
+                Male
+              </label>
+            </div>
+            <div className="pr-8">
+              <input
+                type="radio"
+                id="female"
+                name="gender"
+                value="female"
+                onChange={handleChange}
+              />
+              <label className="pl-2" htmlFor="female">
+                Female
+              </label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                id="other"
+                name="gender"
+                value="other"
+                onChange={handleChange}
+              />
+              <label className="pl-2" htmlFor="other">
+                Other
+              </label>
+            </div>
           </div>
         </div>
       </form>
-      <div className="mt-8 flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <div>
           Don&apos;t have account{' '}
           <Link href="/login" className="text-gray-600 hover:border-none">
