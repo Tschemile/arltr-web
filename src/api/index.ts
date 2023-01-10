@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import type { AxiosError, AxiosRequestConfig } from 'axios';
+import type { AxiosError } from 'axios';
 import axios from 'axios';
 import type { GetServerSidePropsContext } from 'next';
 import Router from 'next/router';
@@ -10,7 +10,8 @@ const isServer = () => {
 
 let accessToken = '';
 let context = <GetServerSidePropsContext>{};
-const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL!;
+// const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL!;
+const baseURL = 'https://5041-14-161-28-14.ap.ngrok.io/api';
 
 export const setAccessToken = (_accessToken: string) => {
   accessToken = _accessToken;
@@ -27,21 +28,34 @@ export const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // to send cookie
+  // withCredentials: true, // to send cookie
 });
 
-api.interceptors.request.use((config: AxiosRequestConfig) => {
-  // eslint-disable-next-line no-param-reassign
-  config.headers = config.headers ?? {};
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
-  }
+api.interceptors.request.use(
+  (config: any) => {
+    // eslint-disable-next-line no-param-reassign
+    config.headers = config.headers ?? {};
+    if (accessToken) {
+      return {
+        ...config,
+        headers: {
+          ...config.headers,
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+    }
 
-  if (isServer() && context?.req?.cookies) {
-    config.headers.Cookie = `gid=${context.req.cookies.gid};`;
+    // if (isServer() && context?.req?.cookies) {
+    //   config.headers.Cookie = `gid=${context.req.cookies.gid};`;
+    // }
+    return config;
+  },
+  (error) => {
+    // console.info('=> (2) Do something with request error', { error });
+
+    return Promise.reject(error);
   }
-  return config;
-});
+);
 
 api.interceptors.response.use(
   (response) => {

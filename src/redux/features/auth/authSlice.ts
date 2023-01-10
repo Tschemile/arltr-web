@@ -1,42 +1,52 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { HYDRATE } from 'next-redux-wrapper';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import type { AppState } from '@/redux/store';
+import { api } from '@/api';
 
 // Type for our state
 export interface AuthState {
-  authState: boolean;
+  isLoading: boolean;
 }
 
 // Initial state
 const initialState: AuthState = {
-  authState: false,
+  isLoading: false,
 };
+
+interface User {
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  password: string;
+  gender: string;
+  birth: string;
+}
+
+export const createUser = createAsyncThunk(
+  'auth/createUser',
+  async (payload: User) => {
+    const res = await api.post('/user', { ...payload });
+    return res;
+  }
+);
 
 // Actual Slice
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {
-    // Action to set the authentication status
-    setAuthState(state, action) {
-      state.authState = action.payload;
-    },
-
-    // Special reducer for hydrating the state. Special case for next-redux-wrapper
-    extraReducers: {
-      [HYDRATE]: (state, action) => {
-        return {
-          ...state,
-          ...action.payload.auth,
-        };
-      },
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(createUser.pending, (state) => {
+        return { ...state, isLoading: true };
+      })
+      .addCase(createUser.fulfilled, (state) => {
+        return { ...state, isLoading: false };
+      })
+      .addCase(createUser.rejected, (state) => {
+        return { ...state, isLoading: false };
+      });
   },
 });
 
-export const { setAuthState } = authSlice.actions;
-
-export const selectAuthState = (state: AppState) => state.auth.authState;
-
-export default authSlice;
+export const { reducer: authReducer } = authSlice;

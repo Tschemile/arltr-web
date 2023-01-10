@@ -30,4 +30,7 @@ a:hover {
     .nav-item {
       @apply flex w-full items-center rounded p-1 hover:bg-gray-400
     }
+    .spinner {
+      @apply animate-spin border-solid border-[5px] border-t-[5px] border-[#f3f3f3] border-t-gray-500 w-[40px] h-[40px] rounded-[50%] mx-auto;
+    }
 }

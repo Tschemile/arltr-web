@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
 
@@ -7,20 +8,42 @@ import Input from '@/components/common/Input';
 import Envelope from '@/components/Icons/Envelope';
 import Lock from '@/components/Icons/Lock';
 import User from '@/components/Icons/User';
+import { createUser } from '@/redux/features/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import AuthLayout from '@/templates/AuthLayout';
 
 export default function Register() {
+  const dispatch = useAppDispatch();
+  const [dd, setDD] = useState('');
+  const [mm, setMM] = useState('');
+  const [yyyy, setYYYY] = useState('');
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    userName: '',
+    username: '',
     password: '',
     gender: '',
+    birth: dd && mm && yyyy ? `${yyyy}-${mm}-${dd}` : '',
   });
+  const router = useRouter();
+  const isLoading = useAppSelector((state) => state.auth.isLoading);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = () => {
+    Object.assign(user, {
+      birth: dd && mm && yyyy ? `${yyyy}-${mm}-${dd}` : '',
+    });
+    if (Object.values(user).every((x) => Boolean(x))) {
+      dispatch(createUser(user)).then((result: any) => {
+        if (result.payload?.data?.status === 201) {
+          router.push('/login');
+        }
+      });
+    }
   };
 
   return (
@@ -29,7 +52,7 @@ export default function Register() {
         <h2 className="mb-2 text-2xl font-medium">Create New Account</h2>
         <p>Login to manage your account.</p>
       </div>
-      <form className="">
+      <form onSubmit={handleSubmit} className="">
         <div className="my-4 grid grid-cols-2 gap-4">
           <div className="">
             <p className="mb-2 text-lg font-medium">First Name</p>
@@ -44,7 +67,7 @@ export default function Register() {
           <div className="">
             <p className="mb-2 text-lg font-medium">Last Name</p>
             <Input
-              placeholder="lastName"
+              placeholder="Enter last name"
               width="100%"
               name="lastName"
               onChange={handleChange}
@@ -68,7 +91,7 @@ export default function Register() {
             placeholder="Enter user name"
             width="100%"
             onChange={handleChange}
-            name="userName"
+            name="username"
             icons={<User />}
           />
         </div>
@@ -82,6 +105,29 @@ export default function Register() {
             onChange={handleChange}
             icons={<Lock />}
           />
+        </div>
+        <div className="my-4">
+          <p className="mb-2 text-lg font-medium">Birthdays</p>
+          <div className="my-4 grid grid-cols-3 gap-4">
+            <Input
+              placeholder="DD"
+              width="100%"
+              name="dd"
+              onChange={(e) => setDD(e.target.value)}
+            />
+            <Input
+              placeholder="MM"
+              width="100%"
+              name="mm"
+              onChange={(e) => setMM(e.target.value)}
+            />
+            <Input
+              placeholder="YYYY"
+              width="100%"
+              name="yyyy"
+              onChange={(e) => setYYYY(e.target.value)}
+            />
+          </div>
         </div>
         <div className="my-4">
           <p className="mb-2 text-lg font-medium">Gender</p>
@@ -132,7 +178,9 @@ export default function Register() {
             Sign in
           </Link>
         </div>
-        <Button>Get Started</Button>
+        <Button loading={isLoading} onSubmit={handleSubmit}>
+          Get Started
+        </Button>
       </div>
     </AuthLayout>
   );
