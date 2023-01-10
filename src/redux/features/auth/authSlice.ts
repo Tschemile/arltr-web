@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
 
-import type { AppState } from '@/store';
+import type { AppState } from '@/redux/store';
 
 // Type for our state
 export interface AuthState {
