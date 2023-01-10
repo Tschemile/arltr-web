@@ -39,6 +39,17 @@ module.exports = {
           900: '#2a4365',
         },
       },
+      keyframes: {
+        help: {
+          '0%,100%': { backgroundColor: 'red' },
+          '25%': { backgroundColor: 'yellow' },
+          '50%': { backgroundColor: 'green' },
+          '75%': { backgroundColor: 'brown' },
+        },
+      },
+      animation: {
+        help: 'help 0.5s ease-in-out infinite',
+      },
     },
   },
   plugins: [],
