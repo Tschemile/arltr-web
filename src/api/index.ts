@@ -8,10 +8,10 @@ const isServer = () => {
   return typeof window === 'undefined';
 };
 
-let accessToken = '';
+let accessToken: string | null = '';
 let context = <GetServerSidePropsContext>{};
 // const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL!;
-const baseURL = 'https://5041-14-161-28-14.ap.ngrok.io/api';
+const baseURL = 'https://30ef-14-161-28-14.ap.ngrok.io/api';
 
 export const setAccessToken = (_accessToken: string) => {
   accessToken = _accessToken;
@@ -35,6 +35,7 @@ api.interceptors.request.use(
   (config: any) => {
     // eslint-disable-next-line no-param-reassign
     config.headers = config.headers ?? {};
+    accessToken = localStorage.getItem('token');
     if (accessToken) {
       return {
         ...config,

@@ -1,13 +1,45 @@
+import 'react-toastify/dist/ReactToastify.css';
+
 import Link from 'next/link';
-import React from 'react';
+import { useRouter } from 'next/router';
+import type { ChangeEvent } from 'react';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import Lock from '@/components/Icons/Lock';
 import User from '@/components/Icons/User';
+import { login } from '@/redux/actions';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import AuthLayout from '@/templates/AuthLayout';
 
 export default function Login() {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const [infoUser, setInfoUser] = useState({
+    usernameOrEmail: '',
+    password: '',
+  });
+
+  const isLoading = useAppSelector(
+    (state) => state.auth.isLoading.loadingLogin
+  );
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setInfoUser({ ...infoUser, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = () => {
+    dispatch(login(infoUser)).then((res: any) => {
+      if (res.payload?.data?.status === 200) {
+        router.replace('/');
+      } else {
+        toast.error(`${res.payload.data.message}`);
+      }
+    });
+  };
+
   return (
     <AuthLayout>
       <div className="text-center">
@@ -20,7 +52,9 @@ export default function Login() {
           <Input
             placeholder="Enter email or user name"
             width="100%"
+            name="usernameOrEmail"
             icons={<User />}
+            onChange={handleChange}
           />
         </div>
         <div className="my-4">
@@ -29,6 +63,8 @@ export default function Login() {
             placeholder="*********"
             width="100%"
             type="password"
+            name="password"
+            onChange={handleChange}
             icons={<Lock />}
           />
         </div>
@@ -40,7 +76,9 @@ export default function Login() {
             Sign up
           </Link>
         </div>
-        <Button>Get Started</Button>
+        <Button loading={isLoading} onSubmit={handleSubmit}>
+          Get Started
+        </Button>
       </div>
     </AuthLayout>
   );

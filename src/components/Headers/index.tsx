@@ -1,4 +1,8 @@
+import Image from 'next/dist/client/image';
+import Link from 'next/dist/client/link';
 import React from 'react';
+
+import Logo from '@/assets/logo.png';
 
 import IconButton from '../common/IconButton';
 import Input from '../common/Input';
@@ -12,11 +16,9 @@ export default function Headers() {
   return (
     <div className="fixed h-[60px] w-full bg-white py-2 px-4">
       <div className="flex items-center justify-between">
-        <img
-          src="https://i.pinimg.com/originals/0e/50/39/0e503918829c61bd24803ce064546cee.jpg"
-          width={36}
-          alt="logo"
-        />
+        <Link className="hover:border-0" href="/">
+          <Image src={Logo} width={40} alt="logo" />
+        </Link>
         <Input
           icons={
             <svg
