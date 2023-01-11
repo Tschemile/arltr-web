@@ -8,7 +8,7 @@ import Input from '@/components/common/Input';
 import Envelope from '@/components/Icons/Envelope';
 import Lock from '@/components/Icons/Lock';
 import User from '@/components/Icons/User';
-import { createUser } from '@/redux/features/auth/authSlice';
+import { register } from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import AuthLayout from '@/templates/AuthLayout';
 
@@ -24,10 +24,12 @@ export default function Register() {
     username: '',
     password: '',
     gender: '',
-    birth: dd && mm && yyyy ? `${yyyy}-${mm}-${dd}` : '',
+    birth: '',
   });
   const router = useRouter();
-  const isLoading = useAppSelector((state) => state.auth.isLoading);
+  const isLoading = useAppSelector(
+    (state) => state.auth.isLoading.loadingRegister
+  );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -38,7 +40,7 @@ export default function Register() {
       birth: dd && mm && yyyy ? `${yyyy}-${mm}-${dd}` : '',
     });
     if (Object.values(user).every((x) => Boolean(x))) {
-      dispatch(createUser(user)).then((result: any) => {
+      dispatch(register(user)).then((result: any) => {
         if (result.payload?.data?.status === 201) {
           router.push('/login');
         }

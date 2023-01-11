@@ -1,34 +1,21 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { api } from '@/api';
+import { getCurrentUser, login, register } from '@/redux/actions';
 
 // Type for our state
 export interface AuthState {
-  isLoading: boolean;
+  isLoading: Record<'loadingRegister' | 'loadingLogin', boolean>;
+  currentUser: Record<string, string>;
 }
 
 // Initial state
 const initialState: AuthState = {
-  isLoading: false,
+  isLoading: {
+    loadingRegister: false,
+    loadingLogin: false,
+  },
+  currentUser: {},
 };
-
-interface User {
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-  password: string;
-  gender: string;
-  birth: string;
-}
-
-export const createUser = createAsyncThunk(
-  'auth/createUser',
-  async (payload: User) => {
-    const res = await api.post('/user', { ...payload });
-    return res;
-  }
-);
 
 // Actual Slice
 export const authSlice = createSlice({
@@ -37,14 +24,46 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createUser.pending, (state) => {
-        return { ...state, isLoading: true };
+      .addCase(register.pending, (state) => {
+        return {
+          ...state,
+          isLoading: { ...state.isLoading, loadingRegister: true },
+        };
       })
-      .addCase(createUser.fulfilled, (state) => {
-        return { ...state, isLoading: false };
+      .addCase(register.fulfilled, (state) => {
+        return {
+          ...state,
+          isLoading: { ...state.isLoading, loadingRegister: false },
+        };
       })
-      .addCase(createUser.rejected, (state) => {
-        return { ...state, isLoading: false };
+      .addCase(register.rejected, (state) => {
+        return {
+          ...state,
+          isLoading: { ...state.isLoading, loadingRegister: false },
+        };
+      })
+      .addCase(login.pending, (state) => {
+        return {
+          ...state,
+          isLoading: { ...state.isLoading, loadingLogin: true },
+        };
+      })
+      .addCase(login.fulfilled, (state, { payload }) => {
+        localStorage.setItem('token', payload.data.token);
+        return {
+          ...state,
+          isLoading: { ...state.isLoading, loadingLogin: false },
+        };
+      })
+      .addCase(login.rejected, (state) => {
+        localStorage.setItem('token', '');
+        return {
+          ...state,
+          isLoading: { ...state.isLoading, loadingLogin: false },
+        };
+      })
+      .addCase(getCurrentUser.fulfilled, (state, action) => {
+        return { ...state, currentUser: action.payload.data.profile };
       });
   },
 });
