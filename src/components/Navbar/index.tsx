@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
 import Avatar from '../common/Avatar';
@@ -211,10 +212,11 @@ const listExplore = [
 ];
 
 export default function Navbar() {
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState(4);
   return (
     <div className="fixed top-[60px] left-0 h-[calc(100vh-60px)] w-[300px] overflow-y-auto overscroll-contain py-2 px-4">
-      <button className="nav-item">
+      <button className="nav-item" onClick={() => router.push('/user/me')}>
         <Avatar
           src="https://i.pinimg.com/474x/ff/0d/f4/ff0df44c4cd43c7cd964e36b4354e56b.jpg"
           alt="avatar"

@@ -14,7 +14,7 @@ import PlusIcon from '../Icons/PlusIcon';
 
 export default function Headers() {
   return (
-    <div className="fixed h-[60px] w-full bg-white py-2 px-4">
+    <div className="fixed z-20 h-[60px] w-full bg-white py-2 px-4">
       <div className="flex items-center justify-between">
         <Link className="hover:border-0" href="/">
           <Image src={Logo} width={40} alt="logo" />
