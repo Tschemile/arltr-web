@@ -12,6 +12,7 @@ import BulletList from '@/components/Icons/BulletList';
 import Camera from '@/components/Icons/Camera';
 import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
 import PlusIcon from '@/components/Icons/PlusIcon';
+import Friends from '@/components/Profile/Friends';
 import Timeline from '@/components/Profile/Timeline';
 import { Meta } from '@/layouts/Meta';
 import { getProfileUser } from '@/redux/actions';
@@ -44,7 +45,7 @@ const User = () => {
     {
       key: '3',
       title: 'Friend',
-      content: 'Test tab 3',
+      content: <Friends />,
     },
     {
       key: '4',

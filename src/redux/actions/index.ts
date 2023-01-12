@@ -17,6 +17,15 @@ interface ILogin {
   password: string;
 }
 
+interface IRelation {
+  user: string;
+  type: 'FOLLOW' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';
+}
+interface IInRelation {
+  status?: string;
+  type: 'FOLLOWING' | 'FOLLOWER' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';
+}
+
 export const register = createAsyncThunk(
   'auth/register',
   async (payload: IUser) => {
@@ -47,10 +56,27 @@ export const getProfileUser = createAsyncThunk(
   }
 );
 
-export const getReletionCount = createAsyncThunk(
-  'profile/getReletionCount',
+// relationship ❤️
+export const getRelationCount = createAsyncThunk(
+  'profile/getRelationCount',
   async () => {
     const res = await api.get('/relation/count');
     return res.data;
+  }
+);
+
+export const makeRelation = createAsyncThunk(
+  'relation/makeRelation',
+  async (payload: IRelation) => {
+    const res = await api.post(`/relation`, { ...payload });
+    return res;
+  }
+);
+
+export const getListFriend = createAsyncThunk(
+  'relation/getListFriend',
+  async (params: IInRelation) => {
+    const res = await api.get(`/relation${params}`);
+    return res;
   }
 );
