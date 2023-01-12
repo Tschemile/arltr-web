@@ -33,7 +33,7 @@ export default function Login() {
   const handleSubmit = () => {
     dispatch(login(infoUser)).then((res: any) => {
       if (res.payload?.data?.status === 200) {
-        router.replace('/');
+        router.push('/');
       } else {
         toast.error(`${res.payload.data.message}`);
       }

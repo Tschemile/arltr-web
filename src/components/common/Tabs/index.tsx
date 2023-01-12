@@ -1,16 +1,26 @@
 import React from 'react';
 
 interface TabsProps {
-  options?: any[];
+  options: Record<'key' | 'title' | 'content', any>[];
   defaultKey?: string;
   handleChange?: (value: string) => void;
+  border?: boolean;
 }
 
 export default function Tabs(props: TabsProps) {
-  const { options = [], defaultKey = '1', handleChange = () => {} } = props;
+  const {
+    options = [],
+    defaultKey = '1',
+    handleChange = () => {},
+    border = false,
+  } = props;
   return (
     <>
-      <ul className="border-b-[1px] border-b-[#ddd]">
+      <ul
+        className={`w-full whitespace-normal ${
+          border && 'border-b-[1px] border-b-[#ddd]'
+        }`}
+      >
         {options.map((x) => (
           <li
             className={`${
@@ -25,7 +35,9 @@ export default function Tabs(props: TabsProps) {
           </li>
         ))}
       </ul>
-      <div className="mt-4">{options[Number(defaultKey) - 1].content}</div>
+      {/* <div className="mt-4 w-full">
+        {options[Number(defaultKey) - 1].content}
+      </div> */}
     </>
   );
 }

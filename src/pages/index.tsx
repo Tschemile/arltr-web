@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import Tabs from '@/components/common/Tabs';
+import TabsContent from '@/components/common/Tabs/TabsContent';
 import { Meta } from '@/layouts/Meta';
 import { Main } from '@/templates/Main';
 
@@ -134,8 +135,10 @@ const Index = () => {
       <Tabs
         options={options}
         defaultKey={active}
+        border
         handleChange={(key) => setIsActive(key)}
       />
+      <TabsContent options={options} active={active} />
     </Main>
   );
 };
