@@ -1,16 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { getProfileUser } from '@/redux/actions';
+import { getProfileUser, getReletionCount } from '@/redux/actions';
 
 export interface ProfileState {
   profileUser: Record<string, string>;
   loading: boolean;
+  totalRelation: Record<string, number>;
 }
 
 // Initial state
 const initialState: ProfileState = {
   profileUser: {},
   loading: false,
+  totalRelation: {},
 };
 
 export const profileSlice = createSlice({
@@ -27,6 +29,9 @@ export const profileSlice = createSlice({
       })
       .addCase(getProfileUser.rejected, (state) => {
         return { ...state, loading: false };
+      })
+      .addCase(getReletionCount.fulfilled, (state, { payload }) => {
+        return { ...state, totalRelation: payload.total };
       });
   },
 });

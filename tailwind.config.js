@@ -38,6 +38,11 @@ module.exports = {
           800: '#2c5282',
           900: '#2a4365',
         },
+        primary: {
+          color: '#f1f3f4',
+          border: '#d6d6d6',
+          hover: '#c4c4c4',
+        },
       },
       keyframes: {
         help: {

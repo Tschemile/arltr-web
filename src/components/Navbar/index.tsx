@@ -6,6 +6,7 @@ import MaleAvatar from '@/assets/male-default-avatar.png';
 import { useAppSelector } from '@/redux/hooks';
 
 import Avatar from '../common/Avatar';
+import Divider from '../common/Divider';
 import ArrowDown from '../Icons/ArrowDown';
 import ArrowUp from '../Icons/ArrowUp';
 
@@ -233,7 +234,7 @@ export default function Navbar() {
         onClick={() => router.push(`/user/${domain}`)}
       >
         <Avatar
-          src={avatar || gender === 'male' ? MaleAvatar : FemaleAvatar}
+          src={avatar || (gender === 'male' ? MaleAvatar : FemaleAvatar)}
           alt="avatar"
           width={36}
         />
@@ -242,7 +243,7 @@ export default function Navbar() {
       <div className="my-4">
         {listMenu.slice(0, isVisible).map((x) => (
           <button className="nav-item mb-2" key={x.id}>
-            <span className="rounded-full border-2 bg-[#c4c4c4] p-2">
+            <span className="rounded-full border-2 bg-primary-hover p-2">
               {x.icon}
             </span>
             <p className="pl-3 text-base font-medium">{x.title}</p>
@@ -252,7 +253,7 @@ export default function Navbar() {
           className="nav-item"
           onClick={() => setIsVisible(isVisible <= 4 ? listMenu.length : 4)}
         >
-          <span className="rounded-full border-2 bg-[#c4c4c4] p-2">
+          <span className="rounded-full border-2 bg-primary-hover p-2">
             {isVisible <= 4 ? <ArrowDown width={18} /> : <ArrowUp width={18} />}
           </span>
 
@@ -261,19 +262,19 @@ export default function Navbar() {
           </p>
         </button>
       </div>
-      <hr className="my-4 border-[#d6d6d6]" />
+      <Divider />
       <h4 className="text-lg font-medium">Explore</h4>
       <div className="my-4">
         {listExplore.map((x) => (
           <button className="nav-item mb-2" key={x.id}>
-            <span className="rounded-full border-2 bg-[#c4c4c4] p-2">
+            <span className="rounded-full border-2 bg-primary-hover p-2">
               {x.icon}
             </span>
             <p className="pl-3 text-base font-medium">{x.title}</p>
           </button>
         ))}
       </div>
-      <hr className="my-4 border-[#d6d6d6]" />
+      <hr className="my-4 border-primary-border" />
 
       <div className="text-sm">
         <div className="my-2">

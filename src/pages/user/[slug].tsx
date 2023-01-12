@@ -67,7 +67,7 @@ const User = () => {
   return (
     <TimelineLayout meta={<Meta title="Bé ơi" description="Bé ơi" />}>
       <div className="w-full bg-gradient-to-t from-white to-[#4d80a4]">
-        <div className="bg-white lg:mx-[15%] xl:mx-[20%]">
+        <div className="bg-white lg:mx-[10%] xl:mx-[20%]">
           <div className="relative max-h-full min-h-[285px]">
             <img
               src={
@@ -87,7 +87,7 @@ const User = () => {
           <div className="relative z-[2] -mt-24 mb-4 text-center">
             <div className="mb-2">
               <Avatar
-                src={avatar || gender === 'male' ? MaleAvatar : FemaleAvatar}
+                src={avatar || (gender === 'male' ? MaleAvatar : FemaleAvatar)}
                 alt="avatar"
                 width={125}
                 height={125}
@@ -149,7 +149,7 @@ const User = () => {
         </div>
       </div>
       <TabsContent
-        className="lg:mx-[15%] xl:mx-[20%]"
+        className="lg:mx-[10%] xl:mx-[20%]"
         options={options}
         active={active}
       />
