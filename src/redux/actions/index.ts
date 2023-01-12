@@ -37,3 +37,11 @@ export const getCurrentUser = createAsyncThunk(
     return res;
   }
 );
+
+export const getProfileUser = createAsyncThunk(
+  'profile/getProfile',
+  async (domain: string | string[] | undefined) => {
+    const res = await api.get(`/profile/${domain}`);
+    return res.data;
+  }
+);

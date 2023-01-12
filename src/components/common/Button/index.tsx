@@ -6,16 +6,36 @@ interface ButtonProps {
   onSubmit?: () => void;
   type?: 'submit' | 'button' | 'reset';
   loading?: boolean;
+  background?: 'primary' | 'secondary' | 'gray';
 }
 
 export default function Button(props: ButtonProps) {
-  const { onSubmit = () => {}, type = 'submit', loading = false } = props;
+  const {
+    onSubmit = () => {},
+    type = 'submit',
+    loading = false,
+    background = 'primary',
+  } = props;
+
+  const getBackground = () => {
+    switch (background) {
+      case 'primary':
+        return 'bg-[#307ee5]';
+      case 'secondary':
+        return 'bg-[#e3e7f7]';
+      default:
+        return '';
+    }
+  };
+
   return (
     <button
       onClick={onSubmit}
       type={type}
       disabled={loading}
-      className="flex items-center whitespace-nowrap rounded bg-[#307ee5] py-2 px-4 font-bold text-white disabled:cursor-not-allowed disabled:bg-slate-400	"
+      className={`flex items-center whitespace-nowrap rounded ${getBackground()} py-1 px-2 ${
+        background === 'primary' ? 'text-white' : 'text-black'
+      } disabled:cursor-not-allowed disabled:bg-slate-400`}
     >
       {loading && (
         <span className="spinner mr-2 block h-[20px] w-[20px]"></span>

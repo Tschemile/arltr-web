@@ -1,6 +1,10 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
+import FemaleAvatar from '@/assets/female-default-avatar.jpg';
+import MaleAvatar from '@/assets/male-default-avatar.png';
+import { useAppSelector } from '@/redux/hooks';
+
 import Avatar from '../common/Avatar';
 import ArrowDown from '../Icons/ArrowDown';
 import ArrowUp from '../Icons/ArrowUp';
@@ -214,15 +218,26 @@ const listExplore = [
 export default function Navbar() {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(4);
+  const currentUser = useAppSelector((state) => state.auth.currentUser);
+
+  const {
+    avatar = '' || undefined,
+    name = '' || undefined,
+    gender = '' || undefined,
+    domain = '' || undefined,
+  } = currentUser;
   return (
     <div className="fixed top-[60px] left-0 h-[calc(100vh-60px)] w-[300px] overflow-y-auto overscroll-contain py-2 px-4">
-      <button className="nav-item" onClick={() => router.push('/user/me')}>
+      <button
+        className="nav-item"
+        onClick={() => router.push(`/user/${domain}`)}
+      >
         <Avatar
-          src="https://i.pinimg.com/474x/ff/0d/f4/ff0df44c4cd43c7cd964e36b4354e56b.jpg"
+          src={avatar || gender === 'male' ? MaleAvatar : FemaleAvatar}
           alt="avatar"
-          width="36px"
+          width={36}
         />
-        <p className="pl-3">Pé Chouu</p>
+        <p className="pl-3">{name}</p>
       </button>
       <div className="my-4">
         {listMenu.slice(0, isVisible).map((x) => (

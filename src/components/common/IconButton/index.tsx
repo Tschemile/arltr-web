@@ -3,8 +3,12 @@ import React from 'react';
 
 interface IconButtonProps {
   children: ReactNode;
+  className?: string;
 }
 
 export default function IconButton(props: IconButtonProps) {
-  return <button className="icon-header">{props.children}</button>;
+  const { className = '' } = props;
+  return (
+    <button className={`icon-header ${className}`}>{props.children}</button>
+  );
 }

@@ -28,9 +28,9 @@ const Main = (props: IMainProps) => {
     <div className=" h-full w-full overflow-y-auto text-gray-700 antialiased">
       {props.meta}
       <Headers />
-      <div className="bg-main grid h-full w-full px-4 pt-[70px] pb-5 text-xl">
+      <div className="bg-main mt-[60px] grid h-full w-full px-4 text-xl">
         <Navbar />
-        <div className="pl-[320px]">{props.children}</div>
+        <div className="py-2 pl-[320px]">{props.children}</div>
       </div>
     </div>
   );
