@@ -38,10 +38,19 @@ export const getCurrentUser = createAsyncThunk(
   }
 );
 
+// Profile
 export const getProfileUser = createAsyncThunk(
   'profile/getProfile',
   async (domain: string | string[] | undefined) => {
     const res = await api.get(`/profile/${domain}`);
+    return res.data;
+  }
+);
+
+export const getReletionCount = createAsyncThunk(
+  'profile/getReletionCount',
+  async () => {
+    const res = await api.get('/relation/count');
     return res.data;
   }
 );

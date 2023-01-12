@@ -35,7 +35,7 @@ export default function Login() {
       if (res.payload?.data?.status === 200) {
         router.push('/');
       } else {
-        toast.error(`${res.payload.data.message}`);
+        toast.error(`${res.payload?.data?.message}`);
       }
     });
   };
