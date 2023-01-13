@@ -73,25 +73,27 @@ export default function Timeline() {
   const totalFollowing = useAppSelector(
     (state) => state.profile.totalRelation?.totalFollowing
   );
+  const listComments = useAppSelector((state) => state.comments.listComment);
+
   const {
     gender = '' || undefined,
     socialLinks = [] || undefined,
     hobbies = [] || undefined,
     work = '' || undefined,
+    posts = [] || undefined,
   } = profileUser;
 
   return (
     <div className="grid grid-cols-3 gap-8">
       <div className="col-span-2">
         <CreatePost />
-        <CardPost img="https://cdn.lazi.vn/timthumb.php?src=storage/uploads/users/avatar/1502200931_maxresdefault.jpg&w=300&h=300">
-          Conan Kun
-        </CardPost>
-        <CardPost img="https://cdn.nguyenkimmall.com/images/companies/_1/tin-tuc/review/phim/anime-naruto.jpg">
-          How are you bro?
-        </CardPost>
-        <CardPost>Hehe</CardPost>
+        {(posts as Record<string, string>[])?.map((x) => (
+          <CardPost user={x} key={x.id} listComments={listComments}>
+            {x.content}
+          </CardPost>
+        ))}
       </div>
+
       <div>
         <Block title="Info" seeAll={false} showTotal={false}>
           <InfoContent

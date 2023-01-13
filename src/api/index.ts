@@ -11,7 +11,7 @@ const isServer = () => {
 let accessToken: string | null = '';
 let context = <GetServerSidePropsContext>{};
 // const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL!;
-const baseURL = 'https://2f83-123-20-87-142.ap.ngrok.io/api';
+const baseURL = 'https://7e2c-14-161-28-14.ap.ngrok.io/api';
 
 export const setAccessToken = (_accessToken: string) => {
   accessToken = _accessToken;

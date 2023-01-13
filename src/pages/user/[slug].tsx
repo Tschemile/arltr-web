@@ -1,8 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import FemaleAvatar from '@/assets/female-default-avatar.jpg';
-import MaleAvatar from '@/assets/male-default-avatar.png';
 import Avatar from '@/components/common/Avatar';
 import Button from '@/components/common/Button';
 import IconButton from '@/components/common/IconButton';
@@ -91,13 +89,16 @@ const User = () => {
 
           <div className="relative z-[2] -mt-24 mb-4 text-center">
             <div className="mb-2">
-              <Avatar
-                src={avatar || (gender === 'male' ? MaleAvatar : FemaleAvatar)}
-                alt="avatar"
-                width={125}
-                height={125}
-                className="m-auto border-[3px] border-solid border-white"
-              />
+              {avatar && (
+                <Avatar
+                  src={avatar}
+                  alt="avatar"
+                  gender={gender}
+                  width={125}
+                  height={125}
+                  className="m-auto border-[3px] border-solid border-white"
+                />
+              )}
               <IconButton className="absolute top-[55%] left-[53%] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white  text-black">
                 <Camera />
               </IconButton>

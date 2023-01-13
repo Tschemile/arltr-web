@@ -1,7 +1,5 @@
 import React from 'react';
 
-import FemaleAvatar from '@/assets/female-default-avatar.jpg';
-import MaleAvatar from '@/assets/male-default-avatar.png';
 import { useAppSelector } from '@/redux/hooks';
 
 import Avatar from '../common/Avatar';
@@ -104,8 +102,9 @@ export default function CreatePost() {
       <div className="flex items-center ">
         <div className="pr-4">
           <Avatar
-            src={avatar || (gender === 'male' ? MaleAvatar : FemaleAvatar)}
+            src={avatar}
             alt="avatar"
+            gender={gender}
             width={50}
             className="m-auto border-[3px] border-solid border-white"
           />

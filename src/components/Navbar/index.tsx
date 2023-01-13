@@ -1,8 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-import FemaleAvatar from '@/assets/female-default-avatar.jpg';
-import MaleAvatar from '@/assets/male-default-avatar.png';
 import { useAppSelector } from '@/redux/hooks';
 
 import Avatar from '../common/Avatar';
@@ -233,11 +231,7 @@ export default function Navbar() {
         className="nav-item"
         onClick={() => router.push(`/user/${domain}`)}
       >
-        <Avatar
-          src={avatar || (gender === 'male' ? MaleAvatar : FemaleAvatar)}
-          alt="avatar"
-          width={36}
-        />
+        <Avatar src={avatar} gender={gender} alt="avatar" width={36} />
         <p className="pl-3">{name}</p>
       </button>
       <div className="my-4">
