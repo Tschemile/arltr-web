@@ -36,6 +36,7 @@ export default function Headers() {
           }
           placeholder="Search for Friends, Videos and more..."
           width="550px"
+          className="hidden xl:block"
         />
         <div>
           <IconButton>

@@ -8,6 +8,7 @@ interface InputProps {
   width?: string;
   type?: 'text' | 'password' | 'number';
   name?: string;
+  className?: string;
 }
 
 export default function Input(props: InputProps) {
@@ -18,9 +19,10 @@ export default function Input(props: InputProps) {
     width = '100%',
     type = 'text',
     name = '',
+    className = '',
   } = props;
   return (
-    <div className="relative">
+    <div className={`relative ${className}`}>
       <div className="absolute top-[50%] left-2 translate-y-[-50%] text-[#929292]">
         {icons || ''}
       </div>

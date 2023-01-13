@@ -12,6 +12,35 @@ interface TabsProps {
   handleChange?: (value: string) => void;
 }
 
+interface GridProps {
+  data: Array<any>;
+}
+
+const Grid = (props: GridProps) => {
+  const { data = [] } = props;
+  return data?.length ? (
+    <>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+        {data.map((val) => (
+          <Card img={val.img} key={val.id}>
+            <p>{val.name}</p>
+            <p className="mb-1 text-sm">{val.following} Following</p>
+            <Button
+              type="button"
+              className="w-full justify-center bg-[#dbeafe] text-sm text-[#71a7f2]"
+            >
+              Following
+            </Button>
+          </Card>
+        ))}
+      </div>
+      <Button className="m-auto mt-4">loading more</Button>
+    </>
+  ) : (
+    <p className="text-center">Poor for you, dont have fen 😢</p>
+  );
+};
+
 export default function Friends(props: TabsProps) {
   const {} = props;
   const [active, setIsActive] = useState('1');
@@ -104,60 +133,28 @@ export default function Friends(props: TabsProps) {
       img: 'https://khoinguonsangtao.vn/wp-content/uploads/2022/09/hinh-anh-gai-xinh-cap-2-3.jpg',
     },
   ];
+  const fen3: any[] = [];
 
   const options = [
     {
       key: '1',
       title: 'All Friends 9,999',
-      content: (
-        <>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-            {fen.map((val) => (
-              <Card img={val.img} key={val.id}>
-                <p>{val.name}</p>
-                <p className="mb-1 text-sm">{val.following} Following</p>
-                <Button
-                  type="button"
-                  className="w-full justify-center bg-[#dbeafe] text-sm text-[#71a7f2]"
-                >
-                  Following
-                </Button>
-              </Card>
-            ))}
-          </div>
-          loading more
-        </>
-      ),
+      content: <Grid data={fen} />,
     },
     {
       key: '2',
       title: 'Recently added',
-      content: (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-          {fen2.map((val) => (
-            <Card img={val.img} key={val.id}>
-              <p>{val.name}</p>
-              <p className="mb-1 text-sm">{val.following} Following</p>
-              <Button
-                type="button"
-                className="w-full justify-center bg-[#dbeafe] text-sm text-[#71a7f2]"
-              >
-                Following
-              </Button>
-            </Card>
-          ))}
-        </div>
-      ),
+      content: <Grid data={fen2} />,
     },
     {
       key: '3',
       title: 'Family',
-      content: 'Test tab 3',
+      content: <Grid data={fen3} />,
     },
     {
       key: '4',
       title: 'University',
-      content: 'hihi',
+      content: <Grid data={fen3} />,
     },
   ];
   return (

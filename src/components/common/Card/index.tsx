@@ -11,7 +11,7 @@ export default function Card(props: CardProps) {
   return (
     <div className={`rounded-lg bg-white shadow-lg`}>
       {!!img && (
-        <div className="relative max-h-[185px] min-h-[185px] overflow-hidden rounded-t-lg">
+        <div className="relative max-h-[185px] min-h-[185px] overflow-hidden rounded-t-lg lg:min-h-[200px] 2xl:min-h-[15rem]">
           <img
             src={img}
             alt="image"

@@ -100,11 +100,14 @@ export default function Timeline() {
           />
           <InfoContent
             isLink
-            content={socialLinks[0]}
+            content={socialLinks && socialLinks[0]}
             icon={<Chain width={30} />}
           />
           <InfoContent icon={<Heart width={30} />} content="Single" />
-          <InfoContent icon={<Star width={30} />} content={hobbies[0]} />
+          <InfoContent
+            icon={<Star width={30} />}
+            content={hobbies && hobbies[0]}
+          />
           <Divider />
           <InfoContent icon={<Briefcase width={30} />} content={work} />
         </Block>
