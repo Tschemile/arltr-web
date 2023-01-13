@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
-import React, { useEffect } from 'react';
+import React from 'react';
 
+import CardPost from '@/components/CardPost';
 import Divider from '@/components/common/Divider';
 import CreatePost from '@/components/CreatePost';
 import Briefcase from '@/components/Icons/Briefcase';
@@ -9,8 +10,7 @@ import Heart from '@/components/Icons/Heart';
 import Sad from '@/components/Icons/Sad';
 import Smite from '@/components/Icons/Smite';
 import Star from '@/components/Icons/Star';
-import { getReletionCount } from '@/redux/actions';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useAppSelector } from '@/redux/hooks';
 
 interface InfoContentProps {
   icon: ReactNode;
@@ -23,6 +23,7 @@ interface BlockProps {
   children: ReactNode;
   seeAll?: boolean;
   showTotal?: boolean;
+  total?: number;
 }
 
 const InfoContent = (props: InfoContentProps) => {
@@ -42,13 +43,19 @@ const InfoContent = (props: InfoContentProps) => {
 };
 
 const Block = (props: BlockProps) => {
-  const { children = '', title = '', seeAll = true, showTotal = true } = props;
+  const {
+    children = '',
+    title = '',
+    seeAll = true,
+    total = '',
+    showTotal = true,
+  } = props;
   return (
     <div className="mb-4 rounded-md bg-white p-4">
       <div className="flex items-center justify-between">
         <div>
           <h4 className="mb-2 inline-block font-medium text-black">{title}</h4>
-          {showTotal && <span className="pl-2 text-base">12</span>}
+          {showTotal && <span className="pl-2 text-base">{`(${total})`}</span>}
         </div>
         {seeAll && (
           <span className="cursor-pointer rounded px-2 py-1 text-xs text-blue-600 hover:bg-primary-color">
@@ -62,9 +69,10 @@ const Block = (props: BlockProps) => {
 };
 
 export default function Timeline() {
-  const dispatch = useAppDispatch();
   const profileUser = useAppSelector((state) => state.profile.profileUser);
-
+  const totalFollowing = useAppSelector(
+    (state) => state.profile.totalRelation?.totalFollowing
+  );
   const {
     gender = '' || undefined,
     socialLinks = [] || undefined,
@@ -72,14 +80,17 @@ export default function Timeline() {
     work = '' || undefined,
   } = profileUser;
 
-  useEffect(() => {
-    dispatch(getReletionCount());
-  }, []);
-
   return (
     <div className="grid grid-cols-3 gap-8">
       <div className="col-span-2">
         <CreatePost />
+        <CardPost img="https://cdn.lazi.vn/timthumb.php?src=storage/uploads/users/avatar/1502200931_maxresdefault.jpg&w=300&h=300">
+          Conan Kun
+        </CardPost>
+        <CardPost img="https://cdn.nguyenkimmall.com/images/companies/_1/tin-tuc/review/phim/anime-naruto.jpg">
+          How are you bro?
+        </CardPost>
+        <CardPost>Hehe</CardPost>
       </div>
       <div>
         <Block title="Info" seeAll={false} showTotal={false}>
@@ -98,7 +109,9 @@ export default function Timeline() {
           <InfoContent icon={<Briefcase width={30} />} content={work} />
         </Block>
         <Block title="Albums">hehe</Block>
-        <Block title="Following">hehe</Block>
+        <Block title="Following" total={totalFollowing}>
+          hehe
+        </Block>
         <Block title="Groups">hehe</Block>
       </div>
     </div>

@@ -15,7 +15,7 @@ import PlusIcon from '@/components/Icons/PlusIcon';
 import Friends from '@/components/Profile/Friends';
 import Timeline from '@/components/Profile/Timeline';
 import { Meta } from '@/layouts/Meta';
-import { getProfileUser } from '@/redux/actions';
+import { getProfileUser, getRelationCount } from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { TimelineLayout } from '@/templates/TimelineLayout';
 
@@ -64,6 +64,10 @@ const User = () => {
   useEffect(() => {
     if (query.slug) dispatch(getProfileUser(query.slug));
   }, [query.slug]);
+
+  useEffect(() => {
+    dispatch(getRelationCount());
+  }, []);
 
   return (
     <TimelineLayout meta={<Meta title="Bé ơi" description="Bé ơi" />}>
