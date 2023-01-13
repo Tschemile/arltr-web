@@ -123,7 +123,9 @@ export default function CreatePost() {
             <span className="rounded-full border-2 bg-primary-hover p-1">
               {x.icon}
             </span>
-            <p className="pl-3 text-base text-[#929292]">{x.title}</p>
+            <p className="whitespace-nowrap pl-2 text-base text-[#929292]">
+              {x.title}
+            </p>
           </button>
         ))}
       </div>
