@@ -80,3 +80,19 @@ export const getListFriend = createAsyncThunk(
     return res;
   }
 );
+
+export const getCommentsOfPost = createAsyncThunk(
+  'post/getCommentsOfPost',
+  async (id: string) => {
+    const res = await api.get(`/comment/${id}`);
+    return res.data;
+  }
+);
+
+export const addComment = createAsyncThunk(
+  'post/addComment',
+  async (payload: Record<string, string | undefined>) => {
+    const res = await api.post('/comment', { ...payload });
+    return res.data;
+  }
+);

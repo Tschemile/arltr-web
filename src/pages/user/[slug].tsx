@@ -1,8 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import FemaleAvatar from '@/assets/female-default-avatar.jpg';
-import MaleAvatar from '@/assets/male-default-avatar.png';
 import Avatar from '@/components/common/Avatar';
 import Button from '@/components/common/Button';
 import IconButton from '@/components/common/IconButton';
@@ -39,21 +37,16 @@ const User = () => {
     },
     {
       key: '2',
-      title: 'About',
-      content: 'Test tab 2',
-    },
-    {
-      key: '3',
       title: 'Friend',
       content: <Friends />,
     },
     {
-      key: '4',
+      key: '3',
       title: 'Photoes',
       content: 'hihi',
     },
     {
-      key: '5',
+      key: '4',
       title: 'Videos',
       content: 'hihi',
     },
@@ -72,7 +65,7 @@ const User = () => {
   return (
     <TimelineLayout meta={<Meta title="Bé ơi" description="Bé ơi" />}>
       <div className="w-full bg-gradient-to-t from-white to-[#4d80a4]">
-        <div className="bg-white lg:mx-[10%] xl:mx-[20%]">
+        <div className="bg-white lg:mx-[10%] xl:mx-[15%]">
           <div className="relative max-h-full min-h-[285px]">
             <img
               src={
@@ -91,13 +84,16 @@ const User = () => {
 
           <div className="relative z-[2] -mt-24 mb-4 text-center">
             <div className="mb-2">
-              <Avatar
-                src={avatar || (gender === 'male' ? MaleAvatar : FemaleAvatar)}
-                alt="avatar"
-                width={125}
-                height={125}
-                className="m-auto border-[3px] border-solid border-white"
-              />
+              {avatar && (
+                <Avatar
+                  src={avatar}
+                  alt="avatar"
+                  gender={gender}
+                  width={125}
+                  height={125}
+                  className="m-auto border-[3px] border-solid border-white"
+                />
+              )}
               <IconButton className="absolute top-[55%] left-[53%] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white  text-black">
                 <Camera />
               </IconButton>
@@ -110,8 +106,8 @@ const User = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between py-2 px-4 text-base">
-            <div className="flex">
+          <div className="py-2 px-4 text-base md:flex md:items-center md:justify-between">
+            <div className="flex items-center">
               <Tabs
                 options={options}
                 defaultKey={active}
@@ -154,7 +150,7 @@ const User = () => {
         </div>
       </div>
       <TabsContent
-        className="lg:mx-[10%] xl:mx-[20%]"
+        className="lg:mx-[10%] xl:mx-[15%]"
         options={options}
         active={active}
       />

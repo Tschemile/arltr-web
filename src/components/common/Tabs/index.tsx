@@ -5,6 +5,7 @@ interface TabsProps {
   defaultKey?: string;
   handleChange?: (value: string) => void;
   border?: boolean;
+  className?: string;
 }
 
 export default function Tabs(props: TabsProps) {
@@ -13,13 +14,14 @@ export default function Tabs(props: TabsProps) {
     defaultKey = '1',
     handleChange = () => {},
     border = false,
+    className = '',
   } = props;
   return (
     <>
       <ul
-        className={`w-full whitespace-normal ${
+        className={`whitespace-normal ${
           border && 'border-b-[1px] border-b-[#ddd]'
-        }`}
+        } ${className}`}
       >
         {options.map((x) => (
           <li

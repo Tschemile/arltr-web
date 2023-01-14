@@ -7,7 +7,7 @@ const Index = () => {
   return (
     <Main meta={<Meta title="I ♥ U" description="I ♥ U" />}>
       <div className="grid grid-cols-3 gap-4">
-        <div className="col-span-2">
+        <div className="col-span-2 mx-auto">
           <CreatePost />
           <CardPost img="https://cdn.lazi.vn/timthumb.php?src=storage/uploads/users/avatar/1502200931_maxresdefault.jpg&w=300&h=300">
             Conan Kun

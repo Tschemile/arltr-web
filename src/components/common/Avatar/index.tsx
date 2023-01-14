@@ -1,20 +1,30 @@
 import Image from 'next/dist/client/image';
-import type { StaticImageData } from 'next/image';
 import React from 'react';
+
+import FemaleAvatar from '@/assets/female-default-avatar.jpg';
+import MaleAvatar from '@/assets/male-default-avatar.png';
 
 interface AvatarProps {
   width?: number;
   height?: number;
   className?: string;
-  src: string | StaticImageData;
+  src: string | undefined;
   alt: string;
+  gender?: string;
 }
 
 export default function Avatar(props: AvatarProps) {
-  const { width = 40, height = 40, src = '', alt = '', className = '' } = props;
+  const {
+    width = 40,
+    height = 40,
+    src = '',
+    alt = '',
+    className = '',
+    gender = 'male',
+  } = props;
   return (
     <Image
-      src={src}
+      src={src || (gender === 'male' ? MaleAvatar : FemaleAvatar)}
       alt={alt}
       width={width}
       height={height}

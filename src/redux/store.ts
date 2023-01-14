@@ -1,14 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import { albumsReducer } from './features/albums';
 import { authReducer } from './features/auth/authSlice';
+import { commentsReducer } from './features/comments';
 import { profileReducer } from './features/profile/profileSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     profile: profileReducer,
-    albums: albumsReducer,
+    comments: commentsReducer,
   },
   devTools: true,
   middleware: (getDefaultMiddleware) =>
