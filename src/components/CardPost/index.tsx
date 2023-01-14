@@ -1,9 +1,9 @@
-import type { ReactNode } from 'react';
+import type { ChangeEvent, FormEvent, ReactNode } from 'react';
 import React, { useEffect, useState } from 'react';
 
 import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
 import Like from '@/components/Icons/Like';
-import { getCommentsOfPost } from '@/redux/actions';
+import { addComment, getCommentsOfPost } from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 import Avatar from '../common/Avatar';
@@ -23,6 +23,8 @@ export default function CardPost(props: CardPostProps) {
   const dispatch = useAppDispatch();
   const [isClickedCmt, setIsClickedCmt] = useState(false);
   const [comments, setComments] = useState([]);
+  const [contentCmt, setContentCmt] = useState('');
+
   const { user = {}, listComments = [] } = props;
   const {
     author = {},
@@ -38,12 +40,27 @@ export default function CardPost(props: CardPostProps) {
   } = author as Record<string, string>;
 
   const currentUser = useAppSelector((state) => state.auth.currentUser);
-
   const getAllCommentsOfPost = (postId: string) => {
     if (totalComments > 0 && !isClickedCmt) {
       dispatch(getCommentsOfPost(postId));
     }
     setIsClickedCmt(true);
+  };
+
+  const handleAddComment = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(
+      addComment({ post: id, content: contentCmt, image: currentUser?.avatar })
+    ).then((res) => {
+      if (res.payload.status === 201) {
+        setContentCmt('');
+        dispatch(getCommentsOfPost(id));
+      }
+    });
+  };
+
+  const handleChangeComment = (e: ChangeEvent<HTMLInputElement>) => {
+    setContentCmt(e.target.value);
   };
 
   useEffect(() => {
@@ -134,23 +151,26 @@ export default function CardPost(props: CardPostProps) {
       </div>
       <Divider />
 
-      {(comments || []).map((x: any) => (
-        <div key={x.id} className="flex py-2">
-          <div className="mr-4">
-            <Avatar
-              src={x.image}
-              alt="avatar"
-              width={50}
-              className="m-auto border-[3px] border-solid border-white"
-            />
+      {isClickedCmt &&
+        (comments || []).map((x: any) => (
+          <div key={x.id} className="group flex items-center py-2">
+            <div className="mr-4">
+              <Avatar
+                src={x.image}
+                alt="avatar"
+                width={50}
+                className="m-auto border-[3px] border-solid border-white"
+              />
+            </div>
+            <div className="relative rounded-lg bg-primary-color p-2 after:absolute after:top-3 after:-left-5 after:border-[10px] after:border-transparent after:border-r-primary-color">
+              <h3 className="text-lg font-medium">{x.user.name}</h3>
+              <p className="text-sm">{x.content}</p>
+            </div>
+            <div className="hidden group-hover:block ">
+              <EllipsisHorizon />
+            </div>
           </div>
-          <div className="relative w-full rounded-lg bg-primary-color p-2 after:absolute after:top-3 after:-left-5 after:border-[10px] after:border-transparent after:border-r-primary-color">
-            <h3 className="text-lg font-medium">{x.user.name}</h3>
-            <p className="text-sm">{x.content}</p>
-          </div>
-          <EllipsisHorizon />
-        </div>
-      ))}
+        ))}
       {(comments || []).length > 2 && isClickedCmt && (
         <div className="cursor-pointer text-sm underline opacity-50 hover:opacity-100">
           View more 2 comments
@@ -166,11 +186,17 @@ export default function CardPost(props: CardPostProps) {
               className="m-auto border-[3px] border-solid border-white"
             />
           </div>
-          <div className="flex w-full items-center justify-between rounded-full bg-primary-color px-4">
+          <form
+            onSubmit={(e) => {
+              handleAddComment(e);
+            }}
+            className="flex w-full items-center justify-between rounded-full bg-primary-color px-4"
+          >
             <input
-              type="text"
               placeholder="Write comment here..."
-              className="w-full bg-primary-color p-2 outline-none placeholder:text-sm placeholder:text-gray-500"
+              value={contentCmt}
+              onChange={(e) => handleChangeComment(e)}
+              className="w-full bg-primary-color p-2 text-sm outline-none placeholder:text-sm placeholder:text-gray-500"
             />
             <ul className="flex items-center">
               <li className="cursor-pointer">
@@ -183,7 +209,7 @@ export default function CardPost(props: CardPostProps) {
                 <EllipsisHorizon />
               </li>
             </ul>
-          </div>
+          </form>
         </div>
       )}
     </div>

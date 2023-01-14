@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import React from 'react';
 
+import { baseURL } from '@/api';
 import CardPost from '@/components/CardPost';
 import Divider from '@/components/common/Divider';
 import CreatePost from '@/components/CreatePost';
@@ -23,7 +24,7 @@ interface BlockProps {
   children: ReactNode;
   seeAll?: boolean;
   showTotal?: boolean;
-  total?: number;
+  total?: string | number;
 }
 
 const InfoContent = (props: InfoContentProps) => {
@@ -47,7 +48,7 @@ const Block = (props: BlockProps) => {
     children = '',
     title = '',
     seeAll = true,
-    total = '',
+    total = 0,
     showTotal = true,
   } = props;
   return (
@@ -55,7 +56,9 @@ const Block = (props: BlockProps) => {
       <div className="flex items-center justify-between">
         <div>
           <h4 className="mb-2 inline-block font-medium text-black">{title}</h4>
-          {showTotal && <span className="pl-2 text-base">{`(${total})`}</span>}
+          {showTotal && (
+            <span className="pl-2 text-base">{`(${total || 0})`}</span>
+          )}
         </div>
         {seeAll && (
           <span className="cursor-pointer rounded px-2 py-1 text-xs text-blue-600 hover:bg-primary-color">
@@ -70,9 +73,6 @@ const Block = (props: BlockProps) => {
 
 export default function Timeline() {
   const profileUser = useAppSelector((state) => state.profile.profileUser);
-  const totalFollowing = useAppSelector(
-    (state) => state.profile.totalRelation?.totalFollowing
-  );
   const listComments = useAppSelector((state) => state.comments.listComment);
 
   const {
@@ -81,11 +81,15 @@ export default function Timeline() {
     hobbies = [] || undefined,
     work = '' || undefined,
     posts = [] || undefined,
+    albums = [] || undefined,
+    followings = [] || undefined,
+    totalFollowing = 0,
+    totalAlbums = 0,
   } = profileUser;
 
   return (
-    <div className="grid grid-cols-3 gap-8">
-      <div className="col-span-2">
+    <div className="grid gap-2 md:grid-cols-3 md:gap-8">
+      <div className="md:col-span-2">
         <CreatePost />
         {(posts as Record<string, string>[])?.map((x) => (
           <CardPost user={x} key={x.id} listComments={listComments}>
@@ -94,7 +98,7 @@ export default function Timeline() {
         ))}
       </div>
 
-      <div>
+      <div className="h-full">
         <Block title="Info" seeAll={false} showTotal={false}>
           <InfoContent
             icon={gender === 'male' ? <Smite width={30} /> : <Sad width={30} />}
@@ -113,10 +117,24 @@ export default function Timeline() {
           <Divider />
           <InfoContent icon={<Briefcase width={30} />} content={work} />
         </Block>
-        <Block title="Albums">hehe</Block>
-        <Block title="Following" total={totalFollowing}>
-          hehe
+        <Block total={totalAlbums} title="Albums">
+          <div className="grid grid-cols-3 gap-2">
+            {(albums as []).map((x: any) => (
+              <div key={x.id} className="col-span-1">
+                <img
+                  alt="photo"
+                  src={`${baseURL}/file/${x.filename}`}
+                  className="rounded-lg"
+                />
+              </div>
+            ))}
+          </div>
         </Block>
+        {followings.length > 0 && (
+          <Block title="Following" total={totalFollowing}>
+            {(followings as []).map((x) => x)}
+          </Block>
+        )}
         <Block title="Groups">hehe</Block>
       </div>
     </div>

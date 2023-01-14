@@ -88,3 +88,11 @@ export const getCommentsOfPost = createAsyncThunk(
     return res.data;
   }
 );
+
+export const addComment = createAsyncThunk(
+  'post/addComment',
+  async (payload: Record<string, string | undefined>) => {
+    const res = await api.post('/comment', { ...payload });
+    return res.data;
+  }
+);

@@ -37,21 +37,16 @@ const User = () => {
     },
     {
       key: '2',
-      title: 'About',
-      content: 'Test tab 2',
-    },
-    {
-      key: '3',
       title: 'Friend',
       content: <Friends />,
     },
     {
-      key: '4',
+      key: '3',
       title: 'Photoes',
       content: 'hihi',
     },
     {
-      key: '5',
+      key: '4',
       title: 'Videos',
       content: 'hihi',
     },
@@ -70,7 +65,7 @@ const User = () => {
   return (
     <TimelineLayout meta={<Meta title="Bé ơi" description="Bé ơi" />}>
       <div className="w-full bg-gradient-to-t from-white to-[#4d80a4]">
-        <div className="bg-white lg:mx-[10%] xl:mx-[20%]">
+        <div className="bg-white lg:mx-[10%] xl:mx-[15%]">
           <div className="relative max-h-full min-h-[285px]">
             <img
               src={
@@ -111,8 +106,8 @@ const User = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between py-2 px-4 text-base">
-            <div className="flex">
+          <div className="py-2 px-4 text-base md:flex md:items-center md:justify-between">
+            <div className="flex items-center">
               <Tabs
                 options={options}
                 defaultKey={active}
@@ -155,7 +150,7 @@ const User = () => {
         </div>
       </div>
       <TabsContent
-        className="lg:mx-[10%] xl:mx-[20%]"
+        className="lg:mx-[10%] xl:mx-[15%]"
         options={options}
         active={active}
       />
