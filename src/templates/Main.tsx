@@ -25,12 +25,12 @@ const Main = (props: IMainProps) => {
   }, []);
 
   return (
-    <div className=" h-full w-full overflow-y-auto text-gray-700 antialiased">
+    <div className="h-full w-full overflow-y-auto text-gray-700 antialiased">
       {props.meta}
       <Headers />
       <div className="bg-main mt-[60px] grid h-full w-full px-4 text-xl">
         <Navbar />
-        <div className="py-2 pl-[320px]">{props.children}</div>
+        <div className="py-2 xl:pl-[320px]">{props.children}</div>
       </div>
     </div>
   );

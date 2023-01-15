@@ -1,9 +1,6 @@
 import React from 'react';
 
-interface IconProps {
-  color?: string;
-  width?: number;
-}
+import type { IconProps } from '..';
 
 export default function Briefcase(props: IconProps) {
   const { color = '', width = 28 } = props;

@@ -3,13 +3,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getListFriend, makeRelation } from '@/redux/actions';
 
 export interface RelationState {
-  listFriend: Record<string, string>;
+  listFriend: Record<string, string>[];
   isLoading: Record<'loadingMakeRelation' | 'loadingListFriend', boolean>;
 }
 
 // Initial state
 const initialState: RelationState = {
-  listFriend: {},
+  listFriend: [],
   isLoading: {
     loadingMakeRelation: false,
     loadingListFriend: false,
@@ -25,19 +25,19 @@ export const relationSlice = createSlice({
       .addCase(makeRelation.pending, (state) => {
         return {
           ...state,
-          isLoading: { ...state.isLoading, loadingRegister: true },
+          isLoading: { ...state.isLoading, loadingMakeRelation: true },
         };
       })
       .addCase(makeRelation.fulfilled, (state) => {
         return {
           ...state,
-          isLoading: { ...state.isLoading, loadingRegister: false },
+          isLoading: { ...state.isLoading, loadingMakeRelation: false },
         };
       })
       .addCase(makeRelation.rejected, (state) => {
         return {
           ...state,
-          isLoading: { ...state.isLoading, loadingRegister: false },
+          isLoading: { ...state.isLoading, loadingMakeRelation: false },
         };
       })
       .addCase(getListFriend.pending, (state) => {
@@ -46,9 +46,10 @@ export const relationSlice = createSlice({
           isLoading: { ...state.isLoading, loadingListFriend: true },
         };
       })
-      .addCase(getListFriend.fulfilled, (state) => {
+      .addCase(getListFriend.fulfilled, (state, action) => {
         return {
           ...state,
+          listFriend: action.payload.data,
           isLoading: { ...state.isLoading, loadingListFriend: false },
         };
       })
@@ -61,4 +62,4 @@ export const relationSlice = createSlice({
   },
 });
 
-export const { reducer: profileReducer } = relationSlice;
+export const { reducer: relationReducer } = relationSlice;

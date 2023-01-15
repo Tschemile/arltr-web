@@ -1,11 +1,8 @@
 import React from 'react';
 
-interface PlusIconProps {
-  color?: string;
-  width?: number;
-}
+import type { IconProps } from '..';
 
-export default function PlusIcon(props: PlusIconProps) {
+export default function PlusIcon(props: IconProps) {
   const { color = '', width = 28 } = props;
   return (
     <svg

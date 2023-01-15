@@ -1,9 +1,6 @@
 import React from 'react';
 
-interface IconProps {
-  color?: string;
-  width?: number;
-}
+import type { IconProps } from '..';
 
 export default function BarsBottomLeft(props: IconProps) {
   const { color = '', width = 28 } = props;
@@ -22,7 +19,7 @@ export default function BarsBottomLeft(props: IconProps) {
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
       />
     </svg>
   );
