@@ -41,7 +41,7 @@ export default function Register() {
     });
     if (Object.values(user).every((x) => Boolean(x))) {
       dispatch(register(user)).then((result: any) => {
-        if (result.payload?.data?.status === 201) {
+        if (result.payload?.status === 201) {
           router.push('/login');
         }
       });

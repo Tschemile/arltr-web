@@ -17,7 +17,7 @@ const TimelineLayout = (props: ITimelineProps) => {
 
   useEffect(() => {
     dispatch(getCurrentUser()).then((res: any) => {
-      if (res.payload?.data?.status !== 200) {
+      if (res.payload?.status !== 200) {
         router.push('/login');
       }
     });

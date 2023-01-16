@@ -1,5 +1,5 @@
 import type { ChangeEvent, FormEvent, ReactNode } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
 import Like from '@/components/Icons/Like';
@@ -8,8 +8,10 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 import Avatar from '../common/Avatar';
 import Divider from '../common/Divider';
+import Dropdown from '../common/Dropdown';
 import IconButton from '../common/IconButton';
 import Chain from '../Icons/Chain';
+import Comment from '../Icons/Comment';
 import Smite from '../Icons/Smite';
 
 interface CardPostProps {
@@ -21,15 +23,12 @@ interface CardPostProps {
 
 export default function CardPost(props: CardPostProps) {
   const dispatch = useAppDispatch();
-  const [isClickedCmt, setIsClickedCmt] = useState(false);
-  const [comments, setComments] = useState([]);
-  const [contentCmt, setContentCmt] = useState('');
-
+  const refs = useRef<null>(null);
   const { user = {}, listComments = [] } = props;
   const {
     author = {},
     images = [],
-    totalComments = 0,
+    totalComments: totalCommentsProps = 0,
     totalReacts = 0,
     id = '',
   } = user;
@@ -39,12 +38,22 @@ export default function CardPost(props: CardPostProps) {
     avatar: authorAvatar = '',
   } = author as Record<string, string>;
 
+  const [isClickedCmt, setIsClickedCmt] = useState(false);
+  const [comments, setComments] = useState<any[]>([]);
+  const [contentCmt, setContentCmt] = useState('');
+  const [totalComments, setTotalComments] = useState(totalCommentsProps);
+  const [open, setOpen] = useState(false);
+  let [limit, setLimit] = useState(2);
+
   const currentUser = useAppSelector((state) => state.auth.currentUser);
+
   const getAllCommentsOfPost = (postId: string) => {
     if (totalComments > 0 && !isClickedCmt) {
-      dispatch(getCommentsOfPost(postId));
+      dispatch(getCommentsOfPost({ post: postId, limit }));
     }
     setIsClickedCmt(true);
+    console.log(refs.current);
+    if (refs.current) (refs.current as any).focus();
   };
 
   const handleAddComment = (e: FormEvent<HTMLFormElement>) => {
@@ -52,9 +61,10 @@ export default function CardPost(props: CardPostProps) {
     dispatch(
       addComment({ post: id, content: contentCmt, image: currentUser?.avatar })
     ).then((res) => {
-      if (res.payload.status === 201) {
+      if (res.payload.comment) {
         setContentCmt('');
-        dispatch(getCommentsOfPost(id));
+        setComments([...comments, res?.payload?.comment]);
+        setTotalComments(Number(totalComments) + 1);
       }
     });
   };
@@ -64,12 +74,15 @@ export default function CardPost(props: CardPostProps) {
   };
 
   useEffect(() => {
+    // const newArr = _.uniq(listComments);
+    const newArr = listComments.filter((x) => x.postId === id);
+    console.log(newArr);
     const find = listComments.find((x) => {
-      return x.find((y: any) => {
+      return x.data.find((y: any) => {
         return y.post.id === id;
       });
     });
-    setComments(find);
+    if (find) setComments(find.data);
   }, [JSON.stringify(listComments)]);
 
   useEffect(() => {
@@ -80,7 +93,7 @@ export default function CardPost(props: CardPostProps) {
 
   return (
     <div className={`mb-4 rounded-lg bg-white px-4 shadow-lg`}>
-      <div className="flex justify-between">
+      <div className="flex items-center justify-between">
         <div className="flex items-center py-2">
           <div className="mr-4">
             <Avatar
@@ -96,7 +109,17 @@ export default function CardPost(props: CardPostProps) {
             <p className="text-sm">5 hrs</p>
           </div>
         </div>
-        <EllipsisHorizon />
+        <Dropdown
+          open={open}
+          content={[
+            { id: '1', title: 'Edit Post' },
+            { id: '2', title: 'Delete Post' },
+          ]}
+        >
+          <button onClick={() => setOpen(!open)}>
+            <EllipsisHorizon />
+          </button>
+        </Dropdown>
       </div>
       <div className="py-2">{props.children}</div>
       {!!images &&
@@ -142,7 +165,7 @@ export default function CardPost(props: CardPostProps) {
           onClick={() => getAllCommentsOfPost(id)}
         >
           <span className="">
-            <Like />
+            <Comment />
           </span>
           <p className="whitespace-nowrap pl-2 text-base text-[#929292]">
             Comment
@@ -152,7 +175,7 @@ export default function CardPost(props: CardPostProps) {
       <Divider />
 
       {isClickedCmt &&
-        (comments || []).map((x: any) => (
+        (comments || [])?.slice(0, limit)?.map((x: any) => (
           <div key={x.id} className="group flex items-center py-2">
             <div className="mr-4">
               <Avatar
@@ -171,8 +194,14 @@ export default function CardPost(props: CardPostProps) {
             </div>
           </div>
         ))}
-      {(comments || []).length > 2 && isClickedCmt && (
-        <div className="cursor-pointer text-sm underline opacity-50 hover:opacity-100">
+      {totalComments > 2 && isClickedCmt && (
+        <div
+          className="cursor-pointer text-sm underline opacity-50 hover:opacity-100"
+          onClick={() => {
+            limit += 10;
+            dispatch(getCommentsOfPost({ post: id, limit }));
+          }}
+        >
           View more 2 comments
         </div>
       )}
@@ -195,6 +224,7 @@ export default function CardPost(props: CardPostProps) {
             <input
               placeholder="Write comment here..."
               value={contentCmt}
+              ref={refs}
               onChange={(e) => handleChangeComment(e)}
               className="w-full bg-primary-color p-2 text-sm outline-none placeholder:text-sm placeholder:text-gray-500"
             />
