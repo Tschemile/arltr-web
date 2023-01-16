@@ -226,7 +226,7 @@ export default function Navbar() {
     domain = '' || undefined,
   } = currentUser;
   return (
-    <div className="fixed top-[60px] left-0 hidden h-[calc(100vh-60px)] w-[300px] overflow-y-auto overscroll-contain py-2 px-4 xl:block">
+    <div className="fixed top-[60px] left-0 hidden h-[calc(100vh-60px)] w-[300px] overflow-y-auto overscroll-contain py-2 px-4 lg:block">
       <button
         className="nav-item"
         onClick={() => router.push(`/user/${domain}`)}

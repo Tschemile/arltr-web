@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { getProfileUser, getRelationCount } from '@/redux/actions';
+import { getProfileUser } from '@/redux/actions';
 
 export interface ProfileState {
   profileUser: Record<string, string>;
@@ -29,9 +29,6 @@ export const profileSlice = createSlice({
       })
       .addCase(getProfileUser.rejected, (state) => {
         return { ...state, loading: false };
-      })
-      .addCase(getRelationCount.fulfilled, (state, { payload }) => {
-        return { ...state, totalRelation: payload.total };
       });
   },
 });

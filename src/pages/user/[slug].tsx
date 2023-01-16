@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 
 import Avatar from '@/components/common/Avatar';
@@ -13,7 +14,7 @@ import PlusIcon from '@/components/Icons/PlusIcon';
 import Friends from '@/components/Profile/Friends';
 import Timeline from '@/components/Profile/Timeline';
 import { Meta } from '@/layouts/Meta';
-import { getProfileUser, getRelationCount } from '@/redux/actions';
+import { editProfile, getProfileUser } from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { TimelineLayout } from '@/templates/TimelineLayout';
 
@@ -23,10 +24,11 @@ const User = () => {
   const profileUser = useAppSelector((state) => state.profile.profileUser);
 
   const {
-    name = '' || undefined,
-    gender = '' || undefined,
-    avatar = '' || undefined,
-    cover = '' || undefined,
+    name = '',
+    gender = '',
+    avatar = '',
+    cover = '',
+    about = '',
   } = profileUser;
 
   const options = [
@@ -53,14 +55,23 @@ const User = () => {
   ];
 
   const [active, setIsActive] = useState('1');
+  const [isEditIntro, setIsEditIntro] = useState(false);
+  const [introValue, setIntroValue] = useState('');
+  const [isEditedIntro, setIsEditedIntro] = useState(false);
+
+  const handleEditIntro = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(editProfile({ about: introValue })).then((res: any) => {
+      if (res.payload.status === 200) {
+        setIsEditedIntro(!isEditedIntro);
+        setIsEditIntro(false);
+      }
+    });
+  };
 
   useEffect(() => {
     if (query.slug) dispatch(getProfileUser(query.slug));
-  }, [query.slug]);
-
-  useEffect(() => {
-    dispatch(getRelationCount());
-  }, []);
+  }, [query.slug, isEditedIntro]);
 
   return (
     <TimelineLayout meta={<Meta title="Bé ơi" description="Bé ơi" />}>
@@ -76,32 +87,58 @@ const User = () => {
               className="absolute top-1/2 right-0 bottom-0 left-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
             />
             <div className="absolute bottom-2 right-3 z-[3]">
-              <Button background="secondary">
-                <Camera width={24} /> <span className="p-1 text-sm">Edit</span>
-              </Button>
+              <form>
+                <label
+                  htmlFor="upload-cover"
+                  className="flex cursor-pointer items-center rounded-md bg-primary-color px-2 py-1"
+                >
+                  <Camera width={24} />{' '}
+                  <span className="p-1 text-sm">Edit</span>
+                </label>
+                <input id="upload-cover" type="file" className="hidden" />
+              </form>
             </div>
           </div>
 
           <div className="relative z-[2] -mt-24 mb-4 text-center">
             <div className="mb-2">
-              {avatar && (
-                <Avatar
-                  src={avatar}
-                  alt="avatar"
-                  gender={gender}
-                  width={125}
-                  height={125}
-                  className="m-auto border-[3px] border-solid border-white"
-                />
-              )}
+              <Avatar
+                src={avatar}
+                alt="avatar"
+                gender={gender}
+                width={125}
+                height={125}
+                className="m-auto border-[3px] border-solid border-white"
+              />
+
               <IconButton className="absolute top-[55%] left-[53%] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white  text-black">
                 <Camera />
               </IconButton>
             </div>
             <div className="">
-              <h1 className="text-3xl"> {name} </h1>
+              <h1 className="text-3xl">{name}</h1>
               <p className="text-sm">
-                Family , Food , Fashion , Fourever <a href="#">Edit </a>
+                {isEditIntro ? (
+                  <form
+                    onSubmit={(e) => handleEditIntro(e)}
+                    className="inline-block w-1/3"
+                  >
+                    <input
+                      placeholder="Let introduce yourself now..."
+                      className="w-full rounded border border-primary-border py-1 px-4 text-base outline-none placeholder:text-base"
+                      defaultValue={about}
+                      onChange={(e) => setIntroValue(e.target.value)}
+                    />
+                  </form>
+                ) : (
+                  about
+                )}
+                <button
+                  className="pl-4 text-blue-500"
+                  onClick={() => setIsEditIntro(!isEditIntro)}
+                >
+                  {isEditIntro ? 'Cancel' : 'Edit'}
+                </button>
               </p>
             </div>
           </div>

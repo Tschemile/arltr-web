@@ -56,14 +56,15 @@ export const getProfileUser = createAsyncThunk(
   }
 );
 
-// relationship ❤️
-export const getRelationCount = createAsyncThunk(
-  'profile/getRelationCount',
-  async () => {
-    const res = await api.get('/relation/count');
-    return res.data;
+export const editProfile = createAsyncThunk(
+  'profile/editProfile',
+  async (payload: Record<string, string>) => {
+    const res = await api.patch(`/profile`, { ...payload });
+    return res;
   }
 );
+
+// relationship ❤️
 
 export const makeRelation = createAsyncThunk(
   'relation/makeRelation',
@@ -83,8 +84,8 @@ export const getListFriend = createAsyncThunk(
 
 export const getCommentsOfPost = createAsyncThunk(
   'post/getCommentsOfPost',
-  async (id: string) => {
-    const res = await api.get(`/comment/${id}`);
+  async (params: Record<string | 'post', string>) => {
+    const res = await api.get(`/comment`, { params });
     return res.data;
   }
 );

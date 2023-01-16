@@ -18,7 +18,7 @@ const Main = (props: IMainProps) => {
 
   useEffect(() => {
     dispatch(getCurrentUser()).then((res: any) => {
-      if (res.payload?.data?.status !== 200) {
+      if (res.payload?.status !== 200) {
         router.push('/login');
       }
     });
@@ -30,7 +30,7 @@ const Main = (props: IMainProps) => {
       <Headers />
       <div className="bg-main mt-[60px] grid h-full w-full px-4 text-xl">
         <Navbar />
-        <div className="py-2 pl-[320px]">{props.children}</div>
+        <div className="py-2 lg:pl-[320px]">{props.children}</div>
       </div>
     </div>
   );
