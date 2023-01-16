@@ -84,7 +84,7 @@ export const getListFriend = createAsyncThunk(
 
 export const getCommentsOfPost = createAsyncThunk(
   'post/getCommentsOfPost',
-  async (params: Record<string | 'post', string>) => {
+  async (params: Record<string | 'post', string | number>) => {
     const res = await api.get(`/comment`, { params });
     return res.data;
   }

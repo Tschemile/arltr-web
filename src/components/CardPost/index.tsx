@@ -43,12 +43,13 @@ export default function CardPost(props: CardPostProps) {
   const [contentCmt, setContentCmt] = useState('');
   const [totalComments, setTotalComments] = useState(totalCommentsProps);
   const [open, setOpen] = useState(false);
+  let [limit, setLimit] = useState(2);
 
   const currentUser = useAppSelector((state) => state.auth.currentUser);
 
   const getAllCommentsOfPost = (postId: string) => {
     if (totalComments > 0 && !isClickedCmt) {
-      dispatch(getCommentsOfPost({ post: postId }));
+      dispatch(getCommentsOfPost({ post: postId, limit }));
     }
     setIsClickedCmt(true);
     console.log(refs.current);
@@ -73,12 +74,15 @@ export default function CardPost(props: CardPostProps) {
   };
 
   useEffect(() => {
+    // const newArr = _.uniq(listComments);
+    const newArr = listComments.filter((x) => x.postId === id);
+    console.log(newArr);
     const find = listComments.find((x) => {
-      return x.find((y: any) => {
+      return x.data.find((y: any) => {
         return y.post.id === id;
       });
     });
-    if (find) setComments(find);
+    if (find) setComments(find.data);
   }, [JSON.stringify(listComments)]);
 
   useEffect(() => {
@@ -171,7 +175,7 @@ export default function CardPost(props: CardPostProps) {
       <Divider />
 
       {isClickedCmt &&
-        (comments || []).map((x: any) => (
+        (comments || [])?.slice(0, limit)?.map((x: any) => (
           <div key={x.id} className="group flex items-center py-2">
             <div className="mr-4">
               <Avatar
@@ -190,8 +194,14 @@ export default function CardPost(props: CardPostProps) {
             </div>
           </div>
         ))}
-      {(comments || []).length > 2 && isClickedCmt && (
-        <div className="cursor-pointer text-sm underline opacity-50 hover:opacity-100">
+      {totalComments > 2 && isClickedCmt && (
+        <div
+          className="cursor-pointer text-sm underline opacity-50 hover:opacity-100"
+          onClick={() => {
+            limit += 10;
+            dispatch(getCommentsOfPost({ post: id, limit }));
+          }}
+        >
           View more 2 comments
         </div>
       )}

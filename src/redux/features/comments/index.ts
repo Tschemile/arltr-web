@@ -23,10 +23,24 @@ export const commentSlice = createSlice({
         return { ...state, isLoading: true };
       })
       .addCase(getCommentsOfPost.fulfilled, (state, { payload }) => {
+        let newArr = [...state.listComment];
+        const { comments = [] } = payload;
+
+        const find = newArr.filter(
+          (x: any) => x.postId === comments[0].post.id
+        );
+        console.log(find);
+        if (find.length) {
+          find.map((x) => {
+            return { ...x, data: comments };
+          });
+        } else {
+          newArr = [...newArr, { postId: comments[0].id, data: comments }];
+        }
         return {
           ...state,
           isLoading: false,
-          listComment: [...state.listComment, payload.comments],
+          listComment: newArr,
         };
       })
       .addCase(getCommentsOfPost.rejected, (state) => {
