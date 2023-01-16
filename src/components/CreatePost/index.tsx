@@ -69,7 +69,7 @@ const listActions = [
 ];
 
 export default function CreatePost() {
-  const profileUser = useAppSelector((state) => state.profile.profileUser);
+  const profileUser = useAppSelector((state) => state.auth.currentUser);
 
   const {
     name = '' || undefined,

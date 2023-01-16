@@ -24,7 +24,7 @@ const TimelineLayout = (props: ITimelineProps) => {
   }, []);
 
   return (
-    <div className=" h-full w-full overflow-y-auto text-gray-700 antialiased">
+    <div className="h-full w-full overflow-y-auto text-gray-700 antialiased">
       {props.meta}
       <Headers />
       <div className="bg-main mt-[60px] grid h-full w-full text-xl">

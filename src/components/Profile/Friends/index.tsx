@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import TabsContent from '@/components/common/Tabs/TabsContent';
+import { getListFriend } from '@/redux/actions';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 import Button from '../../common/Button';
 import Card from '../../common/Card';
@@ -44,51 +46,16 @@ const Grid = (props: GridProps) => {
 export default function Friends(props: TabsProps) {
   const {} = props;
   const [active, setIsActive] = useState('1');
+  const dispatch = useAppDispatch();
+  const {
+    isLoading: { loadingListFriend },
+    listFriend,
+  } = useAppSelector((state) => state.relation);
 
-  const fen = [
-    {
-      id: 1,
-      name: 'Fen',
-      following: '100K',
-      img: 'https://i0.wp.com/codigoespagueti.com/wp-content/uploads/2022/07/mejores-animes-temporada-primavera-2022.jpg?fit=1280%2C720&quality=80&ssl=1',
-    },
-    {
-      id: 2,
-      name: 'Fan',
-      following: '100K',
-      img: 'https://i0.wp.com/codigoespagueti.com/wp-content/uploads/2022/07/mejores-animes-temporada-primavera-2022.jpg?fit=1280%2C720&quality=80&ssl=1',
-    },
-    {
-      id: 3,
-      name: 'Fung',
-      following: '100K',
-      img: 'https://i0.wp.com/codigoespagueti.com/wp-content/uploads/2022/07/mejores-animes-temporada-primavera-2022.jpg?fit=1280%2C720&quality=80&ssl=1',
-    },
-    {
-      id: 4,
-      name: 'Fin',
-      following: '100K',
-      img: 'https://i0.wp.com/codigoespagueti.com/wp-content/uploads/2022/07/mejores-animes-temporada-primavera-2022.jpg?fit=1280%2C720&quality=80&ssl=1',
-    },
-    {
-      id: 5,
-      name: 'Fon',
-      following: '100K',
-      img: 'https://i0.wp.com/codigoespagueti.com/wp-content/uploads/2022/07/mejores-animes-temporada-primavera-2022.jpg?fit=1280%2C720&quality=80&ssl=1',
-    },
-    {
-      id: 6,
-      name: 'Fên',
-      following: '100K',
-      img: 'https://i0.wp.com/codigoespagueti.com/wp-content/uploads/2022/07/mejores-animes-temporada-primavera-2022.jpg?fit=1280%2C720&quality=80&ssl=1',
-    },
-    {
-      id: 7,
-      name: 'Fjn',
-      following: '100K',
-      img: 'https://i0.wp.com/codigoespagueti.com/wp-content/uploads/2022/07/mejores-animes-temporada-primavera-2022.jpg?fit=1280%2C720&quality=80&ssl=1',
-    },
-  ];
+  useEffect(() => {
+    dispatch(getListFriend({ type: 'FOLLOWING' }));
+  }, []);
+
   const fen2 = [
     {
       id: 1,
@@ -139,7 +106,7 @@ export default function Friends(props: TabsProps) {
     {
       key: '1',
       title: 'All Friends 9,999',
-      content: <Grid data={fen} />,
+      content: <Grid data={listFriend} />,
     },
     {
       key: '2',

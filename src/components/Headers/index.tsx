@@ -8,17 +8,33 @@ import IconButton from '../common/IconButton';
 import Input from '../common/Input';
 import Tooltip from '../common/Tooltip';
 import ArrowDown from '../Icons/ArrowDown';
+import Bars from '../Icons/Bars';
+import BarsBottomLeft from '../Icons/BarsBottomLeft';
 import Bell from '../Icons/Bell';
 import Message from '../Icons/Message';
 import PlusIcon from '../Icons/PlusIcon';
 
 export default function Headers() {
+  const bar = true;
   return (
     <div className="fixed z-20 h-[60px] w-full bg-white py-2 px-4">
       <div className="flex items-center justify-between">
-        <Link className="hover:border-0" href="/">
-          <Image src={Logo} width={40} alt="logo" />
-        </Link>
+        <div className="flex items-center">
+          <div className="mr-2 xl:hidden">
+            <div className="peer transition duration-200 hover:hidden">
+              <BarsBottomLeft />
+            </div>
+            <div
+              className="hidden transition duration-200 ease-in-out peer-hover:block"
+              onClick={() => localStorage.setItem('bar', `${!bar}`)}
+            >
+              <Bars />
+            </div>
+          </div>
+          <Link className="hover:border-0" href="/">
+            <Image src={Logo} width={40} alt="logo" />
+          </Link>
+        </div>
         <Input
           icons={
             <svg
