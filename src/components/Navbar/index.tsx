@@ -218,6 +218,7 @@ export default function Navbar() {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(4);
   const currentUser = useAppSelector((state) => state.auth.currentUser);
+  const isShow = useAppSelector((state) => state.home.isShowNavbar);
 
   const {
     avatar = '' || undefined,
@@ -226,7 +227,11 @@ export default function Navbar() {
     domain = '' || undefined,
   } = currentUser;
   return (
-    <div className="fixed top-[60px] hidden h-[calc(100vh-60px)] w-[300px] -translate-x-full overflow-y-auto overscroll-contain py-2 px-4 xl:block xl:translate-x-0">
+    <div
+      className={`fixed top-[60px] h-[calc(100vh-60px)] w-[300px] ${
+        !isShow ? '-translate-x-full' : 'translate-x-0'
+      } z-50 overflow-y-auto overscroll-contain bg-white py-2 px-4 transition-all duration-200 ease-in-out xl:block xl:translate-x-0`}
+    >
       <button
         className="nav-item"
         onClick={() => router.push(`/user/${domain}`)}

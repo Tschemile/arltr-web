@@ -3,6 +3,8 @@ import Link from 'next/dist/client/link';
 import React from 'react';
 
 import Logo from '@/assets/logo.png';
+import { onShowNavbar } from '@/redux/features/home/homeSlice';
+import { useAppDispatch } from '@/redux/hooks';
 
 import IconButton from '../common/IconButton';
 import Input from '../common/Input';
@@ -15,19 +17,19 @@ import Message from '../Icons/Message';
 import PlusIcon from '../Icons/PlusIcon';
 
 export default function Headers() {
-  const bar = true;
+  const dispatch = useAppDispatch();
   return (
     <div className="fixed z-20 h-[60px] w-full bg-white py-2 px-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <div className="mr-2 xl:hidden">
+          <div
+            className="mr-2 xl:hidden"
+            onClick={() => dispatch(onShowNavbar())}
+          >
             <div className="peer transition duration-200 hover:hidden">
               <BarsBottomLeft />
             </div>
-            <div
-              className="hidden transition duration-200 ease-in-out peer-hover:block"
-              onClick={() => localStorage.setItem('bar', `${!bar}`)}
-            >
+            <div className="hidden transition duration-200 ease-in-out peer-hover:block">
               <Bars />
             </div>
           </div>

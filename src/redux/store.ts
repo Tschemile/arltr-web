@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import { authReducer } from './features/auth/authSlice';
 import { commentsReducer } from './features/comments';
+import { homeReducer } from './features/home/homeSlice';
 import { profileReducer } from './features/profile/profileSlice';
 import { relationReducer } from './features/relation/relationSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    home: homeReducer,
     profile: profileReducer,
     comments: commentsReducer,
     relation: relationReducer,
