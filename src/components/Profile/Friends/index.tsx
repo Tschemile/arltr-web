@@ -113,16 +113,6 @@ export default function Friends(props: TabsProps) {
       title: 'Recently added',
       content: <Grid data={fen2} />,
     },
-    {
-      key: '3',
-      title: 'Family',
-      content: <Grid data={fen3} />,
-    },
-    {
-      key: '4',
-      title: 'University',
-      content: <Grid data={fen3} />,
-    },
   ];
   return (
     <Card>

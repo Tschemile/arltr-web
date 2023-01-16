@@ -31,6 +31,7 @@ export default function CardPost(props: CardPostProps) {
     totalComments: totalCommentsProps = 0,
     totalReacts = 0,
     id = '',
+    createdAt: datePostProps = new Date(),
   } = user;
   const {
     name: authorName = '',
@@ -41,10 +42,21 @@ export default function CardPost(props: CardPostProps) {
   const [isClickedCmt, setIsClickedCmt] = useState(false);
   const [comments, setComments] = useState<any[]>([]);
   const [contentCmt, setContentCmt] = useState('');
-  const [totalComments, setTotalComments] = useState(totalCommentsProps);
+  const [totalComments, setTotalComments] = useState(
+    Number(totalCommentsProps)
+  );
   const [open, setOpen] = useState(false);
-  let [limit, setLimit] = useState(2);
-
+  const [limit, setLimit] = useState(2);
+  const datePosts = new Date(datePostProps);
+  const timeCreated = Math.floor(
+    (Date.parse(new Date()) - Date.parse(datePostProps)) / 3600000
+  );
+  const timeOfPosts =
+    timeCreated < 24
+      ? `${timeCreated} hours`
+      : `${datePosts.getDate()}/${
+          datePosts.getMonth() + 1
+        }/${datePosts.getFullYear()}`;
   const currentUser = useAppSelector((state) => state.auth.currentUser);
 
   const getAllCommentsOfPost = (postId: string) => {
@@ -52,7 +64,6 @@ export default function CardPost(props: CardPostProps) {
       dispatch(getCommentsOfPost({ post: postId, limit }));
     }
     setIsClickedCmt(true);
-    console.log(refs.current);
     if (refs.current) (refs.current as any).focus();
   };
 
@@ -64,7 +75,7 @@ export default function CardPost(props: CardPostProps) {
       if (res.payload.comment) {
         setContentCmt('');
         setComments([...comments, res?.payload?.comment]);
-        setTotalComments(Number(totalComments) + 1);
+        setTotalComments(totalComments + 1);
       }
     });
   };
@@ -74,9 +85,6 @@ export default function CardPost(props: CardPostProps) {
   };
 
   useEffect(() => {
-    // const newArr = _.uniq(listComments);
-    const newArr = listComments.filter((x) => x.postId === id);
-    console.log(newArr);
     const find = listComments.find((x) => {
       return x.data.find((y: any) => {
         return y.post.id === id;
@@ -88,6 +96,7 @@ export default function CardPost(props: CardPostProps) {
   useEffect(() => {
     return () => {
       setIsClickedCmt(false);
+      setLimit(2);
     };
   }, []);
 
@@ -106,7 +115,7 @@ export default function CardPost(props: CardPostProps) {
           </div>
           <div className="">
             <h3 className="text-lg font-medium">{authorName}</h3>
-            <p className="text-sm">5 hrs</p>
+            <p className="text-sm">{timeOfPosts}</p>
           </div>
         </div>
         <Dropdown
@@ -172,7 +181,7 @@ export default function CardPost(props: CardPostProps) {
           </p>
         </button>
       </div>
-      <Divider />
+      {isClickedCmt ? <Divider /> : <div className="my-4" />}
 
       {isClickedCmt &&
         (comments || [])?.slice(0, limit)?.map((x: any) => (
@@ -194,17 +203,20 @@ export default function CardPost(props: CardPostProps) {
             </div>
           </div>
         ))}
-      {totalComments > 2 && isClickedCmt && (
-        <div
-          className="cursor-pointer text-sm underline opacity-50 hover:opacity-100"
-          onClick={() => {
-            limit += 10;
-            dispatch(getCommentsOfPost({ post: id, limit }));
-          }}
-        >
-          View more 2 comments
-        </div>
-      )}
+      {totalComments > 2 &&
+        isClickedCmt &&
+        totalComments !== (comments || []).length &&
+        totalComments - limit > 0 && (
+          <div
+            className="cursor-pointer text-sm underline opacity-50 hover:opacity-100"
+            onClick={() => {
+              setLimit(limit + 10);
+              dispatch(getCommentsOfPost({ post: id, limit: limit + 10 }));
+            }}
+          >
+            View more {totalComments - limit} comments
+          </div>
+        )}
       {isClickedCmt && (
         <div className="flex items-center py-3">
           <div className="mr-4">

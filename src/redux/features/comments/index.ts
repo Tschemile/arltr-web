@@ -26,12 +26,13 @@ export const commentSlice = createSlice({
         let newArr = [...state.listComment];
         const { comments = [] } = payload;
 
-        const find = newArr.filter(
-          (x: any) => x.postId === comments[0].post.id
-        );
-        console.log(find);
+        const find = newArr.filter((x: any) => x.postId === comments[0].id);
+        // .sort(
+        //   (a: any, b: any) => new Date(a.createdAt) - new Date(b.createdAt)
+        // );
+
         if (find.length) {
-          find.map((x) => {
+          newArr = find.map((x) => {
             return { ...x, data: comments };
           });
         } else {
