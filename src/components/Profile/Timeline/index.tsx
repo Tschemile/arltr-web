@@ -92,7 +92,7 @@ export default function Timeline() {
       <div className="md:col-span-2">
         <CreatePost />
         {(posts as Record<string, string>[])?.map((x) => (
-          <CardPost user={x} key={x.id} listComments={listComments}>
+          <CardPost post={x} key={x.id} listComments={listComments}>
             {x.content}
           </CardPost>
         ))}

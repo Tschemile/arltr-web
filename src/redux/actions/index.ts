@@ -97,3 +97,11 @@ export const addComment = createAsyncThunk(
     return res.data;
   }
 );
+
+export const uploadFile = createAsyncThunk(
+  'upload/uploadFile',
+  async (payload: FormData) => {
+    const res = await api.post('/file/upload', payload);
+    return res;
+  }
+);

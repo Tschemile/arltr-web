@@ -1,5 +1,3 @@
-import 'react-toastify/dist/ReactToastify.css';
-
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';

@@ -17,14 +17,14 @@ import Smite from '../Icons/Smite';
 interface CardPostProps {
   children: ReactNode;
   img?: string;
-  user?: Record<string, string>;
+  post?: Record<string, string>;
   listComments?: any[];
 }
 
 export default function CardPost(props: CardPostProps) {
   const dispatch = useAppDispatch();
   const refs = useRef<null>(null);
-  const { user = {}, listComments = [] } = props;
+  const { post = {}, listComments = [] } = props;
   const {
     author = {},
     images = [],
@@ -32,7 +32,7 @@ export default function CardPost(props: CardPostProps) {
     totalReacts = 0,
     id = '',
     createdAt: datePostProps = new Date(),
-  } = user;
+  } = post;
   const {
     name: authorName = '',
     gender: authorGender = '',
@@ -57,6 +57,7 @@ export default function CardPost(props: CardPostProps) {
       : `${datePosts.getDate()}/${
           datePosts.getMonth() + 1
         }/${datePosts.getFullYear()}`;
+
   const currentUser = useAppSelector((state) => state.auth.currentUser);
 
   const getAllCommentsOfPost = (postId: string) => {
@@ -74,7 +75,7 @@ export default function CardPost(props: CardPostProps) {
     ).then((res) => {
       if (res.payload.comment) {
         setContentCmt('');
-        setComments([...comments, res?.payload?.comment]);
+        dispatch(getCommentsOfPost({ post: id, limit }));
         setTotalComments(totalComments + 1);
       }
     });
@@ -85,12 +86,12 @@ export default function CardPost(props: CardPostProps) {
   };
 
   useEffect(() => {
-    const find = listComments.find((x) => {
-      return x.data.find((y: any) => {
-        return y.post.id === id;
+    if (listComments && listComments.length) {
+      const find = listComments.find((x) => {
+        return x.postId === id;
       });
-    });
-    if (find) setComments(find.data);
+      if (find) setComments(find.data);
+    }
   }, [JSON.stringify(listComments)]);
 
   useEffect(() => {
@@ -181,10 +182,10 @@ export default function CardPost(props: CardPostProps) {
           </p>
         </button>
       </div>
-      {isClickedCmt ? <Divider /> : <div className="my-4" />}
+      <Divider />
 
       {isClickedCmt &&
-        (comments || [])?.slice(0, limit)?.map((x: any) => (
+        (comments || []).slice(0, limit).map((x: any) => (
           <div key={x.id} className="group flex items-center py-2">
             <div className="mr-4">
               <Avatar
@@ -217,43 +218,42 @@ export default function CardPost(props: CardPostProps) {
             View more {totalComments - limit} comments
           </div>
         )}
-      {isClickedCmt && (
-        <div className="flex items-center py-3">
-          <div className="mr-4">
-            <Avatar
-              src={currentUser.avatar}
-              alt="avatar"
-              width={45}
-              className="m-auto border-[3px] border-solid border-white"
-            />
-          </div>
-          <form
-            onSubmit={(e) => {
-              handleAddComment(e);
-            }}
-            className="flex w-full items-center justify-between rounded-full bg-primary-color px-4"
-          >
-            <input
-              placeholder="Write comment here..."
-              value={contentCmt}
-              ref={refs}
-              onChange={(e) => handleChangeComment(e)}
-              className="w-full bg-primary-color p-2 text-sm outline-none placeholder:text-sm placeholder:text-gray-500"
-            />
-            <ul className="flex items-center">
-              <li className="cursor-pointer">
-                <Chain />
-              </li>
-              <li className="cursor-pointer">
-                <Smite />
-              </li>
-              <li className="cursor-pointer">
-                <EllipsisHorizon />
-              </li>
-            </ul>
-          </form>
+
+      <div className="flex items-center py-3">
+        <div className="mr-4">
+          <Avatar
+            src={currentUser.avatar}
+            alt="avatar"
+            width={45}
+            className="m-auto border-[3px] border-solid border-white"
+          />
         </div>
-      )}
+        <form
+          onSubmit={(e) => {
+            handleAddComment(e);
+          }}
+          className="flex w-full items-center justify-between rounded-full bg-primary-color px-4"
+        >
+          <input
+            placeholder="Write comment here..."
+            value={contentCmt}
+            ref={refs}
+            onChange={(e) => handleChangeComment(e)}
+            className="w-full bg-primary-color p-2 text-sm outline-none placeholder:text-sm placeholder:text-gray-500"
+          />
+          <ul className="flex items-center">
+            <li className="cursor-pointer">
+              <Chain />
+            </li>
+            <li className="cursor-pointer">
+              <Smite />
+            </li>
+            <li className="cursor-pointer">
+              <EllipsisHorizon />
+            </li>
+          </ul>
+        </form>
+      </div>
     </div>
   );
 }
