@@ -236,8 +236,15 @@ export default function Navbar() {
         className="nav-item"
         onClick={() => router.push(`/user/${domain}`)}
       >
-        <Avatar src={avatar} gender={gender} alt="avatar" width={36} />
-        <p className="pl-3">{name}</p>
+        <div className="mr-4 h-[40px] w-[40px]">
+          <Avatar
+            src={avatar}
+            gender={gender}
+            alt="avatar"
+            className="h-full w-full"
+          />
+        </div>
+        <p>{name}</p>
       </button>
       <div className="my-4">
         {listMenu.slice(0, isVisible).map((x) => (

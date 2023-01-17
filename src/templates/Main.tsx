@@ -38,7 +38,7 @@ const Main = (props: IMainProps) => {
         } z-40 mt-[60px] grid h-full w-full text-xl`}
       >
         <Navbar />
-        <div className={`${isShow ? '-z-10' : ''} py-2 xl:pl-[320px]`}>
+        <div className={`${isShow ? '-z-10' : ''} py-2 px-4 xl:pl-[320px]`}>
           {props.children}
         </div>
       </div>

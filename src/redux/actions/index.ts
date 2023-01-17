@@ -26,6 +26,11 @@ interface IInRelation {
   type: 'FOLLOWING' | 'FOLLOWER' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';
 }
 
+interface ICreatePost {
+  content: string;
+  type: 'STORY' | 'POST' | 'REEL';
+}
+
 export const register = createAsyncThunk(
   'auth/register',
   async (payload: IUser) => {
@@ -82,6 +87,8 @@ export const getListFriend = createAsyncThunk(
   }
 );
 
+// POST
+
 export const getCommentsOfPost = createAsyncThunk(
   'post/getCommentsOfPost',
   async (params: Record<string | 'post', string | number>) => {
@@ -102,6 +109,14 @@ export const uploadFile = createAsyncThunk(
   'upload/uploadFile',
   async (payload: FormData) => {
     const res = await api.post('/file/upload', payload);
+    return res;
+  }
+);
+
+export const createPost = createAsyncThunk(
+  'post/createPost',
+  async (payload: ICreatePost) => {
+    const res = await api.post('/post', { ...payload });
     return res;
   }
 );

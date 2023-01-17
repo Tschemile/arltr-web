@@ -6,6 +6,7 @@ import Like from '@/components/Icons/Like';
 import { addComment, getCommentsOfPost } from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
+import ActionButton from '../common/ActionButton';
 import Avatar from '../common/Avatar';
 import Divider from '../common/Divider';
 import Dropdown from '../common/Dropdown';
@@ -105,12 +106,12 @@ export default function CardPost(props: CardPostProps) {
     <div className={`mb-4 rounded-lg bg-white px-4 shadow-lg`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center py-2">
-          <div className="mr-4">
+          <div className="mr-4 h-[45px] w-[45px]">
             <Avatar
               src={authorAvatar}
               alt="avatar"
               width={50}
-              className="m-auto border-[3px] border-solid border-white"
+              className="m-auto h-full w-full rounded-full"
               gender={authorGender}
             />
           </div>
@@ -162,37 +163,29 @@ export default function CardPost(props: CardPostProps) {
       </div>
       <Divider />
       <div className="-my-3 flex">
-        <button className="nav-item justify-center">
-          <span className="">
-            <Like />
-          </span>
-          <p className="whitespace-nowrap pl-2 text-base text-[#929292]">
-            Like
-          </p>
-        </button>
-        <button
-          className="nav-item justify-center"
+        <ActionButton
+          className="justify-center"
+          // onClick={() => getAllCommentsOfPost(id)}
+          icon={<Like />}
+          text="Like"
+        />
+        <ActionButton
+          className="justify-center"
           onClick={() => getAllCommentsOfPost(id)}
-        >
-          <span className="">
-            <Comment />
-          </span>
-          <p className="whitespace-nowrap pl-2 text-base text-[#929292]">
-            Comment
-          </p>
-        </button>
+          icon={<Comment />}
+          text="Comment"
+        />
       </div>
       <Divider />
 
       {isClickedCmt &&
         (comments || []).slice(0, limit).map((x: any) => (
           <div key={x.id} className="group flex items-center py-2">
-            <div className="mr-4">
+            <div className="mr-4 h-[40px] w-[40px]">
               <Avatar
                 src={x.image}
                 alt="avatar"
-                width={50}
-                className="m-auto border-[3px] border-solid border-white"
+                className="m-auto h-full w-full rounded-full"
               />
             </div>
             <div className="relative rounded-lg bg-primary-color p-2 after:absolute after:top-3 after:-left-5 after:border-[10px] after:border-transparent after:border-r-primary-color">
@@ -220,12 +213,11 @@ export default function CardPost(props: CardPostProps) {
         )}
 
       <div className="flex items-center py-3">
-        <div className="mr-4">
+        <div className="mr-4 h-[40px] w-[40px]">
           <Avatar
             src={currentUser.avatar}
             alt="avatar"
-            width={45}
-            className="m-auto border-[3px] border-solid border-white"
+            className="m-auto h-full w-full rounded-full"
           />
         </div>
         <form
