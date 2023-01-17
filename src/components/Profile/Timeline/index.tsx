@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { baseURL } from '@/api';
 import CardPost from '@/components/CardPost';
@@ -11,7 +11,8 @@ import Heart from '@/components/Icons/Heart';
 import Sad from '@/components/Icons/Sad';
 import Smite from '@/components/Icons/Smite';
 import Star from '@/components/Icons/Star';
-import { useAppSelector } from '@/redux/hooks';
+import { createPost } from '@/redux/actions';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 interface InfoContentProps {
   icon: ReactNode;
@@ -72,26 +73,56 @@ const Block = (props: BlockProps) => {
 };
 
 export default function Timeline() {
+  const dispatch = useAppDispatch();
   const profileUser = useAppSelector((state) => state.profile.profileUser);
   const listComments = useAppSelector((state) => state.comments.listComment);
 
   const {
-    gender = '' || undefined,
-    socialLinks = [] || undefined,
-    hobbies = [] || undefined,
-    work = '' || undefined,
-    posts = [] || undefined,
-    albums = [] || undefined,
-    followings = [] || undefined,
+    gender = '',
+    socialLinks = [],
+    hobbies = [],
+    work = '',
+    posts = [],
+    albums = [],
+    followings = [],
+    groups = [],
     totalFollowing = 0,
     totalAlbums = 0,
   } = profileUser;
 
+  const [openModal, setOpenModal] = useState(false);
+  const [content, setContent] = useState('');
+  const [listPosts, setListPosts] = useState<Record<string, string>[]>([]);
+
+  const onClose = () => {
+    setOpenModal(false);
+  };
+
+  const onSubmit = () => {
+    dispatch(createPost({ type: 'POST', content })).then((res: any) => {
+      if (res.payload.status === 201) {
+        setOpenModal(false);
+        setContent('');
+        setListPosts([...posts, res.payload.data.post]);
+      }
+    });
+  };
+
+  useEffect(() => {
+    setListPosts(posts as []);
+  }, [JSON.stringify(posts)]);
+
   return (
     <div className="grid gap-2 md:grid-cols-3 md:gap-8">
       <div className="md:col-span-2">
-        <CreatePost />
-        {(posts as Record<string, string>[])?.map((x) => (
+        <CreatePost
+          openModal={openModal}
+          onClose={onClose}
+          onSubmit={onSubmit}
+          setContent={setContent}
+          setOpenModal={setOpenModal}
+        />
+        {(listPosts as Record<string, string>[])?.map((x) => (
           <CardPost post={x} key={x.id} listComments={listComments}>
             {x.content}
           </CardPost>
@@ -119,23 +150,22 @@ export default function Timeline() {
         </Block>
         <Block total={totalAlbums} title="Albums">
           <div className="grid grid-cols-3 gap-2">
-            {(albums as []).map((x: any) => (
-              <div key={x.id} className="col-span-1">
+            {(albums as []).slice(0, 9).map((x: any) => (
+              <div key={x.id} className="col-span-1 h-[100px] w-full">
                 <img
                   alt="photo"
                   src={`${baseURL}/file/${x.filename}`}
-                  className="rounded-lg"
+                  className="h-full w-full rounded-lg object-cover"
                 />
               </div>
             ))}
           </div>
         </Block>
-        {followings.length > 0 && (
-          <Block title="Following" total={totalFollowing}>
-            {(followings as []).map((x) => x)}
-          </Block>
-        )}
-        <Block title="Groups">hehe</Block>
+
+        <Block title="Following" total={totalFollowing}>
+          {(followings as []).map((x) => x)}
+        </Block>
+        <Block title="Groups">{(groups as []).map((x) => x)}</Block>
       </div>
     </div>
   );

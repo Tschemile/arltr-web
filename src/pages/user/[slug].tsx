@@ -5,9 +5,9 @@ import { toast } from 'react-toastify';
 
 import Avatar from '@/components/common/Avatar';
 import Button from '@/components/common/Button';
-import IconButton from '@/components/common/IconButton';
 import Tabs from '@/components/common/Tabs';
 import TabsContent from '@/components/common/Tabs/TabsContent';
+import UploadButton from '@/components/common/UploadButton';
 import BulletList from '@/components/Icons/BulletList';
 import Camera from '@/components/Icons/Camera';
 import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
@@ -27,7 +27,7 @@ const User = () => {
   const {
     name = '',
     gender = '',
-    avatar = '',
+    avatar: avatarProps = '',
     cover: coverImgProps = '',
     about = '',
   } = profileUser;
@@ -60,6 +60,7 @@ const User = () => {
   const [introValue, setIntroValue] = useState('');
   const [isEditedIntro, setIsEditedIntro] = useState(false);
   const [coverImg, setCoverImg] = useState('');
+  const [avatarImg, setAvatarImg] = useState('');
 
   const handleEditIntro = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -86,6 +87,21 @@ const User = () => {
     }
   };
 
+  const handleUploadAvatar = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const formData = new FormData();
+      formData.append('file', e.target.files[0] as string | Blob);
+      formData.append('type', 'AVATAR');
+      dispatch(uploadFile(formData)).then((res: any) => {
+        const { payload: { status = 0, data = '' } = {} } = res;
+        if (status === 201) {
+          toast.success('Upload success');
+          setAvatarImg(data);
+        }
+      });
+    }
+  };
+
   useEffect(() => {
     if (query.slug) dispatch(getProfileUser(query.slug));
   }, [query.slug, isEditedIntro]);
@@ -93,6 +109,10 @@ const User = () => {
   useEffect(() => {
     if (coverImgProps) setCoverImg(coverImgProps);
   }, [coverImgProps]);
+
+  useEffect(() => {
+    if (avatarProps) setAvatarImg(avatarProps);
+  }, [avatarProps]);
 
   return (
     <TimelineLayout meta={<Meta title="Bé ơi" description="Bé ơi" />}>
@@ -108,39 +128,33 @@ const User = () => {
               className="absolute top-1/2 right-0 bottom-0 left-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
             />
             <div className="absolute bottom-2 right-3 z-[3]">
-              <form>
-                <label
-                  htmlFor="upload-cover"
-                  className="flex cursor-pointer items-center rounded-md bg-primary-color px-2 py-1"
-                >
-                  <Camera width={24} />{' '}
-                  <span className="p-1 text-sm">Edit</span>
-                </label>
-                <input
-                  id="upload-cover"
-                  type="file"
-                  accept=".jpg, .png, .jpeg, .svg"
-                  className="hidden"
-                  onChange={handleUploadCover}
-                />
-              </form>
+              <UploadButton
+                handleChange={handleUploadCover}
+                id="upload-cover"
+                className="flex cursor-pointer items-center rounded-md bg-primary-color px-2 py-1"
+              >
+                <Camera width={24} /> <span className="p-1 text-sm">Edit</span>
+              </UploadButton>
             </div>
           </div>
 
           <div className="relative z-[2] -mt-24 mb-4 text-center">
-            <div className="mb-2">
+            <div className="mx-auto mb-2 h-[120px] w-[120px]">
               <Avatar
-                src={avatar}
+                src={avatarImg}
                 alt="avatar"
                 gender={gender}
                 width={125}
                 height={125}
-                className="m-auto border-[3px] border-solid border-white"
+                className="h-full w-full border-[3px] border-solid border-white"
               />
-
-              <IconButton className="absolute top-[55%] left-[53%] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white  text-black">
+              <UploadButton
+                id="upload-avatar"
+                handleChange={handleUploadAvatar}
+                className="absolute top-[55%] left-[53%] -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 border-white bg-primary-color p-1"
+              >
                 <Camera />
-              </IconButton>
+              </UploadButton>
             </div>
             <div className="">
               <h1 className="text-3xl">{name}</h1>
