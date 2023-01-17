@@ -11,6 +11,7 @@ import Avatar from '../common/Avatar';
 import Divider from '../common/Divider';
 import Dropdown from '../common/Dropdown';
 import IconButton from '../common/IconButton';
+import Tooltip from '../common/Tooltip';
 import Chain from '../Icons/Chain';
 import Comment from '../Icons/Comment';
 import Smite from '../Icons/Smite';
@@ -49,15 +50,47 @@ export default function CardPost(props: CardPostProps) {
   const [open, setOpen] = useState(false);
   const [limit, setLimit] = useState(2);
   const datePosts = new Date(datePostProps);
+  const dateFormated = `${datePosts.getDate()}/${
+    datePosts.getMonth() < 9
+      ? `0${datePosts.getMonth() + 1}`
+      : datePosts.getMonth()
+  }/${datePosts.getFullYear()} at ${datePosts.getHours()}:${datePosts.getMinutes()}`;
   const timeCreated = Math.floor(
-    (Date.parse(new Date()) - Date.parse(datePostProps)) / 3600000
+    Date.parse(new Date()) - Date.parse(datePostProps as string)
   );
-  const timeOfPosts =
-    timeCreated < 24
-      ? `${timeCreated} hours`
-      : `${datePosts.getDate()}/${
-          datePosts.getMonth() + 1
-        }/${datePosts.getFullYear()}`;
+  const timeSince = (date: number) => {
+    const seconds = Math.floor(date / 1000);
+
+    let interval = seconds / 31536000;
+
+    if (interval > 1) {
+      return `${Math.floor(interval)} ${
+        Math.floor(interval) - 1 ? 'years' : 'year'
+      }`;
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+      return dateFormated;
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+      return `${Math.floor(interval)} ${
+        Math.floor(interval) - 1 ? 'days' : 'day'
+      }`;
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+      return `${Math.floor(interval)} ${
+        Math.floor(interval) - 1 ? 'hours' : 'hour'
+      }`;
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+      return `${Math.floor(interval)} min`;
+    }
+    return `${Math.floor(seconds)} sec`;
+  };
+  const timeOfPosts = timeSince(timeCreated);
 
   const currentUser = useAppSelector((state) => state.auth.currentUser);
 
@@ -117,7 +150,9 @@ export default function CardPost(props: CardPostProps) {
           </div>
           <div className="">
             <h3 className="text-lg font-medium">{authorName}</h3>
-            <p className="text-sm">{timeOfPosts}</p>
+            <Tooltip description={dateFormated}>
+              <p className="text-sm">{timeOfPosts}</p>
+            </Tooltip>
           </div>
         </div>
         <Dropdown

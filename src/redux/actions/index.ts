@@ -2,34 +2,13 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { api } from '@/api';
 
-interface IUser {
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-  password: string;
-  gender: string;
-  birth: string;
-}
-
-interface ILogin {
-  usernameOrEmail: string;
-  password: string;
-}
-
-interface IRelation {
-  user: string;
-  type: 'FOLLOW' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';
-}
-interface IInRelation {
-  status?: string;
-  type: 'FOLLOWING' | 'FOLLOWER' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';
-}
-
-interface ICreatePost {
-  content: string;
-  type: 'STORY' | 'POST' | 'REEL';
-}
+import type {
+  ICreatePost,
+  IInRelation,
+  ILogin,
+  IRelation,
+  IUser,
+} from './Interface';
 
 export const register = createAsyncThunk(
   'auth/register',

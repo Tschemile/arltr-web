@@ -129,7 +129,7 @@ export default function Timeline() {
         ))}
       </div>
 
-      <div className="h-full">
+      <div className="row-start-1 h-full md:row-start-auto">
         <Block title="Info" seeAll={false} showTotal={false}>
           <InfoContent
             icon={gender === 'male' ? <Smite width={30} /> : <Sad width={30} />}

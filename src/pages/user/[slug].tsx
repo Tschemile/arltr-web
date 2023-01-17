@@ -11,11 +11,18 @@ import UploadButton from '@/components/common/UploadButton';
 import BulletList from '@/components/Icons/BulletList';
 import Camera from '@/components/Icons/Camera';
 import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
+import Heart from '@/components/Icons/Heart';
+import Message from '@/components/Icons/Message';
 import PlusIcon from '@/components/Icons/PlusIcon';
 import Friends from '@/components/Profile/Friends';
 import Timeline from '@/components/Profile/Timeline';
 import { Meta } from '@/layouts/Meta';
-import { editProfile, getProfileUser, uploadFile } from '@/redux/actions';
+import {
+  editProfile,
+  getProfileUser,
+  makeRelation,
+  uploadFile,
+} from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { TimelineLayout } from '@/templates/TimelineLayout';
 
@@ -23,6 +30,9 @@ const User = () => {
   const { query } = useRouter();
   const dispatch = useAppDispatch();
   const profileUser = useAppSelector((state) => state.profile.profileUser);
+  const { id: currentUserId = '' } = useAppSelector(
+    (state) => state.auth.currentUser
+  );
 
   const {
     name = '',
@@ -30,7 +40,10 @@ const User = () => {
     avatar: avatarProps = '',
     cover: coverImgProps = '',
     about = '',
+    id = '',
   } = profileUser;
+
+  const isCurrentUser = currentUserId === id;
 
   const options = [
     {
@@ -115,7 +128,11 @@ const User = () => {
   }, [avatarProps]);
 
   return (
-    <TimelineLayout meta={<Meta title="Bé ơi" description="Bé ơi" />}>
+    <TimelineLayout
+      meta={
+        <Meta title={`${name} | Bé ơi ❤️`} description={`${name} | Bé ơi ❤️`} />
+      }
+    >
       <div className="w-full bg-gradient-to-t from-white to-[#4d80a4]">
         <div className="bg-white lg:mx-[10%] xl:mx-[15%]">
           <div className="relative max-h-full min-h-[285px]">
@@ -184,8 +201,8 @@ const User = () => {
             </div>
           </div>
 
-          <div className="py-2 px-4 text-base md:flex md:items-center md:justify-between">
-            <div className="flex items-center">
+          <div className="flex flex-col-reverse items-center justify-between py-2 px-4 text-base lg:flex-row">
+            <div className="mt-2 flex items-center lg:mt-0">
               <Tabs
                 options={options}
                 defaultKey={active}
@@ -194,36 +211,63 @@ const User = () => {
               />
               <span className="px-4 py-2">More</span>
             </div>
-            <div className="flex items-center text-sm">
-              <Button>
-                <PlusIcon /> Add your story
-              </Button>
-              <div className="ml-1">
-                <Button background="secondary">
-                  <BulletList />
+            {isCurrentUser ? (
+              <div className="flex items-center text-sm">
+                <Button>
+                  <PlusIcon /> Add your story
                 </Button>
-              </div>
-              <div className="group flex flex-col">
                 <div className="ml-1">
                   <Button background="secondary">
-                    <EllipsisHorizon />
+                    <BulletList />
                   </Button>
                 </div>
-                <div>
-                  <ul className="absolute z-[2] hidden w-52 bg-white p-2 group-hover:block">
-                    <li>
-                      <a href="#"> View as guast </a>
-                    </li>
-                    <li>
-                      <a href="#"> Block this person </a>
-                    </li>
-                    <li>
-                      <a href="#"> Report abuse</a>
-                    </li>
-                  </ul>
+                <div className="group flex flex-col">
+                  <div className="ml-1">
+                    <Button background="secondary">
+                      <EllipsisHorizon />
+                    </Button>
+                  </div>
+                  <div>
+                    <ul className="absolute z-[2] hidden w-52 bg-white p-2 group-hover:block">
+                      <li>
+                        <a href="#"> View as guast </a>
+                      </li>
+                      <li>
+                        <a href="#"> Block this person </a>
+                      </li>
+                      <li>
+                        <a href="#"> Report abuse</a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="flex items-center text-sm">
+                <Button className="bg-gray-600">
+                  <Message />
+                  Chat
+                </Button>
+                <Button
+                  className="ml-1"
+                  onSubmit={() =>
+                    dispatch(makeRelation({ user: id, type: 'FOLLOW' }))
+                  }
+                >
+                  <Heart />
+                  Follow
+                </Button>
+                <Button
+                  className="ml-1 bg-gray-600"
+                  onSubmit={() =>
+                    dispatch(makeRelation({ user: id, type: 'FRIEND' }))
+                  }
+                >
+                  <PlusIcon />
+                  Add friend
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>

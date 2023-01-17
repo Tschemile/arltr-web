@@ -26,10 +26,10 @@ export default function Tooltip(props: TooltipProps) {
   const customClass = way[direction];
   const customArrow = arrow[direction];
   return (
-    <div className="group relative flex flex-col items-center hover:justify-center">
+    <div className="group relative flex flex-col hover:justify-center">
       {props.children}
       <div
-        className={`absolute hidden items-center group-hover:flex ${customClass}`}
+        className={`absolute hidden w-max items-center opacity-75 group-hover:flex ${customClass}`}
       >
         {showArrow && ['bottom', 'right'].includes(direction) && (
           <div className={`${customArrow} h-3 w-3 rotate-45 bg-black`} />

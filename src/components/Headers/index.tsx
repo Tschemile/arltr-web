@@ -1,5 +1,6 @@
 import Image from 'next/dist/client/image';
 import Link from 'next/dist/client/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import Logo from '@/assets/logo.png';
@@ -18,21 +19,24 @@ import PlusIcon from '../Icons/PlusIcon';
 
 export default function Headers() {
   const dispatch = useAppDispatch();
+  const { pathname } = useRouter();
   return (
     <div className="fixed z-20 h-[60px] w-full bg-white py-2 px-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <div
-            className="mr-2 xl:hidden"
-            onClick={() => dispatch(onShowNavbar())}
-          >
-            <div className="peer transition duration-200 hover:hidden">
-              <BarsBottomLeft />
+          {pathname.split('/')[1] !== 'user' && (
+            <div
+              className="mr-2 xl:hidden"
+              onClick={() => dispatch(onShowNavbar())}
+            >
+              <div className="peer transition duration-200 hover:hidden">
+                <BarsBottomLeft />
+              </div>
+              <div className="hidden transition duration-200 ease-in-out peer-hover:block">
+                <Bars />
+              </div>
             </div>
-            <div className="hidden transition duration-200 ease-in-out peer-hover:block">
-              <Bars />
-            </div>
-          </div>
+          )}
           <Link className="hover:border-0" href="/">
             <Image src={Logo} width={40} alt="logo" />
           </Link>

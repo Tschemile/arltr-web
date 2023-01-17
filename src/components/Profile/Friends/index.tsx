@@ -51,56 +51,11 @@ export default function Friends(props: TabsProps) {
     isLoading: { loadingListFriend },
     listFriend,
   } = useAppSelector((state) => state.relation);
+  const recentlyListfriend = (listFriend || []).map((friend) => friend);
 
   useEffect(() => {
     dispatch(getListFriend({ type: 'FOLLOWING' }));
   }, []);
-
-  const fen2 = [
-    {
-      id: 1,
-      name: 'Fen',
-      following: '100K',
-      img: 'https://globalcastingresources.com/wp-content/uploads/2022/10/1664482232_How-much-does-the-anime-streaming-service-cost.jpg',
-    },
-    {
-      id: 2,
-      name: 'Fan',
-      following: '100K',
-      img: 'https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA16eAHq.img?w=800&h=415&q=60&m=2&f=jpg',
-    },
-    {
-      id: 3,
-      name: 'Fung',
-      following: '100K',
-      img: 'https://thuthuatnhanh.com/wp-content/uploads/2019/07/anh-girl-xinh-facebook-tuyet-dep-387x580.jpg',
-    },
-    {
-      id: 4,
-      name: 'Fin',
-      following: '100K',
-      img: 'https://photo-cms-kienthuc.epicdn.me/zoom/800/uploaded/thutrang/2020_11_24/2/dang-chuan-mat-dep-gai-xinh-ha-thanh-khien-dan-tinh-xao-xuyen.jpg',
-    },
-    {
-      id: 5,
-      name: 'Fon',
-      following: '100K',
-      img: 'https://cafebiz.cafebizcdn.vn/162123310254002176/2021/8/26/photo-1-16299140636611036587762.jpg',
-    },
-    {
-      id: 6,
-      name: 'Fên',
-      following: '100K',
-      img: 'https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA16eJyI.img?w=800&h=415&q=60&m=2&f=jpg',
-    },
-    {
-      id: 7,
-      name: 'Fjn',
-      following: '100K',
-      img: 'https://khoinguonsangtao.vn/wp-content/uploads/2022/09/hinh-anh-gai-xinh-cap-2-3.jpg',
-    },
-  ];
-  const fen3: any[] = [];
 
   const options = [
     {
@@ -111,7 +66,7 @@ export default function Friends(props: TabsProps) {
     {
       key: '2',
       title: 'Recently added',
-      content: <Grid data={fen2} />,
+      content: <Grid data={recentlyListfriend} />,
     },
   ];
   return (
