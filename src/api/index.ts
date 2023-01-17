@@ -25,9 +25,9 @@ export const setContext = (_context: GetServerSidePropsContext) => {
 
 export const api = axios.create({
   baseURL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  // headers: {
+  //   'Content-Type': 'application/json',
+  // },
   // withCredentials: true, // to send cookie
 });
 

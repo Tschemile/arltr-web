@@ -26,7 +26,9 @@ export const commentSlice = createSlice({
         let newArr = [...state.listComment];
         const { comments = [] } = payload;
 
-        const find = newArr.filter((x: any) => x.postId === comments[0].id);
+        const find = newArr.filter(
+          (x: any) => x.postId === comments[0].post.id
+        );
         // .sort(
         //   (a: any, b: any) => new Date(a.createdAt) - new Date(b.createdAt)
         // );
@@ -36,7 +38,7 @@ export const commentSlice = createSlice({
             return { ...x, data: comments };
           });
         } else {
-          newArr = [...newArr, { postId: comments[0].id, data: comments }];
+          newArr = [...newArr, { postId: comments[0].post.id, data: comments }];
         }
         return {
           ...state,
