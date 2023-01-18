@@ -3,7 +3,7 @@ import React from 'react';
 
 interface IDropdown {
   children: ReactNode;
-  content: Record<string, string>[];
+  content: any;
   open: boolean;
 }
 
@@ -13,12 +13,12 @@ export default function Dropdown(props: IDropdown) {
     <div className="relative text-base">
       {children}
       {open && (
-        <ul className="absolute top-6 right-0 z-10 rounded border bg-white shadow-lg ">
-          {content.map((x) => (
+        <ul className="absolute top-6 right-0 rounded border bg-white shadow-lg">
+          {content.map((x: any) => (
             <li
               key={x.id}
               className="cursor-pointer whitespace-nowrap rounded px-4 py-2 hover:bg-slate-400"
-              onClick={() => console.log('hello')}
+              onClick={x.handleCLick}
             >
               {x.title}
             </li>

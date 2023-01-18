@@ -3,6 +3,7 @@ import type { AxiosError } from 'axios';
 import axios from 'axios';
 import type { GetServerSidePropsContext } from 'next';
 import Router from 'next/router';
+import { toast } from 'react-toastify';
 
 const isServer = () => {
   return typeof window === 'undefined';
@@ -53,7 +54,6 @@ api.interceptors.request.use(
   },
   (error) => {
     // console.info('=> (2) Do something with request error', { error });
-
     return Promise.reject(error);
   }
 );
@@ -70,6 +70,13 @@ api.interceptors.response.use(
       !error.response?.config?.url?.includes('signin')
     ) {
       return refreshToken(error);
+    }
+    if (error.response?.data) {
+      if (typeof (error.response.data as any).message === 'string') {
+        toast.error((error.response.data as any)?.message);
+      } else {
+        toast.error((error.response.data as any)?.message[0]);
+      }
     }
     return Promise.reject(error);
   }

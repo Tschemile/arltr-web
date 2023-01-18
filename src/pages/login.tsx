@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
-import { toast } from 'react-toastify';
 
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
@@ -32,8 +31,6 @@ export default function Login() {
     dispatch(login(infoUser)).then((res: any) => {
       if (res.payload?.status === 201) {
         router.push('/');
-      } else {
-        toast.error(`${res.payload?.data?.message}`);
       }
     });
   };

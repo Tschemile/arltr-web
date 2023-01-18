@@ -1,4 +1,4 @@
-import type { ChangeEvent, FormEvent, ReactNode } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
@@ -16,17 +16,27 @@ import Chain from '../Icons/Chain';
 import Comment from '../Icons/Comment';
 import Smite from '../Icons/Smite';
 
-interface CardPostProps {
-  children: ReactNode;
-  img?: string;
+interface ICardPost {
+  setIsEdit?: (value: boolean) => void;
   post?: Record<string, string>;
   listComments?: any[];
+  setOpenModal?: (value: boolean) => void;
+  setContent?: (value: string) => void;
+  setPostIdEdit?: (value: string) => void;
 }
 
-export default function CardPost(props: CardPostProps) {
+export default function CardPost(props: ICardPost) {
   const dispatch = useAppDispatch();
   const refs = useRef<null>(null);
-  const { post = {}, listComments = [] } = props;
+  const {
+    post = {},
+    listComments = [],
+    setIsEdit = () => {},
+    setOpenModal = () => {},
+    setContent = () => {},
+    setPostIdEdit = () => {},
+  } = props;
+
   const {
     author = {},
     images = [],
@@ -34,7 +44,9 @@ export default function CardPost(props: CardPostProps) {
     totalReacts = 0,
     id = '',
     createdAt: datePostProps = new Date(),
+    content = '',
   } = post;
+
   const {
     name: authorName = '',
     gender: authorGender = '',
@@ -49,6 +61,7 @@ export default function CardPost(props: CardPostProps) {
   );
   const [open, setOpen] = useState(false);
   const [limit, setLimit] = useState(2);
+
   const datePosts = new Date(datePostProps);
   const dateFormated = `${datePosts.getDate()}/${
     datePosts.getMonth() < 9
@@ -135,6 +148,14 @@ export default function CardPost(props: CardPostProps) {
     };
   }, []);
 
+  const handleEditPost = () => {
+    setOpen(false);
+    setOpenModal(true);
+    setIsEdit(true);
+    setContent(content);
+    setPostIdEdit(id);
+  };
+
   return (
     <div className={`mb-4 rounded-lg bg-white px-4 shadow-lg`}>
       <div className="flex items-center justify-between">
@@ -158,8 +179,21 @@ export default function CardPost(props: CardPostProps) {
         <Dropdown
           open={open}
           content={[
-            { id: '1', title: 'Edit Post' },
-            { id: '2', title: 'Delete Post' },
+            {
+              id: '1',
+              title: 'Edit Post',
+              handleCLick: () => handleEditPost(),
+            },
+            {
+              id: '2',
+              title: 'Delete Post',
+              handleCLick: () => console.log('delete'),
+            },
+            {
+              id: '3',
+              title: 'Change Post',
+              handleCLick: () => console.log('click 3'),
+            },
           ]}
         >
           <button onClick={() => setOpen(!open)}>
@@ -167,7 +201,7 @@ export default function CardPost(props: CardPostProps) {
           </button>
         </Dropdown>
       </div>
-      <div className="py-2">{props.children}</div>
+      <div className="py-2">{content}</div>
       {!!images &&
         (images as string[])?.map((img) => (
           <div
