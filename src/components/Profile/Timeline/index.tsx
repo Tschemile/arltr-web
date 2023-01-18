@@ -1,3 +1,4 @@
+import router from 'next/router';
 import type { ReactNode } from 'react';
 import React, { useEffect, useState } from 'react';
 
@@ -162,11 +163,29 @@ export default function Timeline() {
           </div>
         </Block>
 
-        <Block title="Following" total={totalFollowing}>
-          {(followings as []).map((x) => x)}
-        </Block>
-        <Block title="Groups">{(groups as []).map((x) => x)}</Block>
+          <Block title="Following" total={totalFollowing}>
+            <div className="grid grid-cols-3 gap-2">
+              {(followings as []).map((x: any) => (
+                <div
+                  key={x.id}
+                  onClick={() => router.push(`/user/${x.domain}`)}
+                  className="hover:cursor-pointer"
+                >
+                  <div className="col-span-1 h-[100px] w-full">
+                    <img
+                      alt="photo-following"
+                      src={x.avatar}
+                      className="h-full w-full rounded-lg object-cover"
+                    />
+                  </div>
+                  <p className="mt-2 text-sm">{x.name}</p>
+                </div>
+              ))}
+            </div>
+          </Block>
+          <Block title="Groups">{(groups as []).map((x) => x)}</Block>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

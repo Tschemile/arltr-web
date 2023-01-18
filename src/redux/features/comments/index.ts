@@ -29,9 +29,6 @@ export const commentSlice = createSlice({
         const find = newArr.filter(
           (x: any) => x.postId === comments[0].post.id
         );
-        // .sort(
-        //   (a: any, b: any) => new Date(a.createdAt) - new Date(b.createdAt)
-        // );
 
         if (find.length) {
           newArr = find.map((x) => {

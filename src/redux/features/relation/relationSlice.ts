@@ -49,7 +49,7 @@ export const relationSlice = createSlice({
       .addCase(getListFriend.fulfilled, (state, action) => {
         return {
           ...state,
-          listFriend: action.payload.data,
+          listFriend: action.payload.relations,
           isLoading: { ...state.isLoading, loadingListFriend: false },
         };
       })
