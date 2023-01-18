@@ -6,6 +6,7 @@ import type {
   ICreatePost,
   IInRelation,
   ILogin,
+  IReaction,
   IRelation,
   IUser,
 } from './Interface';
@@ -96,6 +97,32 @@ export const createPost = createAsyncThunk(
   'post/createPost',
   async (payload: ICreatePost) => {
     const res = await api.post('/post', { ...payload });
+    return res;
+  }
+);
+
+export const editPost = createAsyncThunk(
+  'post/createPost',
+  async (arg: Record<string, ICreatePost | any>) => {
+    const res = await api.patch(`/post/${arg.postId}`, {
+      ...arg.payload,
+    });
+    return res;
+  }
+);
+
+export const deletePost = createAsyncThunk(
+  'post/deletePost',
+  async (postId: string) => {
+    const res = await api.delete(`/post/${postId}`);
+    return res;
+  }
+);
+
+export const makeReaction = createAsyncThunk(
+  'post/makeReaction',
+  async (payload: IReaction) => {
+    const res = await api.put('/react', { ...payload });
     return res;
   }
 );

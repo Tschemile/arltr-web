@@ -5,8 +5,6 @@ import { useAppSelector } from '@/redux/hooks';
 import ActionButton from '../common/ActionButton';
 import Avatar from '../common/Avatar';
 import Divider from '../common/Divider';
-import Modal from '../common/Modal';
-import Comment from '../Icons/Comment';
 
 const listActions = [
   {
@@ -72,21 +70,11 @@ const listActions = [
 ];
 
 interface ICreatePost {
-  openModal?: boolean;
-  setContent?: (value: string) => void;
-  onClose?: () => void;
-  onSubmit?: () => void;
   setOpenModal?: (value: boolean) => void;
 }
 
 export default function CreatePost(props: ICreatePost) {
-  const {
-    openModal = false,
-    setContent = () => {},
-    onClose = () => {},
-    onSubmit = () => {},
-    setOpenModal = () => {},
-  } = props;
+  const { setOpenModal = () => {} } = props;
   const currentUser = useAppSelector((state) => state.auth.currentUser);
 
   const {
@@ -94,38 +82,6 @@ export default function CreatePost(props: ICreatePost) {
     gender = '' || undefined,
     avatar = '' || undefined,
   } = currentUser;
-
-  const getContent = () => {
-    return (
-      <div>
-        <>
-          <div className="flex items-center">
-            <div className="mr-4 h-[40px] w-[40px]">
-              <Avatar
-                src={avatar}
-                alt="avatar"
-                gender={gender}
-                className="h-full w-full"
-              />
-            </div>
-            <p className="font-medium">{name}</p>
-          </div>
-          <div className="my-4">
-            <textarea
-              className="h-full w-full resize-none py-1 outline-none placeholder:text-base placeholder:text-gray-500"
-              placeholder={`What is your mind? ${name} !`}
-              onChange={(e) => setContent(e.target.value)}
-            />
-          </div>
-        </>
-        <div className="my-4 flex items-center">
-          <ActionButton icon={<Comment />} text="Comment" />
-          <ActionButton icon={<Comment />} text="Comment" />
-          <ActionButton icon={<Comment />} text="Comment" />
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className="mb-4 rounded-md bg-white p-4">
@@ -141,7 +97,7 @@ export default function CreatePost(props: ICreatePost) {
           />
         </div>
         <div
-          className="w-full rounded-full bg-primary-color px-4 py-2 text-base text-gray-500 outline-none hover:cursor-pointer"
+          className="w-full cursor-pointer rounded-full bg-primary-color px-4 py-2 text-base text-gray-500 outline-none"
           onClick={() => setOpenModal(true)}
         >
           What is your mind? {name} !
@@ -158,14 +114,6 @@ export default function CreatePost(props: ICreatePost) {
           />
         ))}
       </div>
-      <Modal
-        title="Create New Post"
-        textSubmitButton="Post"
-        showModal={openModal}
-        content={getContent()}
-        onClose={onClose}
-        onSubmit={onSubmit}
-      />
     </div>
   );
 }

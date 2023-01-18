@@ -6,7 +6,7 @@ interface TooltipProps {
   children: ReactNode;
   direction?: 'bottom' | 'left' | 'right' | 'top';
   showArrow?: boolean;
-  description: string;
+  description: string | undefined;
 }
 
 export default function Tooltip(props: TooltipProps) {
