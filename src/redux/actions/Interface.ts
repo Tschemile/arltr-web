@@ -27,3 +27,9 @@ export interface ICreatePost {
   content: string;
   type: 'STORY' | 'POST' | 'REEL';
 }
+
+export interface IReaction {
+  post: string;
+  comment?: string;
+  type: 'LIKE' | 'HEART' | 'LAUGH' | 'CRY' | 'WOW' | 'ANGRY';
+}

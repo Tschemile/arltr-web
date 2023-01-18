@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import { baseURL } from '@/api';
@@ -7,6 +7,7 @@ import ActionButton from '@/components/common/ActionButton';
 import Avatar from '@/components/common/Avatar';
 import Divider from '@/components/common/Divider';
 import Modal from '@/components/common/Modal';
+import Tooltip from '@/components/common/Tooltip';
 import CreatePost from '@/components/CreatePost';
 import Briefcase from '@/components/Icons/Briefcase';
 import Chain from '@/components/Icons/Chain';
@@ -18,66 +19,18 @@ import Star from '@/components/Icons/Star';
 import { createPost, editPost } from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
-interface InfoContentProps {
-  icon: ReactNode;
-  content: string | undefined;
-  isLink?: boolean;
+import Block from './components/Block';
+import InfoContent from './components/InfoContent';
+
+interface ITimeline {
+  setIsActive?: (value: string) => void;
 }
 
-interface BlockProps {
-  title: string;
-  children: ReactNode;
-  seeAll?: boolean;
-  showTotal?: boolean;
-  total?: string | number;
-}
-
-const InfoContent = (props: InfoContentProps) => {
-  const { icon = '', content = '', isLink = false } = props;
-  return (
-    <div className="mb-4 flex items-center break-all text-sm">
-      {icon}
-      {isLink ? (
-        <a href={content} className="pl-2">
-          {content}
-        </a>
-      ) : (
-        <span className="pl-2">{content}</span>
-      )}
-    </div>
-  );
-};
-
-const Block = (props: BlockProps) => {
-  const {
-    children = '',
-    title = '',
-    seeAll = true,
-    total = 0,
-    showTotal = true,
-  } = props;
-  return (
-    <div className="mb-4 rounded-md bg-white p-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h4 className="mb-2 inline-block font-medium text-black">{title}</h4>
-          {showTotal && (
-            <span className="pl-2 text-base">{`(${total || 0})`}</span>
-          )}
-        </div>
-        {seeAll && (
-          <span className="cursor-pointer rounded px-2 py-1 text-xs text-blue-600 hover:bg-primary-color">
-            See all
-          </span>
-        )}
-      </div>
-      {children}
-    </div>
-  );
-};
-
-export default function Timeline() {
+export default function Timeline(props: ITimeline) {
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const { setIsActive = () => {} } = props;
+
   const profileUser = useAppSelector((state) => state.profile.profileUser);
   const listComments = useAppSelector((state) => state.comments.listComment);
   const currentUser = useAppSelector((state) => state.auth.currentUser);
@@ -94,7 +47,10 @@ export default function Timeline() {
     followings = [],
     totalFollowing = 0,
     totalAlbums = 0,
+    totalGroups = 0,
+    totalFollowers = 0,
     groups = [],
+    followers = [],
   } = profileUser;
 
   const [openModal, setOpenModal] = useState(false);
@@ -176,14 +132,6 @@ export default function Timeline() {
 
   return (
     <>
-      <Modal
-        title={isEdit ? 'Edit Post' : 'Create New Post'}
-        textSubmitButton={isEdit ? 'Edit Post' : 'Create Post'}
-        showModal={openModal}
-        content={getContent()}
-        onClose={onClose}
-        onSubmit={onSubmit}
-      />
       <div className="grid gap-2 md:grid-cols-3 md:gap-8">
         <div className="md:col-span-2">
           <CreatePost setOpenModal={setOpenModal} />
@@ -196,6 +144,8 @@ export default function Timeline() {
               setOpenModal={setOpenModal}
               setContent={setContent}
               setPostIdEdit={setPostIdEdit}
+              setListPosts={setListPosts}
+              listPosts={listPosts}
             />
           ))}
         </div>
@@ -208,22 +158,37 @@ export default function Timeline() {
               }
               content={gender === 'male' ? 'Male' : 'Female'}
             />
-            <InfoContent
-              isLink
-              content={socialLinks && socialLinks[0]}
-              icon={<Chain width={30} />}
-            />
+            {socialLinks && (
+              <InfoContent
+                isLink
+                content={socialLinks && socialLinks[0]}
+                icon={<Chain width={30} />}
+              />
+            )}
             <InfoContent icon={<Heart width={30} />} content="Single" />
-            <InfoContent
-              icon={<Star width={30} />}
-              content={hobbies && hobbies[0]}
-            />
-            <Divider />
-            <InfoContent icon={<Briefcase width={30} />} content={work} />
+            {hobbies && (
+              <InfoContent
+                icon={<Star width={30} />}
+                content={hobbies && hobbies[0]}
+              />
+            )}
+            {work && (
+              <>
+                <Divider />
+                <InfoContent
+                  icon={<Briefcase width={30} />}
+                  content={work}
+                />{' '}
+              </>
+            )}
           </Block>
-          <Block total={totalAlbums} title="Albums">
-            <div className="grid grid-cols-3 gap-2">
-              {(albums as []).slice(0, 9).map((x: any) => (
+          <Block
+            total={totalAlbums}
+            title="Photos"
+            onClickSeeAll={() => setIsActive('3')}
+          >
+            <div className="grid grid-cols-3 gap-4">
+              {(albums as []).slice(0, 9).map((x: Record<string, string>) => (
                 <div key={x.id} className="col-span-1 h-[100px] w-full">
                   <img
                     alt="photo"
@@ -235,12 +200,72 @@ export default function Timeline() {
             </div>
           </Block>
 
-          <Block title="Following" total={totalFollowing}>
-            {(followings as []).map((x) => x)}
+          <Block
+            title="Following"
+            total={totalFollowing}
+            onClickSeeAll={() => setIsActive('2')}
+          >
+            {/* {(followings as []).map((x) => x)} */}
           </Block>
-          <Block title="Groups">{(groups as []).map((x) => x)}</Block>
+          <Block
+            title="Followers"
+            total={totalFollowers}
+            onClickSeeAll={() => setIsActive('2')}
+          >
+            <div className="grid grid-cols-3 gap-4">
+              {(followers as []).map((x: Record<string, string>) => (
+                <div
+                  key={x.id}
+                  onClick={() => router.push(`/user/${x.domain}`)}
+                  className="hover:cursor-pointer"
+                >
+                  <div className="col-span-1 h-[100px] w-full">
+                    <img
+                      alt="avatar-followers"
+                      src={x.avatar}
+                      className="h-full w-full rounded-lg object-cover"
+                    />
+                  </div>
+                  <p className="mt-2 text-sm font-medium">{x.name}</p>
+                </div>
+              ))}
+            </div>
+          </Block>
+          <Block
+            title="Groups"
+            total={totalGroups}
+            onClickSeeAll={() => setIsActive('4')}
+          >
+            <div className="grid grid-cols-3 gap-4">
+              {(groups as []).map((x: Record<string, string>) => (
+                <div key={x.id} className="hover:cursor-pointer">
+                  <div className="col-span-1 h-[100px] w-full">
+                    <img
+                      alt="avatar-followers"
+                      src={x.avatar}
+                      className="h-full w-full rounded-lg object-cover"
+                    />
+                  </div>
+                  <Tooltip description={x.name}>
+                    <p className="mt-2 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium">
+                      {x.name}
+                    </p>
+                  </Tooltip>
+                </div>
+              ))}
+            </div>
+          </Block>
         </div>
       </div>
+
+      <Modal
+        title={isEdit ? 'Edit Post' : 'Create New Post'}
+        textSubmitButton={isEdit ? 'Edit Post' : 'Create Post'}
+        showModal={openModal}
+        content={getContent()}
+        onClose={onClose}
+        onSubmit={onSubmit}
+      />
     </>
   );
 }

@@ -39,47 +39,52 @@ const User = () => {
     gender = '',
     avatar: avatarProps = '',
     cover: coverImgProps = '',
-    about = '',
+    about: aboutProps = '',
     id = '',
   } = profileUser;
 
   const isCurrentUser = currentUserId === id;
 
+  const [active, setIsActive] = useState('1');
+  const [isEditIntro, setIsEditIntro] = useState(false);
+  const [introValue, setIntroValue] = useState('');
+  const [about, setAbout] = useState('');
+  const [coverImg, setCoverImg] = useState('');
+  const [avatarImg, setAvatarImg] = useState('');
+
   const options = [
     {
       key: '1',
       title: 'Timeline',
-      content: <Timeline />,
+      content: <Timeline setIsActive={setIsActive} />,
     },
     {
       key: '2',
-      title: 'Friend',
+      title: 'Friends',
       content: <Friends />,
     },
     {
       key: '3',
-      title: 'Photoes',
+      title: 'Photos',
       content: 'hihi',
     },
     {
       key: '4',
+      title: 'Groups',
+      content: 'hihi',
+    },
+    {
+      key: '5',
       title: 'Videos',
       content: 'hihi',
     },
   ];
 
-  const [active, setIsActive] = useState('1');
-  const [isEditIntro, setIsEditIntro] = useState(false);
-  const [introValue, setIntroValue] = useState('');
-  const [isEditedIntro, setIsEditedIntro] = useState(false);
-  const [coverImg, setCoverImg] = useState('');
-  const [avatarImg, setAvatarImg] = useState('');
-
   const handleEditIntro = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(editProfile({ about: introValue })).then((res: any) => {
       if (res.payload.status === 200) {
-        setIsEditedIntro(!isEditedIntro);
+        setAbout(res.payload.data.profile.about);
         setIsEditIntro(false);
       }
     });
@@ -117,7 +122,7 @@ const User = () => {
 
   useEffect(() => {
     if (query.slug) dispatch(getProfileUser(query.slug));
-  }, [query.slug, isEditedIntro]);
+  }, [query.slug]);
 
   useEffect(() => {
     if (coverImgProps) setCoverImg(coverImgProps);
@@ -126,6 +131,10 @@ const User = () => {
   useEffect(() => {
     if (avatarProps) setAvatarImg(avatarProps);
   }, [avatarProps]);
+
+  useEffect(() => {
+    if (aboutProps) setAbout(aboutProps);
+  }, [aboutProps]);
 
   return (
     <TimelineLayout
@@ -175,11 +184,11 @@ const User = () => {
             </div>
             <div className="">
               <h1 className="text-3xl">{name}</h1>
-              <p className="text-sm">
+              <div className="text-sm">
                 {isEditIntro ? (
                   <form
                     onSubmit={(e) => handleEditIntro(e)}
-                    className="inline-block w-1/3"
+                    className="inline-block w-1/3 text-sm"
                   >
                     <input
                       placeholder="Let introduce yourself now..."
@@ -197,7 +206,7 @@ const User = () => {
                 >
                   {isEditIntro ? 'Cancel' : 'Edit'}
                 </button>
-              </p>
+              </div>
             </div>
           </div>
 

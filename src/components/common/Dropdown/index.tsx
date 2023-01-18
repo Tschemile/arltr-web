@@ -17,7 +17,7 @@ export default function Dropdown(props: IDropdown) {
           {content.map((x: any) => (
             <li
               key={x.id}
-              className="cursor-pointer whitespace-nowrap rounded px-4 py-2 hover:bg-slate-400"
+              className="cursor-pointer whitespace-nowrap rounded px-4 py-2 hover:bg-slate-400 hover:text-white"
               onClick={x.handleCLick}
             >
               {x.title}

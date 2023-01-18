@@ -1,10 +1,17 @@
 import type { ChangeEvent, FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
 import Like from '@/components/Icons/Like';
-import { addComment, getCommentsOfPost } from '@/redux/actions';
+import {
+  addComment,
+  deletePost,
+  getCommentsOfPost,
+  makeReaction,
+} from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { timeSince } from '@/utils/utils';
 
 import ActionButton from '../common/ActionButton';
 import Avatar from '../common/Avatar';
@@ -23,6 +30,8 @@ interface ICardPost {
   setOpenModal?: (value: boolean) => void;
   setContent?: (value: string) => void;
   setPostIdEdit?: (value: string) => void;
+  setListPosts?: (value: Record<string, string>[]) => void;
+  listPosts?: Record<string, string>[];
 }
 
 export default function CardPost(props: ICardPost) {
@@ -35,16 +44,19 @@ export default function CardPost(props: ICardPost) {
     setOpenModal = () => {},
     setContent = () => {},
     setPostIdEdit = () => {},
+    setListPosts = () => {},
+    listPosts = [],
   } = props;
 
   const {
     author = {},
     images = [],
     totalComments: totalCommentsProps = 0,
-    totalReacts = 0,
+    totalReacts: totalReactsProps = 0,
     id = '',
     createdAt: datePostProps = new Date(),
     content = '',
+    react = {},
   } = post;
 
   const {
@@ -61,6 +73,8 @@ export default function CardPost(props: ICardPost) {
   );
   const [open, setOpen] = useState(false);
   const [limit, setLimit] = useState(2);
+  const [isLiked, setIsLiked] = useState(false);
+  const [totalReacts, setTotalReacts] = useState(0);
 
   const datePosts = new Date(datePostProps);
   const dateFormated = `${datePosts.getDate()}/${
@@ -68,42 +82,12 @@ export default function CardPost(props: ICardPost) {
       ? `0${datePosts.getMonth() + 1}`
       : datePosts.getMonth()
   }/${datePosts.getFullYear()} at ${datePosts.getHours()}:${datePosts.getMinutes()}`;
+
   const timeCreated = Math.floor(
     Date.parse(new Date()) - Date.parse(datePostProps as string)
   );
-  const timeSince = (date: number) => {
-    const seconds = Math.floor(date / 1000);
 
-    let interval = seconds / 31536000;
-
-    if (interval > 1) {
-      return `${Math.floor(interval)} ${
-        Math.floor(interval) - 1 ? 'years' : 'year'
-      }`;
-    }
-    interval = seconds / 2592000;
-    if (interval > 1) {
-      return dateFormated;
-    }
-    interval = seconds / 86400;
-    if (interval > 1) {
-      return `${Math.floor(interval)} ${
-        Math.floor(interval) - 1 ? 'days' : 'day'
-      }`;
-    }
-    interval = seconds / 3600;
-    if (interval > 1) {
-      return `${Math.floor(interval)} ${
-        Math.floor(interval) - 1 ? 'hours' : 'hour'
-      }`;
-    }
-    interval = seconds / 60;
-    if (interval > 1) {
-      return `${Math.floor(interval)} min`;
-    }
-    return `${Math.floor(seconds)} sec`;
-  };
-  const timeOfPosts = timeSince(timeCreated);
+  const timeOfPosts = timeSince(timeCreated, dateFormated);
 
   const currentUser = useAppSelector((state) => state.auth.currentUser);
 
@@ -156,6 +140,43 @@ export default function CardPost(props: ICardPost) {
     setPostIdEdit(id);
   };
 
+  const handleDeletePost = () => {
+    dispatch(deletePost(id)).then((res: any) => {
+      if (res.payload.status === 200) {
+        setOpen(false);
+        setListPosts(listPosts.filter((x) => x.id !== id));
+        toast.success('Delete post success');
+      }
+    });
+  };
+
+  const handleLikePost = () => {
+    dispatch(makeReaction({ post: id, type: 'LIKE' })).then((res: any) => {
+      if (res.payload.status === 200) {
+        setIsLiked(!isLiked);
+        if (!isLiked) {
+          setTotalReacts(totalReacts + 1);
+        } else {
+          setTotalReacts(totalReacts - 1);
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (totalReactsProps) setTotalReacts(Number(totalReactsProps));
+  }, [totalReactsProps]);
+
+  useEffect(() => {
+    if (react)
+      setIsLiked(
+        currentUser.id === (react as Record<string, string | any>).user?.id
+      );
+  }, []);
+
+  if (listPosts.length <= 0)
+    return <p className="text-center">Don&apos;t have any post! </p>;
+
   return (
     <div className={`mb-4 rounded-lg bg-white px-4 shadow-lg`}>
       <div className="flex items-center justify-between">
@@ -187,12 +208,7 @@ export default function CardPost(props: ICardPost) {
             {
               id: '2',
               title: 'Delete Post',
-              handleCLick: () => console.log('delete'),
-            },
-            {
-              id: '3',
-              title: 'Change Post',
-              handleCLick: () => console.log('click 3'),
+              handleCLick: () => handleDeletePost(),
             },
           ]}
         >
@@ -201,7 +217,7 @@ export default function CardPost(props: ICardPost) {
           </button>
         </Dropdown>
       </div>
-      <div className="py-2">{content}</div>
+      <div className="whitespace-pre-line py-2 ">{content}</div>
       {!!images &&
         (images as string[])?.map((img) => (
           <div
@@ -233,8 +249,8 @@ export default function CardPost(props: ICardPost) {
       <Divider />
       <div className="-my-3 flex">
         <ActionButton
-          className="justify-center"
-          // onClick={() => getAllCommentsOfPost(id)}
+          className={`justify-center ${isLiked ? 'text-red-700' : ''}`}
+          onClick={() => handleLikePost()}
           icon={<Like />}
           text="Like"
         />
@@ -259,7 +275,7 @@ export default function CardPost(props: ICardPost) {
             </div>
             <div className="relative rounded-lg bg-primary-color p-2 after:absolute after:top-3 after:-left-5 after:border-[10px] after:border-transparent after:border-r-primary-color">
               <h3 className="text-lg font-medium">{x.user.name}</h3>
-              <p className="text-sm">{x.content}</p>
+              <p className="whitespace-pre-line text-sm">{x.content}</p>
             </div>
             <div className="hidden group-hover:block ">
               <EllipsisHorizon />

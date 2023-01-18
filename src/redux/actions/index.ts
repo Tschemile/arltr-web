@@ -6,6 +6,7 @@ import type {
   ICreatePost,
   IInRelation,
   ILogin,
+  IReaction,
   IRelation,
   IUser,
 } from './Interface';
@@ -114,6 +115,14 @@ export const deletePost = createAsyncThunk(
   'post/deletePost',
   async (postId: string) => {
     const res = await api.delete(`/post/${postId}`);
+    return res;
+  }
+);
+
+export const makeReaction = createAsyncThunk(
+  'post/makeReaction',
+  async (payload: IReaction) => {
+    const res = await api.put('/react', { ...payload });
     return res;
   }
 );
