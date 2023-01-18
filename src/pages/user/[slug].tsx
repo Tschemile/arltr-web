@@ -60,8 +60,10 @@ const User = () => {
     },
     {
       key: '2',
-      title: 'Friends',
-      content: <Friends />,
+      title: 'Friend',
+      content: (
+        <Friends isCurrentUser={isCurrentUser} profileUser={profileUser} />
+      ),
     },
     {
       key: '3',
@@ -153,15 +155,18 @@ const User = () => {
               alt="cover-img"
               className="absolute top-1/2 right-0 bottom-0 left-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
             />
-            <div className="absolute bottom-2 right-3 z-[3]">
-              <UploadButton
-                handleChange={handleUploadCover}
-                id="upload-cover"
-                className="flex cursor-pointer items-center rounded-md bg-primary-color px-2 py-1"
-              >
-                <Camera width={24} /> <span className="p-1 text-sm">Edit</span>
-              </UploadButton>
-            </div>
+            {isCurrentUser && (
+              <div className="absolute bottom-2 right-3 z-[3]">
+                <UploadButton
+                  handleChange={handleUploadCover}
+                  id="upload-cover"
+                  className="flex cursor-pointer items-center rounded-md bg-primary-color px-2 py-1"
+                >
+                  <Camera width={24} />{' '}
+                  <span className="p-1 text-sm">Edit</span>
+                </UploadButton>
+              </div>
+            )}
           </div>
 
           <div className="relative z-[2] -mt-24 mb-4 text-center">
@@ -174,13 +179,15 @@ const User = () => {
                 height={125}
                 className="h-full w-full border-[3px] border-solid border-white"
               />
-              <UploadButton
-                id="upload-avatar"
-                handleChange={handleUploadAvatar}
-                className="absolute top-[55%] left-[53%] -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 border-white bg-primary-color p-1"
-              >
-                <Camera />
-              </UploadButton>
+              {isCurrentUser && (
+                <UploadButton
+                  id="upload-avatar"
+                  handleChange={handleUploadAvatar}
+                  className="absolute top-[55%] left-[53%] -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 border-white bg-primary-color p-1"
+                >
+                  <Camera />
+                </UploadButton>
+              )}
             </div>
             <div className="">
               <h1 className="text-3xl">{name}</h1>
@@ -200,12 +207,14 @@ const User = () => {
                 ) : (
                   about
                 )}
-                <button
-                  className="pl-4 text-blue-500"
-                  onClick={() => setIsEditIntro(!isEditIntro)}
-                >
-                  {isEditIntro ? 'Cancel' : 'Edit'}
-                </button>
+                {isCurrentUser && (
+                  <button
+                    className="pl-4 text-blue-500"
+                    onClick={() => setIsEditIntro(!isEditIntro)}
+                  >
+                    {isEditIntro ? 'Cancel' : 'Edit'}
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -220,63 +229,65 @@ const User = () => {
               />
               <span className="px-4 py-2">More</span>
             </div>
-            {isCurrentUser ? (
-              <div className="flex items-center text-sm">
-                <Button>
-                  <PlusIcon /> Add your story
-                </Button>
-                <div className="ml-1">
-                  <Button background="secondary">
-                    <BulletList />
+            <div className="flex">
+              {isCurrentUser ? (
+                <div className="flex items-center text-sm">
+                  <Button>
+                    <PlusIcon /> Add your story
                   </Button>
-                </div>
-                <div className="group flex flex-col">
                   <div className="ml-1">
                     <Button background="secondary">
-                      <EllipsisHorizon />
+                      <BulletList />
                     </Button>
                   </div>
-                  <div>
-                    <ul className="absolute z-[2] hidden w-52 bg-white p-2 group-hover:block">
-                      <li>
-                        <a href="#"> View as guast </a>
-                      </li>
-                      <li>
-                        <a href="#"> Block this person </a>
-                      </li>
-                      <li>
-                        <a href="#"> Report abuse</a>
-                      </li>
-                    </ul>
-                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center text-sm">
+                  <Button className="bg-gray-600">
+                    <Message />
+                    Chat
+                  </Button>
+                  <Button
+                    className="ml-1"
+                    onSubmit={() =>
+                      dispatch(makeRelation({ user: id, type: 'FOLLOW' }))
+                    }
+                  >
+                    <Heart />
+                    Follow
+                  </Button>
+                  <Button
+                    className="ml-1 bg-gray-600"
+                    onSubmit={() =>
+                      dispatch(makeRelation({ user: id, type: 'FRIEND' }))
+                    }
+                  >
+                    <PlusIcon />
+                    Add friend
+                  </Button>
+                </div>
+              )}
+              <div className="group flex flex-col">
+                <div className="ml-1">
+                  <Button background="secondary">
+                    <EllipsisHorizon />
+                  </Button>
+                </div>
+                <div>
+                  <ul className="absolute z-[2] hidden w-52 bg-white p-2 group-hover:block">
+                    <li>
+                      <a href="#"> View as guast </a>
+                    </li>
+                    <li>
+                      <a href="#"> Block this person </a>
+                    </li>
+                    <li>
+                      <a href="#"> Report abuse</a>
+                    </li>
+                  </ul>
                 </div>
               </div>
-            ) : (
-              <div className="flex items-center text-sm">
-                <Button className="bg-gray-600">
-                  <Message />
-                  Chat
-                </Button>
-                <Button
-                  className="ml-1"
-                  onSubmit={() =>
-                    dispatch(makeRelation({ user: id, type: 'FOLLOW' }))
-                  }
-                >
-                  <Heart />
-                  Follow
-                </Button>
-                <Button
-                  className="ml-1 bg-gray-600"
-                  onSubmit={() =>
-                    dispatch(makeRelation({ user: id, type: 'FRIEND' }))
-                  }
-                >
-                  <PlusIcon />
-                  Add friend
-                </Button>
-              </div>
-            )}
+            </div>
           </div>
         </div>
       </div>

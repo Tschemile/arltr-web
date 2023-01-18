@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import TabsContent from '@/components/common/Tabs/TabsContent';
+import { notUser } from '@/constants';
 import { getListFriend } from '@/redux/actions';
+import type { IInRelation } from '@/redux/actions/Interface';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 import Button from '../../common/Button';
@@ -9,13 +11,12 @@ import Card from '../../common/Card';
 import Tabs from '../../common/Tabs';
 
 interface TabsProps {
-  options?: any[];
-  defaultKey?: string;
-  handleChange?: (value: string) => void;
+  isCurrentUser: boolean;
+  profileUser: Record<string, string>;
 }
 
 interface GridProps {
-  data: Array<any>;
+  data: Array<any> | undefined | string;
 }
 
 const Grid = (props: GridProps) => {
@@ -23,9 +24,9 @@ const Grid = (props: GridProps) => {
   return data?.length ? (
     <>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-        {data.map((val) => (
-          <Card img={val.img} key={val.id}>
-            <p>{val.name}</p>
+        {(data as []).map((val: Record<string, string | undefined | any>) => (
+          <Card img={val.requester?.avatar || val.avatar} key={val.id}>
+            <p>{val.requester?.name || val.name}</p>
             <p className="mb-1 text-sm">{val.following} Following</p>
             <Button
               type="button"
@@ -36,7 +37,7 @@ const Grid = (props: GridProps) => {
           </Card>
         ))}
       </div>
-      <Button className="m-auto mt-4">loading more</Button>
+      <Button className="m-auto mt-4">load more</Button>
     </>
   ) : (
     <p className="text-center">Poor for you, dont have fen 😢</p>
@@ -44,29 +45,35 @@ const Grid = (props: GridProps) => {
 };
 
 export default function Friends(props: TabsProps) {
-  const {} = props;
-  const [active, setIsActive] = useState('1');
+  const { isCurrentUser = true, profileUser = {} } = props;
+  const [active, setIsActive] = useState<IInRelation['type']>('FRIEND');
   const dispatch = useAppDispatch();
   const {
     isLoading: { loadingListFriend },
-    listFriend,
+    listFriend: allFriend,
   } = useAppSelector((state) => state.relation);
-  const recentlyListfriend = (listFriend || []).map((friend) => friend);
+
+  const listFriend = isCurrentUser ? allFriend : profileUser[notUser[active]];
 
   useEffect(() => {
-    dispatch(getListFriend({ type: 'FOLLOWING' }));
-  }, []);
+    if (isCurrentUser) dispatch(getListFriend({ type: active }));
+  }, [active]);
 
   const options = [
     {
-      key: '1',
-      title: 'All Friends 9,999',
+      key: 'FRIEND',
+      title: `All Friends (${profileUser.totalFriends})`,
       content: <Grid data={listFriend} />,
     },
     {
-      key: '2',
-      title: 'Recently added',
-      content: <Grid data={recentlyListfriend} />,
+      key: 'FOLLOWING',
+      title: `Following (${profileUser.totalFollowing})`,
+      content: <Grid data={listFriend} />,
+    },
+    {
+      key: 'FOLLOWER',
+      title: `Follower (${profileUser.totalFollowers})`,
+      content: <Grid data={listFriend} />,
     },
   ];
   return (
@@ -75,7 +82,7 @@ export default function Friends(props: TabsProps) {
       <Tabs
         options={options}
         defaultKey={active}
-        handleChange={(key) => setIsActive(key)}
+        handleChange={(key: any) => setIsActive(key)}
       />
       <TabsContent options={options} active={active} />
     </Card>

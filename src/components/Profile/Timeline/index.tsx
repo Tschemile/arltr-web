@@ -205,7 +205,24 @@ export default function Timeline(props: ITimeline) {
             total={totalFollowing}
             onClickSeeAll={() => setIsActive('2')}
           >
-            {/* {(followings as []).map((x) => x)} */}
+            <div className="grid grid-cols-3 gap-2">
+              {(followings as []).map((x: any) => (
+                <div
+                  key={x.id}
+                  onClick={() => router.push(`/user/${x.domain}`)}
+                  className="hover:cursor-pointer"
+                >
+                  <div className="col-span-1 h-[100px] w-full">
+                    <img
+                      alt="photo-following"
+                      src={x.avatar}
+                      className="h-full w-full rounded-lg object-cover"
+                    />
+                  </div>
+                  <p className="mt-2 text-sm">{x.name}</p>
+                </div>
+              ))}
+            </div>
           </Block>
           <Block
             title="Followers"
