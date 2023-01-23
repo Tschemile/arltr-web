@@ -49,7 +49,7 @@ export default function Friends(props: TabsProps) {
   const [active, setIsActive] = useState<IInRelation['type']>('FRIEND');
   const dispatch = useAppDispatch();
   const {
-    isLoading: { loadingListFriend },
+    // isLoading: { loadingListFriend },
     listFriend: allFriend,
   } = useAppSelector((state) => state.relation);
 
