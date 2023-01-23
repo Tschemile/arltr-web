@@ -84,7 +84,7 @@ export default function CardPost(props: ICardPost) {
   }/${datePosts.getFullYear()} at ${datePosts.getHours()}:${datePosts.getMinutes()}`;
 
   const timeCreated = Math.floor(
-    Date.parse(new Date()) - Date.parse(datePostProps as string)
+    Date.parse(new Date().toDateString()) - Date.parse(datePostProps as string)
   );
 
   const timeOfPosts = timeSince(timeCreated, dateFormated);
