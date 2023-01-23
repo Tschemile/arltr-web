@@ -7,6 +7,7 @@ import Avatar from '../common/Avatar';
 import Divider from '../common/Divider';
 import ArrowDown from '../Icons/ArrowDown';
 import ArrowUp from '../Icons/ArrowUp';
+import { Sidebar } from '../Skeleton';
 
 const listMenu = [
   {
@@ -232,69 +233,78 @@ export default function Navbar() {
         !isShow ? '-translate-x-full' : 'translate-x-0'
       } z-50 overflow-y-auto overscroll-contain bg-white py-2 px-4 transition-all duration-200 ease-in-out xl:block xl:translate-x-0`}
     >
-      <button
-        className="nav-item"
-        onClick={() => router.push(`/user/${domain}`)}
-      >
-        <div className="mr-4 h-[40px] w-[40px]">
-          <Avatar
-            src={avatar}
-            gender={gender}
-            alt="avatar"
-            className="h-full w-full"
-          />
-        </div>
-        <p>{name}</p>
-      </button>
-      <div className="my-4">
-        {listMenu.slice(0, isVisible).map((x) => (
-          <button className="nav-item mb-2" key={x.id}>
-            <span className="rounded-full border-2 bg-primary-hover p-2">
-              {x.icon}
-            </span>
-            <p className="pl-3 text-base font-medium">{x.title}</p>
+      {false ? (
+        <Sidebar />
+      ) : (
+        <>
+          <button
+            className="nav-item"
+            onClick={() => router.push(`/user/${domain}`)}
+          >
+            <div className="mr-4 h-[40px] w-[40px]">
+              <Avatar
+                src={avatar}
+                gender={gender}
+                alt="avatar"
+                className="h-full w-full"
+              />
+            </div>
+            <p>{name}</p>
           </button>
-        ))}
-        <button
-          className="nav-item"
-          onClick={() => setIsVisible(isVisible <= 4 ? listMenu.length : 4)}
-        >
-          <span className="rounded-full border-2 bg-primary-hover p-2">
-            {isVisible <= 4 ? <ArrowDown width={18} /> : <ArrowUp width={18} />}
-          </span>
+          <div className="my-4">
+            {listMenu.slice(0, isVisible).map((x) => (
+              <button className="nav-item mb-2" key={x.id}>
+                <span className="rounded-full border-2 bg-primary-hover p-2">
+                  {x.icon}
+                </span>
+                <p className="pl-3 text-base font-medium">{x.title}</p>
+              </button>
+            ))}
+            <button
+              className="nav-item"
+              onClick={() => setIsVisible(isVisible <= 4 ? listMenu.length : 4)}
+            >
+              <span className="rounded-full border-2 bg-primary-hover p-2">
+                {isVisible <= 4 ? (
+                  <ArrowDown width={18} />
+                ) : (
+                  <ArrowUp width={18} />
+                )}
+              </span>
 
-          <p className="pl-3 text-base font-bold">
-            See {isVisible <= 4 ? 'all' : 'less'}
-          </p>
-        </button>
-      </div>
-      <Divider />
-      <h4 className="text-lg font-medium">Explore</h4>
-      <div className="my-4">
-        {listExplore.map((x) => (
-          <button className="nav-item mb-2" key={x.id}>
-            <span className="rounded-full border-2 bg-primary-hover p-2">
-              {x.icon}
-            </span>
-            <p className="pl-3 text-base font-medium">{x.title}</p>
-          </button>
-        ))}
-      </div>
-      <hr className="my-4 border-primary-border" />
-
-      <div className="text-sm">
-        <div className="my-2">
-          <p>About Us</p>
-          <p>Blog</p>
-          <p>Contact Us</p>
-          <p>Privacy Policy</p>
-          <p>Developers</p>
-          <p>Temp - Conditions</p>
-        </div>
-        <p>
-          © 2020 <strong>Fortune</strong>. All Rights Reserved.
-        </p>
-      </div>
+              <p className="pl-3 text-base font-bold">
+                See {isVisible <= 4 ? 'all' : 'less'}
+              </p>
+            </button>
+          </div>
+          <Divider />
+          <h4 className="text-lg font-medium">Explore</h4>
+          <div className="my-4">
+            {listExplore.map((x) => (
+              <button className="nav-item mb-2" key={x.id}>
+                <span className="rounded-full border-2 bg-primary-hover p-2">
+                  {x.icon}
+                </span>
+                <p className="pl-3 text-base font-medium">{x.title}</p>
+              </button>
+            ))}
+          </div>
+          <hr className="my-4 border-primary-border" />
+          <div className="text-sm">
+            <div className="my-2">
+              <p>About Us</p>
+              <p>Blog</p>
+              <p>Contact Us</p>
+              <p>Privacy Policy</p>
+              <p>Developers</p>
+              <p>Temp - Conditions</p>
+            </div>
+            <p>
+              © 2023 <strong>Iu be ❤</strong>. All Rights Reserved.
+            </p>
+          </div>
+        </>
+      )}
     </div>
   );
 }

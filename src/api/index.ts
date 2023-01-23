@@ -100,10 +100,11 @@ const refreshToken = async (oError: AxiosError) => {
 
     // create new Promise to retry original request
     const retryOriginalRequest = new Promise((resolve) => {
-      addSubscriber((token: string) => {
-        response!.config.headers.Authorization = `Bearer ${token}`;
-        resolve(axios(response!.config));
-      });
+      if (response !== undefined)
+        addSubscriber((token: string) => {
+          response.config.headers = { Authorization: `Bearer ${token}` };
+          resolve(axios(response.config));
+        });
     });
 
     // check whether refreshing token or not
