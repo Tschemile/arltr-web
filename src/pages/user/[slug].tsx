@@ -15,6 +15,7 @@ import Heart from '@/components/Icons/Heart';
 import Message from '@/components/Icons/Message';
 import PlusIcon from '@/components/Icons/PlusIcon';
 import Friends from '@/components/Profile/Friends';
+import Groups from '@/components/Profile/Groups';
 import Timeline from '@/components/Profile/Timeline';
 import { Meta } from '@/layouts/Meta';
 import {
@@ -73,7 +74,7 @@ const User = () => {
     {
       key: '4',
       title: 'Groups',
-      content: 'hihi',
+      content: <Groups />,
     },
     {
       key: '5',
@@ -101,7 +102,7 @@ const User = () => {
         const { payload: { status = 0, data = '' } = {} } = res;
         if (status === 201) {
           toast.success('Upload success');
-          setCoverImg(data);
+          setCoverImg(data.url);
         }
       });
     }
@@ -116,7 +117,7 @@ const User = () => {
         const { payload: { status = 0, data = '' } = {} } = res;
         if (status === 201) {
           toast.success('Upload success');
-          setAvatarImg(data);
+          setAvatarImg(data.url);
         }
       });
     }

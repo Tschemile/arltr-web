@@ -18,9 +18,9 @@ export default function ActionButton(props: IActionButton) {
     iconClassname = '',
   } = props;
   return (
-    <button className={`nav-item ${className}`} onClick={onClick}>
+    <div className={`nav-item ${className}`} onClick={onClick}>
       <span className={iconClassname}>{icon}</span>
       <p className="whitespace-nowrap pl-2 text-base text-[#929292]">{text}</p>
-    </button>
+    </div>
   );
 }

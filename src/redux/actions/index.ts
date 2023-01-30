@@ -4,12 +4,16 @@ import { api } from '@/api';
 
 import type {
   ICreatePost,
+  IGetGroups,
+  IGetListPosts,
   IInRelation,
   ILogin,
   IReaction,
   IRelation,
   IUser,
 } from './Interface';
+
+// AUTH
 
 export const register = createAsyncThunk(
   'auth/register',
@@ -37,6 +41,14 @@ export const getProfileUser = createAsyncThunk(
   'profile/getProfile',
   async (domain: string | string[] | undefined) => {
     const res = await api.get(`/profile/${domain}`);
+    return res.data;
+  }
+);
+
+export const getProfileListPosts = createAsyncThunk(
+  'profile/getListPosts',
+  async (params: IGetListPosts) => {
+    const res = await api.get('/post', { params });
     return res.data;
   }
 );
@@ -88,7 +100,7 @@ export const addComment = createAsyncThunk(
 export const uploadFile = createAsyncThunk(
   'upload/uploadFile',
   async (payload: FormData) => {
-    const res = await api.post('/file/upload', payload);
+    const res = await api.post('/upload/image', payload);
     return res;
   }
 );
@@ -124,5 +136,15 @@ export const makeReaction = createAsyncThunk(
   async (payload: IReaction) => {
     const res = await api.put('/react', { ...payload });
     return res;
+  }
+);
+
+// GROUPS
+
+export const getListGroups = createAsyncThunk(
+  'groups/getListGroups',
+  async (params: IGetGroups) => {
+    const res = await api.get('/group', { params });
+    return res.data;
   }
 );

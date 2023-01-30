@@ -13,6 +13,7 @@ import {
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { timeSince } from '@/utils/utils';
 
+import CommentBox from '../CommentBox';
 import ActionButton from '../common/ActionButton';
 import Avatar from '../common/Avatar';
 import Divider from '../common/Divider';
@@ -153,7 +154,7 @@ export default function CardPost(props: ICardPost) {
   const handleLikePost = () => {
     dispatch(makeReaction({ post: id, type: 'LIKE' })).then((res: any) => {
       if (res.payload.status === 200) {
-        setIsLiked(!isLiked);
+        setIsLiked((prevState) => !prevState);
         if (!isLiked) {
           setTotalReacts(totalReacts + 1);
         } else {
@@ -264,24 +265,10 @@ export default function CardPost(props: ICardPost) {
       <Divider />
 
       {isClickedCmt &&
-        (comments || []).slice(0, limit).map((x: any) => (
-          <div key={x.id} className="group flex items-center py-2">
-            <div className="mr-4 h-[40px] w-[40px]">
-              <Avatar
-                src={x.image}
-                alt="avatar"
-                className="m-auto h-full w-full rounded-full"
-              />
-            </div>
-            <div className="relative rounded-lg bg-primary-color p-2 after:absolute after:top-3 after:-left-5 after:border-[10px] after:border-transparent after:border-r-primary-color">
-              <h3 className="text-lg font-medium">{x.user.name}</h3>
-              <p className="whitespace-pre-line text-sm">{x.content}</p>
-            </div>
-            <div className="hidden group-hover:block ">
-              <EllipsisHorizon />
-            </div>
-          </div>
-        ))}
+        (comments || [])
+          .slice(0, limit)
+          .map((x: any) => <CommentBox key={x.id} item={x} />)}
+
       {totalComments > 2 &&
         isClickedCmt &&
         totalComments !== (comments || []).length &&
