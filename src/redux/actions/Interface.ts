@@ -26,10 +26,29 @@ export interface IInRelation {
 export interface ICreatePost {
   content: string;
   type: 'STORY' | 'POST' | 'REEL';
+  images?: string[] | null | undefined;
 }
 
 export interface IReaction {
   post: string;
   comment?: string;
   type: 'LIKE' | 'HEART' | 'LAUGH' | 'CRY' | 'WOW' | 'ANGRY';
+}
+
+export interface IGetGroups {
+  limit?: number;
+  type?: 'COMMUNICATE' | 'SELF';
+  search?: string;
+  mode?: 'HIDDEN' | 'PUBLIC' | 'PRIVATE' | string;
+}
+
+export interface IGetListPosts {
+  limit?: number;
+  type?: string | 'POST' | 'REEL' | 'STORY';
+  queryType?: string | 'USER' | 'COMMUNITY' | 'GROUP';
+}
+
+export interface IEditComment {
+  image?: string;
+  content: string;
 }

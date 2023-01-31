@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { getProfileUser } from '@/redux/actions';
+import { getProfileListPosts, getProfileUser } from '@/redux/actions';
 
 export interface ProfileState {
   profileUser: Record<string, string>;
   loading: boolean;
   totalRelation: Record<string, number>;
+  listPosts: Record<string, string>[];
+  loadingPosts: boolean;
 }
 
 // Initial state
@@ -13,6 +15,8 @@ const initialState: ProfileState = {
   profileUser: {},
   loading: false,
   totalRelation: {},
+  listPosts: [],
+  loadingPosts: false,
 };
 
 export const profileSlice = createSlice({
@@ -29,6 +33,15 @@ export const profileSlice = createSlice({
       })
       .addCase(getProfileUser.rejected, (state) => {
         return { ...state, loading: false };
+      })
+      .addCase(getProfileListPosts.pending, (state) => {
+        return { ...state, loadingPosts: true };
+      })
+      .addCase(getProfileListPosts.fulfilled, (state, { payload }) => {
+        return { ...state, loadingPosts: false, listPosts: payload.posts };
+      })
+      .addCase(getProfileListPosts.rejected, (state) => {
+        return { ...state, loadingPosts: false };
       });
   },
 });

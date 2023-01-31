@@ -27,7 +27,7 @@ export default function Tabs(props: TabsProps) {
           <li
             className={`${
               defaultKey === x.key
-                ? 'border-b-2 border-b-[#1a73e8] text-[#1a73e8] '
+                ? 'border-b-2 border-b-[#1a73e8] text-[#1a73e8]'
                 : ''
             } inline-block cursor-pointer px-4 py-2`}
             key={x.key}

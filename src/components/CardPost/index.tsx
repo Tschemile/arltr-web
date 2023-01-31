@@ -19,9 +19,9 @@ import Divider from '../common/Divider';
 import Dropdown from '../common/Dropdown';
 import IconButton from '../common/IconButton';
 import Tooltip from '../common/Tooltip';
-import Chain from '../Icons/Chain';
 import Comment from '../Icons/Comment';
-import Smite from '../Icons/Smite';
+import CommentBox from './components/CommentBox';
+import CommentForm from './components/CommentForm';
 
 interface ICardPost {
   setIsEdit?: (value: boolean) => void;
@@ -75,6 +75,7 @@ export default function CardPost(props: ICardPost) {
   const [limit, setLimit] = useState(2);
   const [isLiked, setIsLiked] = useState(false);
   const [totalReacts, setTotalReacts] = useState(0);
+  const [isDeletedCmtID, setIsDeletedCmtID] = useState('');
 
   const datePosts = new Date(datePostProps);
   const dateFormated = `${datePosts.getDate()}/${
@@ -153,7 +154,7 @@ export default function CardPost(props: ICardPost) {
   const handleLikePost = () => {
     dispatch(makeReaction({ post: id, type: 'LIKE' })).then((res: any) => {
       if (res.payload.status === 200) {
-        setIsLiked(!isLiked);
+        setIsLiked((prevState) => !prevState);
         if (!isLiked) {
           setTotalReacts(totalReacts + 1);
         } else {
@@ -173,6 +174,14 @@ export default function CardPost(props: ICardPost) {
         currentUser.id === (react as Record<string, string | any>).user?.id
       );
   }, []);
+
+  useEffect(() => {
+    if (isDeletedCmtID) {
+      setComments(comments.filter((x) => x.id !== isDeletedCmtID));
+      setTotalComments(totalComments - 1);
+      dispatch(getCommentsOfPost({ post: id, limit }));
+    }
+  }, [isDeletedCmtID]);
 
   if (listPosts.length <= 0)
     return <p className="text-center">Don&apos;t have any post! </p>;
@@ -264,24 +273,16 @@ export default function CardPost(props: ICardPost) {
       <Divider />
 
       {isClickedCmt &&
-        (comments || []).slice(0, limit).map((x: any) => (
-          <div key={x.id} className="group flex items-center py-2">
-            <div className="mr-4 h-[40px] w-[40px]">
-              <Avatar
-                src={x.image}
-                alt="avatar"
-                className="m-auto h-full w-full rounded-full"
-              />
-            </div>
-            <div className="relative rounded-lg bg-primary-color p-2 after:absolute after:top-3 after:-left-5 after:border-[10px] after:border-transparent after:border-r-primary-color">
-              <h3 className="text-lg font-medium">{x.user.name}</h3>
-              <p className="whitespace-pre-line text-sm">{x.content}</p>
-            </div>
-            <div className="hidden group-hover:block ">
-              <EllipsisHorizon />
-            </div>
-          </div>
-        ))}
+        (comments || [])
+          .slice(0, limit)
+          .map((x: any) => (
+            <CommentBox
+              setIsDeletedCmtID={setIsDeletedCmtID}
+              key={x.id}
+              item={x}
+            />
+          ))}
+
       {totalComments > 2 &&
         isClickedCmt &&
         totalComments !== (comments || []).length &&
@@ -297,40 +298,12 @@ export default function CardPost(props: ICardPost) {
           </div>
         )}
 
-      <div className="flex items-center py-3">
-        <div className="mr-4 h-[40px] w-[40px]">
-          <Avatar
-            src={currentUser.avatar}
-            alt="avatar"
-            className="m-auto h-full w-full rounded-full"
-          />
-        </div>
-        <form
-          onSubmit={(e) => {
-            handleAddComment(e);
-          }}
-          className="flex w-full items-center justify-between rounded-full bg-primary-color px-4"
-        >
-          <input
-            placeholder="Write comment here..."
-            value={contentCmt}
-            ref={refs}
-            onChange={(e) => handleChangeComment(e)}
-            className="w-full bg-primary-color p-2 text-sm outline-none placeholder:text-sm placeholder:text-gray-500"
-          />
-          <ul className="flex items-center">
-            <li className="cursor-pointer">
-              <Chain />
-            </li>
-            <li className="cursor-pointer">
-              <Smite />
-            </li>
-            <li className="cursor-pointer">
-              <EllipsisHorizon />
-            </li>
-          </ul>
-        </form>
-      </div>
+      <CommentForm
+        onChange={(e) => handleChangeComment(e)}
+        onSubmit={(e) => handleAddComment(e)}
+        contentCmt={contentCmt}
+        refs={refs}
+      />
     </div>
   );
 }

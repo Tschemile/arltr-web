@@ -6,6 +6,7 @@ interface IUploadButton {
   handleChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   id: string;
   className?: string;
+  multiple?: boolean;
 }
 
 export default function UploadButton(props: IUploadButton) {
@@ -14,6 +15,7 @@ export default function UploadButton(props: IUploadButton) {
     handleChange = () => {},
     id = '',
     className = '',
+    multiple = false,
   } = props;
   return (
     <form>
@@ -26,6 +28,7 @@ export default function UploadButton(props: IUploadButton) {
         accept=".jpg, .png, .jpeg"
         className="hidden"
         onChange={handleChange}
+        multiple={multiple}
       />
     </form>
   );

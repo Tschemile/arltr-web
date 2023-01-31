@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 
 import { baseURL } from '@/api';
@@ -8,6 +9,7 @@ import Avatar from '@/components/common/Avatar';
 import Divider from '@/components/common/Divider';
 import Modal from '@/components/common/Modal';
 import Tooltip from '@/components/common/Tooltip';
+import UploadButton from '@/components/common/UploadButton';
 import CreatePost from '@/components/CreatePost';
 import Briefcase from '@/components/Icons/Briefcase';
 import Chain from '@/components/Icons/Chain';
@@ -16,7 +18,12 @@ import Heart from '@/components/Icons/Heart';
 import Sad from '@/components/Icons/Sad';
 import Smite from '@/components/Icons/Smite';
 import Star from '@/components/Icons/Star';
-import { createPost, editPost } from '@/redux/actions';
+import {
+  createPost,
+  editPost,
+  getProfileListPosts,
+  uploadFile,
+} from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 import Block from './components/Block';
@@ -34,6 +41,7 @@ export default function Timeline(props: ITimeline) {
   const profileUser = useAppSelector((state) => state.profile.profileUser);
   const listComments = useAppSelector((state) => state.comments.listComment);
   const currentUser = useAppSelector((state) => state.auth.currentUser);
+  const listPostsProps = useAppSelector((state) => state.profile.listPosts);
 
   const { name = '', gender: genderCurrent = '', avatar = '' } = currentUser;
 
@@ -42,7 +50,6 @@ export default function Timeline(props: ITimeline) {
     socialLinks = [],
     hobbies = [],
     work = '',
-    posts = [],
     albums = [],
     followings = [],
     totalFollowing = 0,
@@ -58,11 +65,13 @@ export default function Timeline(props: ITimeline) {
   const [listPosts, setListPosts] = useState<Record<string, string>[]>([]);
   const [isEdit, setIsEdit] = useState(false);
   const [postIdEdit, setPostIdEdit] = useState('');
+  const [fileDataURL, setFileDataURL] = useState<string[]>([]);
 
   const onClose = () => {
     setOpenModal(false);
     setIsEdit(false);
     setContent('');
+    setFileDataURL([]);
   };
 
   const onSubmit = () => {
@@ -83,19 +92,61 @@ export default function Timeline(props: ITimeline) {
         }
       });
     } else {
-      dispatch(createPost({ type: 'POST', content })).then((res: any) => {
+      dispatch(
+        createPost({ type: 'POST', content, images: [...fileDataURL] })
+      ).then((res: any) => {
         if (res.payload?.status === 201) {
           setOpenModal(false);
           setContent('');
-          setListPosts([...posts, res.payload.data.post]);
+          setListPosts([...listPosts, res.payload.data.post]);
+        }
+      });
+    }
+  };
+
+  const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const formData = new FormData();
+      formData.append('file', e.target.files[0] as string | Blob);
+      dispatch(uploadFile(formData)).then((res: any) => {
+        const { payload: { status = 0, data = '' } = {} } = res;
+        if (status === 201) {
+          setFileDataURL([...fileDataURL, data]);
         }
       });
     }
   };
 
   useEffect(() => {
-    setListPosts(posts as []);
-  }, [JSON.stringify(posts)]);
+    setListPosts(listPostsProps as []);
+  }, [JSON.stringify(listPostsProps)]);
+
+  useEffect(() => {
+    dispatch(
+      getProfileListPosts({ type: 'POST', queryType: 'COMMUNITY', limit: 10 })
+    );
+  }, []);
+
+  // useEffect(() => {
+  //   let fileReader: any = '';
+  //   let isCancel = false;
+  //   if (files) {
+  //     fileReader = new FileReader();
+  //     fileReader.onload = (e: any) => {
+  //       const { result } = e.target;
+  //       if (result && !isCancel) {
+  //         setFileDataURL(result);
+  //       }
+  //     };
+  //     fileReader.readAsDataURL(files);
+  //   }
+  //   return () => {
+  //     isCancel = true;
+  //     if (fileReader && fileReader.readyState === 1) {
+  //       fileReader.abort();
+  //     }
+  //   };
+  // }, [files]);
 
   const getContent = () => {
     return (
@@ -120,9 +171,25 @@ export default function Timeline(props: ITimeline) {
               value={content}
             />
           </div>
+          {fileDataURL.length > 0 &&
+            fileDataURL.map((x) => (
+              <div key={x} className="h-[200px] w-full">
+                <img
+                  className="h-full w-full object-cover"
+                  src={x as string}
+                  alt="post-img"
+                />
+              </div>
+            ))}
         </>
         <div className="my-4 flex items-center">
-          <ActionButton icon={<Comment />} text="Comment" />
+          <UploadButton
+            className="cursor-pointer"
+            id="upload-file-post"
+            handleChange={handleChangeFile}
+          >
+            <ActionButton icon={<Comment />} text="Image" />
+          </UploadButton>
           <ActionButton icon={<Comment />} text="Comment" />
           <ActionButton icon={<Comment />} text="Comment" />
         </div>
