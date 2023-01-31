@@ -158,6 +158,14 @@ export const uploadFile = createAsyncThunk(
   }
 );
 
+export const uploadMultiFile = createAsyncThunk(
+  'upload/uploadMultiFile',
+  async (payload: FormData) => {
+    const res = await api.post('/upload/image/multiple', payload);
+    return res;
+  }
+);
+
 // GROUPS
 
 export const getListGroups = createAsyncThunk(

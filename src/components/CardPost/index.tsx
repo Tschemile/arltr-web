@@ -32,6 +32,7 @@ interface ICardPost {
   setPostIdEdit?: (value: string) => void;
   setListPosts?: (value: Record<string, string>[]) => void;
   listPosts?: Record<string, string>[];
+  setFileDataURL?: (value: string[]) => void;
 }
 
 export default function CardPost(props: ICardPost) {
@@ -45,6 +46,7 @@ export default function CardPost(props: ICardPost) {
     setContent = () => {},
     setPostIdEdit = () => {},
     setListPosts = () => {},
+    setFileDataURL = () => {},
     listPosts = [],
   } = props;
 
@@ -138,6 +140,7 @@ export default function CardPost(props: ICardPost) {
     setOpenModal(true);
     setIsEdit(true);
     setContent(content);
+    setFileDataURL(images as string[]);
     setPostIdEdit(id);
   };
 
@@ -164,15 +167,64 @@ export default function CardPost(props: ICardPost) {
     });
   };
 
+  const getLayout = () => {
+    switch (images.length) {
+      case 1:
+      case 2:
+        return (images as []).map((x: any) => (
+          <div
+            key={x}
+            className="relative max-h-[185px] min-h-[300px] overflow-hidden rounded"
+          >
+            <img
+              className="absolute top-1/2 right-0 left-1/2 bottom-0 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
+              src={x}
+              alt="post-img"
+            />
+          </div>
+        ));
+      case 3:
+        return (
+          <div className="relative">
+            <div className="relative max-h-[185px] min-h-[300px] overflow-hidden rounded">
+              <img
+                className="h-full w-full rounded object-cover"
+                src={images[0] as string | undefined}
+                alt="post-img"
+              />
+            </div>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <div>
+                <img
+                  className="h-full w-full rounded object-cover"
+                  src={images[1] as string | undefined}
+                  alt="post-img"
+                />
+              </div>
+              <div>
+                <img
+                  className="h-full w-full rounded object-cover"
+                  src={images[2] as string | undefined}
+                  alt="post-img"
+                />
+              </div>
+            </div>
+            <div className="absolute bottom-0 right-0 rounded bg-[rgba(0,0,0,0.5)] p-4 text-white">
+              + {images.length - 2}
+            </div>
+          </div>
+        );
+      default:
+        return '';
+    }
+  };
+
   useEffect(() => {
     if (totalReactsProps) setTotalReacts(Number(totalReactsProps));
   }, [totalReactsProps]);
 
   useEffect(() => {
-    if (react)
-      setIsLiked(
-        currentUser.id === (react as Record<string, string | any>).user?.id
-      );
+    setIsLiked(Object.keys(react).length > 0);
   }, []);
 
   useEffect(() => {
@@ -227,19 +279,7 @@ export default function CardPost(props: ICardPost) {
         </Dropdown>
       </div>
       <div className="whitespace-pre-line py-2 ">{content}</div>
-      {!!images &&
-        (images as string[])?.map((img) => (
-          <div
-            key={img}
-            className="relative max-h-[185px] min-h-[300px] overflow-hidden rounded"
-          >
-            <img
-              src={img}
-              alt="image"
-              className="absolute top-1/2 right-0 left-1/2 bottom-0 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
-            />
-          </div>
-        ))}
+      {!!images && getLayout()}
       <div className="mt-4 flex items-center justify-between text-sm">
         <div className="flex items-center">
           <IconButton className="ml-0 mr-1 p-0">
