@@ -78,7 +78,14 @@ export default function Timeline(props: ITimeline) {
   const onSubmit = () => {
     if (isEdit) {
       dispatch(
-        editPost({ postId: postIdEdit, payload: { type: 'POST', content } })
+        editPost({
+          postId: postIdEdit,
+          payload: {
+            type: 'POST',
+            content,
+            images: fileDataURL,
+          },
+        })
       ).then((res: any) => {
         if (res.payload?.status === 200) {
           setOpenModal(false);
@@ -94,7 +101,11 @@ export default function Timeline(props: ITimeline) {
       });
     } else {
       dispatch(
-        createPost({ type: 'POST', content, images: [...fileDataURL] })
+        createPost({
+          type: 'POST',
+          content,
+          images: fileDataURL,
+        })
       ).then((res: any) => {
         if (res.payload?.status === 201) {
           setOpenModal(false);
@@ -112,9 +123,58 @@ export default function Timeline(props: ITimeline) {
       dispatch(uploadFile(formData)).then((res: any) => {
         const { payload: { status = 0, data = '' } = {} } = res;
         if (status === 201) {
-          setFileDataURL([...fileDataURL, data]);
+          setFileDataURL([...fileDataURL, data.url]);
         }
       });
+    }
+  };
+
+  const getLayout = () => {
+    switch (fileDataURL.length) {
+      case 1:
+      case 2:
+        return fileDataURL.map((x: any) => (
+          <div key={x} className="h-[200px] w-full">
+            <img
+              className="h-full w-full rounded object-cover"
+              src={x}
+              alt="post-img"
+            />
+          </div>
+        ));
+      case 3:
+        return (
+          <div className="relative">
+            <div className="h-[200px] w-full">
+              <img
+                className="h-full w-full rounded object-cover"
+                src={fileDataURL[0] as string | undefined}
+                alt="post-img"
+              />
+            </div>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <div>
+                <img
+                  className="h-full w-full rounded object-cover"
+                  src={fileDataURL[1] as string | undefined}
+                  alt="post-img"
+                />
+              </div>
+              <div>
+                <img
+                  className="h-full w-full rounded object-cover"
+                  src={fileDataURL[2] as string | undefined}
+                  alt="post-img"
+                />
+              </div>
+            </div>
+            <div className="absolute bottom-0 right-0 rounded bg-[rgba(0,0,0,0.5)] p-4 text-white">
+              + {fileDataURL.length - 2}
+            </div>
+          </div>
+        );
+      default:
+        return '';
     }
   };
 
@@ -127,27 +187,6 @@ export default function Timeline(props: ITimeline) {
       getProfileListPosts({ type: 'POST', queryType: 'COMMUNITY', limit: 10 })
     );
   }, []);
-
-  // useEffect(() => {
-  //   let fileReader: any = '';
-  //   let isCancel = false;
-  //   if (files) {
-  //     fileReader = new FileReader();
-  //     fileReader.onload = (e: any) => {
-  //       const { result } = e.target;
-  //       if (result && !isCancel) {
-  //         setFileDataURL(result);
-  //       }
-  //     };
-  //     fileReader.readAsDataURL(files);
-  //   }
-  //   return () => {
-  //     isCancel = true;
-  //     if (fileReader && fileReader.readyState === 1) {
-  //       fileReader.abort();
-  //     }
-  //   };
-  // }, [files]);
 
   const getContent = () => {
     return (
@@ -172,16 +211,7 @@ export default function Timeline(props: ITimeline) {
               value={content}
             />
           </div>
-          {fileDataURL.length > 0 &&
-            fileDataURL.map((x) => (
-              <div key={x} className="h-[200px] w-full">
-                <img
-                  className="h-full w-full object-cover"
-                  src={x as string}
-                  alt="post-img"
-                />
-              </div>
-            ))}
+          {fileDataURL.length > 0 && getLayout()}
         </>
         <div className="my-4 flex items-center">
           <UploadButton
@@ -213,6 +243,7 @@ export default function Timeline(props: ITimeline) {
               setContent={setContent}
               setPostIdEdit={setPostIdEdit}
               setListPosts={setListPosts}
+              setFileDataURL={setFileDataURL}
               listPosts={listPosts}
             />
           ))}

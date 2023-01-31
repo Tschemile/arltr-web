@@ -26,7 +26,7 @@ export interface IInRelation {
 export interface ICreatePost {
   content: string;
   type: 'STORY' | 'POST' | 'REEL';
-  images?: string[] | null | undefined;
+  images?: Record<string, string>[] | (string | undefined)[];
 }
 
 export interface IReaction {
