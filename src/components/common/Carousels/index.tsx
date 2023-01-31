@@ -1,12 +1,11 @@
 /* eslint-disable no-plusplus */
-import type { ReactNode } from 'react';
-import React, { createRef, useState } from 'react';
+import { createRef, useState } from 'react';
 
 import ArrowLeft from '@/components/Icons/ArrowLeft';
 import ArrowRight from '@/components/Icons/ArrowRight';
 
 interface CarouselsProps {
-  children?: ReactNode;
+  children?: any;
   numSlide?: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
@@ -20,6 +19,8 @@ export default function Carousels(props: CarouselsProps) {
     acc[i] = createRef();
     return acc;
   }, {});
+
+  console.log(paused);
 
   const scrollToSmooth = (i: number) => {
     refs[i].current?.scrollIntoView({

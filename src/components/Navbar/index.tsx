@@ -221,6 +221,7 @@ export default function Navbar() {
   const currentUser = useAppSelector((state) => state.auth.currentUser);
   const isShow = useAppSelector((state) => state.home.isShowNavbar);
 
+  const isSidebar = false;
   const {
     avatar = '' || undefined,
     name = '' || undefined,
@@ -233,7 +234,7 @@ export default function Navbar() {
         !isShow ? '-translate-x-full' : 'translate-x-0'
       } z-50 overflow-y-auto overscroll-contain bg-white py-2 px-4 transition-all duration-200 ease-in-out xl:block xl:translate-x-0`}
     >
-      {false ? (
+      {isSidebar ? (
         <Sidebar />
       ) : (
         <>
