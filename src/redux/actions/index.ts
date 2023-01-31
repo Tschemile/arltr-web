@@ -80,6 +80,14 @@ export const getListFriend = createAsyncThunk(
   }
 );
 
+export const breakUp = createAsyncThunk(
+  'relation/breakUpRelation',
+  async (relationId: string) => {
+    const res = await api.delete(`/relation/${relationId}`);
+    return res.data;
+  }
+);
+
 // POST
 
 export const getCommentsOfPost = createAsyncThunk(

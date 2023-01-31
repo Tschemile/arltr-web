@@ -31,12 +31,13 @@ import InfoContent from './components/InfoContent';
 
 interface ITimeline {
   setIsActive?: (value: string) => void;
+  isFriend?: boolean;
 }
 
 export default function Timeline(props: ITimeline) {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { setIsActive = () => {} } = props;
+  const { setIsActive = () => {}, isFriend = false } = props;
 
   const profileUser = useAppSelector((state) => state.profile.profileUser);
   const listComments = useAppSelector((state) => state.comments.listComment);
@@ -201,7 +202,7 @@ export default function Timeline(props: ITimeline) {
     <>
       <div className="grid gap-2 md:grid-cols-3 md:gap-8">
         <div className="md:col-span-2">
-          <CreatePost setOpenModal={setOpenModal} />
+          {isFriend && <CreatePost setOpenModal={setOpenModal} />}
           {(listPosts as Record<string, string>[])?.map((x) => (
             <CardPost
               setIsEdit={setIsEdit}

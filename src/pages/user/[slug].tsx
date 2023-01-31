@@ -12,6 +12,8 @@ import BulletList from '@/components/Icons/BulletList';
 import Camera from '@/components/Icons/Camera';
 import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
 import Heart from '@/components/Icons/Heart';
+import SolidHeart from '@/components/Icons/Heart/solid';
+import Lock from '@/components/Icons/Lock';
 import Message from '@/components/Icons/Message';
 import PlusIcon from '@/components/Icons/PlusIcon';
 import Friends from '@/components/Profile/Friends';
@@ -19,7 +21,9 @@ import Groups from '@/components/Profile/Groups';
 import Timeline from '@/components/Profile/Timeline';
 import { Meta } from '@/layouts/Meta';
 import {
+  breakUp,
   editProfile,
+  getListFriend,
   getProfileUser,
   makeRelation,
   uploadFile,
@@ -31,9 +35,11 @@ const User = () => {
   const { query } = useRouter();
   const dispatch = useAppDispatch();
   const profileUser = useAppSelector((state) => state.profile.profileUser);
-  const { id: currentUserId = '' } = useAppSelector(
-    (state) => state.auth.currentUser
-  );
+  const {
+    id: currentUserId = '',
+    followings: followingUser = [],
+    friends: friendUser = [],
+  } = useAppSelector((state) => state.auth.currentUser);
 
   const {
     name = '',
@@ -42,9 +48,12 @@ const User = () => {
     cover: coverImgProps = '',
     about: aboutProps = '',
     id = '',
+    domain = '',
   } = profileUser;
 
   const isCurrentUser = currentUserId === id;
+  const isFollowing = followingUser?.find((x: any) => x.domain === domain);
+  const isFriend = friendUser?.find((x: any) => x.domain === domain);
 
   const [active, setIsActive] = useState('1');
   const [isEditIntro, setIsEditIntro] = useState(false);
@@ -57,7 +66,12 @@ const User = () => {
     {
       key: '1',
       title: 'Timeline',
-      content: <Timeline setIsActive={setIsActive} />,
+      content: (
+        <Timeline
+          setIsActive={setIsActive}
+          isFriend={isFriend || isCurrentUser}
+        />
+      ),
     },
     {
       key: '2',
@@ -124,7 +138,9 @@ const User = () => {
   };
 
   useEffect(() => {
-    if (query.slug) dispatch(getProfileUser(query.slug));
+    if (query.slug) {
+      dispatch(getProfileUser(query.slug));
+    }
   }, [query.slug]);
 
   useEffect(() => {
@@ -163,7 +179,7 @@ const User = () => {
                   id="upload-cover"
                   className="flex cursor-pointer items-center rounded-md bg-primary-color px-2 py-1"
                 >
-                  <Camera width={24} />{' '}
+                  <Camera width={24} />
                   <span className="p-1 text-sm">Edit</span>
                 </UploadButton>
               </div>
@@ -248,24 +264,67 @@ const User = () => {
                     <Message />
                     Chat
                   </Button>
-                  <Button
-                    className="ml-1"
-                    onSubmit={() =>
-                      dispatch(makeRelation({ user: id, type: 'FOLLOW' }))
-                    }
-                  >
-                    <Heart />
-                    Follow
-                  </Button>
-                  <Button
-                    className="ml-1 bg-gray-600"
-                    onSubmit={() =>
-                      dispatch(makeRelation({ user: id, type: 'FRIEND' }))
-                    }
-                  >
-                    <PlusIcon />
-                    Add friend
-                  </Button>
+
+                  {!isFollowing ? (
+                    <Button
+                      className="ml-1"
+                      onSubmit={() =>
+                        dispatch(makeRelation({ user: id, type: 'FOLLOW' }))
+                      }
+                    >
+                      <Heart />
+                      Follow
+                    </Button>
+                  ) : (
+                    <Button
+                      className="ml-1"
+                      onSubmit={() =>
+                        dispatch(getListFriend({ type: 'FOLLOWING' })).then(
+                          (x) =>
+                            dispatch(
+                              breakUp(
+                                x.payload.relations.find(
+                                  (y: any) => y.user.id === id
+                                ).id
+                              )
+                            )
+                        )
+                      }
+                    >
+                      <SolidHeart color="pink" />
+                      Following
+                    </Button>
+                  )}
+
+                  {!isFriend ? (
+                    <Button
+                      className="ml-1 bg-gray-600"
+                      onSubmit={() =>
+                        dispatch(makeRelation({ user: id, type: 'FRIEND' }))
+                      }
+                    >
+                      <PlusIcon />
+                      Add friend
+                    </Button>
+                  ) : (
+                    <Button
+                      className="ml-1 bg-gray-600"
+                      onSubmit={() =>
+                        dispatch(getListFriend({ type: 'FRIEND' })).then((x) =>
+                          dispatch(
+                            breakUp(
+                              x.payload.relations.find(
+                                (y: any) => y.user.id === id
+                              ).id
+                            )
+                          )
+                        )
+                      }
+                    >
+                      <Lock />
+                      Unfriend
+                    </Button>
+                  )}
                 </div>
               )}
               <div className="group flex flex-col">
@@ -276,15 +335,20 @@ const User = () => {
                 </div>
                 <div>
                   <ul className="absolute z-[2] hidden w-52 bg-white p-2 group-hover:block">
-                    <li>
-                      <a href="#"> View as guast </a>
-                    </li>
-                    <li>
-                      <a href="#"> Block this person </a>
-                    </li>
-                    <li>
-                      <a href="#"> Report abuse</a>
-                    </li>
+                    {isCurrentUser ? (
+                      <li>
+                        <a href="#"> View as guast </a>
+                      </li>
+                    ) : (
+                      <>
+                        <li>
+                          <a href="#"> Block this person </a>
+                        </li>
+                        <li>
+                          <a href="#"> Report abuse</a>
+                        </li>
+                      </>
+                    )}
                   </ul>
                 </div>
               </div>

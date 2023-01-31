@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 
-interface SkeletonProps {
+export interface SkeletonProps {
   children: ReactNode;
-  img?: string;
+  loading: boolean;
 }
 
 export { default as Sidebar } from './Sidebar';

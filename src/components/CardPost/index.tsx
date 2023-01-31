@@ -11,7 +11,7 @@ import {
   makeReaction,
 } from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { timeSince } from '@/utils/utils';
+import { timeSince } from '@/utils/func';
 
 import ActionButton from '../common/ActionButton';
 import Avatar from '../common/Avatar';

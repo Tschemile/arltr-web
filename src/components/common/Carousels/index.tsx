@@ -6,7 +6,7 @@ import ArrowLeft from '@/components/Icons/ArrowLeft';
 import ArrowRight from '@/components/Icons/ArrowRight';
 
 interface CarouselsProps {
-  children?: ReactNode;
+  children?: ReactNode | any;
   numSlide?: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
@@ -14,7 +14,7 @@ export default function Carousels(props: CarouselsProps) {
   const { children, numSlide = 1 } = props;
   const carouselData = [...children];
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [paused, setPaused] = useState(false);
+  // const [paused, setPaused] = useState(false);
 
   const refs = carouselData?.reduce((acc, _val, i) => {
     acc[i] = createRef();
@@ -79,8 +79,8 @@ export default function Carousels(props: CarouselsProps) {
   return (
     <div
       className="flex w-screen items-center justify-center p-12 md:w-1/2"
-      onMouseDown={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      // onMouseDown={() => setPaused(true)}
+      // onMouseLeave={() => setPaused(false)}
     >
       <div className="relative w-full">
         <div className="inline-flex overflow-x-hidden">

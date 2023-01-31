@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getProfileListPosts, getProfileUser } from '@/redux/actions';
 
 export interface ProfileState {
-  profileUser: Record<string, string>;
+  profileUser: Record<string, any>;
   loading: boolean;
   totalRelation: Record<string, number>;
   listPosts: Record<string, string>[];

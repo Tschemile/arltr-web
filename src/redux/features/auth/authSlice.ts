@@ -4,8 +4,11 @@ import { getCurrentUser, login, register } from '@/redux/actions';
 
 // Type for our state
 export interface AuthState {
-  isLoading: Record<'loadingRegister' | 'loadingLogin', boolean>;
-  currentUser: Record<string, string>;
+  isLoading: Record<
+    'loadingRegister' | 'loadingLogin' | 'loadingCurrentUser',
+    boolean
+  >;
+  currentUser: Record<string, any>;
 }
 
 // Initial state
@@ -13,6 +16,7 @@ const initialState: AuthState = {
   isLoading: {
     loadingRegister: false,
     loadingLogin: false,
+    loadingCurrentUser: false,
   },
   currentUser: {},
 };
@@ -62,8 +66,18 @@ export const authSlice = createSlice({
           isLoading: { ...state.isLoading, loadingLogin: false },
         };
       })
+      .addCase(getCurrentUser.pending, (state) => {
+        return {
+          ...state,
+          isLoading: { ...state.isLoading, loadingCurrentUser: true },
+        };
+      })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
-        return { ...state, currentUser: action.payload.data.profile };
+        return {
+          ...state,
+          isLoading: { ...state.isLoading, loadingCurrentUser: false },
+          currentUser: action.payload.data.profile,
+        };
       });
   },
 });
