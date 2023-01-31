@@ -32,7 +32,9 @@ const Main = (props: IMainProps) => {
       {props.meta}
       <Headers />
       <div
-        onClick={() => dispatch(onHideNavbar())}
+        onClick={() => {
+          if (isShow) dispatch(onHideNavbar());
+        }}
         className={`${
           isShow ? 'cursor-pointer bg-[rgba(0,0,0,0.4)]' : 'bg-main'
         } z-40 mt-[60px] grid h-full w-full text-xl`}

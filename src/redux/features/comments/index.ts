@@ -27,7 +27,7 @@ export const commentSlice = createSlice({
         const { comments = [] } = payload;
 
         const find = newArr.filter(
-          (x: any) => x.postId === comments[0].post.id
+          (x: Record<string, string>) => x.postId === comments[0].post.id
         );
 
         if (find.length) {

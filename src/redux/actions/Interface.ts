@@ -47,3 +47,8 @@ export interface IGetListPosts {
   type?: string | 'POST' | 'REEL' | 'STORY';
   queryType?: string | 'USER' | 'COMMUNITY' | 'GROUP';
 }
+
+export interface IEditComment {
+  image?: string;
+  content: string;
+}

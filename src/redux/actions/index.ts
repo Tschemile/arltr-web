@@ -4,6 +4,7 @@ import { api } from '@/api';
 
 import type {
   ICreatePost,
+  IEditComment,
   IGetGroups,
   IGetListPosts,
   IInRelation,
@@ -97,14 +98,6 @@ export const addComment = createAsyncThunk(
   }
 );
 
-export const uploadFile = createAsyncThunk(
-  'upload/uploadFile',
-  async (payload: FormData) => {
-    const res = await api.post('/upload/image', payload);
-    return res;
-  }
-);
-
 export const createPost = createAsyncThunk(
   'post/createPost',
   async (payload: ICreatePost) => {
@@ -114,7 +107,7 @@ export const createPost = createAsyncThunk(
 );
 
 export const editPost = createAsyncThunk(
-  'post/createPost',
+  'post/editPost',
   async (arg: Record<string, ICreatePost | any>) => {
     const res = await api.patch(`/post/${arg.postId}`, {
       ...arg.payload,
@@ -131,10 +124,36 @@ export const deletePost = createAsyncThunk(
   }
 );
 
+export const deleteComment = createAsyncThunk(
+  'post/deleteComment',
+  async (commentId: string) => {
+    const res = await api.delete(`/comment/${commentId}`);
+    return res;
+  }
+);
+
+export const editComment = createAsyncThunk(
+  'post/editComment',
+  async (arg: Record<string, IEditComment | any>) => {
+    const res = await api.patch(`/comment/${arg.commentId}`, {
+      ...arg.payload,
+    });
+    return res;
+  }
+);
+
 export const makeReaction = createAsyncThunk(
   'post/makeReaction',
   async (payload: IReaction) => {
     const res = await api.put('/react', { ...payload });
+    return res;
+  }
+);
+// Upload File
+export const uploadFile = createAsyncThunk(
+  'upload/uploadFile',
+  async (payload: FormData) => {
+    const res = await api.post('/upload/image', payload);
     return res;
   }
 );
