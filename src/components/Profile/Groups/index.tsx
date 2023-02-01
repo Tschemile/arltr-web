@@ -14,7 +14,7 @@ const ContentGroups = (props: IContentGroups) => {
   const { data = [] } = props;
   return (
     <div>
-      <div className="grid grid-cols-2 gap-8 px-4">
+      <div className="grid grid-cols-2 gap-8 px-4 py-6">
         {data.map((x) => (
           <div key={x.id} className="col-span-1">
             <div className="flex items-center">
@@ -45,6 +45,7 @@ export default function Groups() {
   const dispatch = useAppDispatch();
 
   const listGroups = useAppSelector((state) => state.groups.listGroups);
+  const { id = '' } = useAppSelector((state) => state.profile.profileUser);
   const [activeTab, setActiveTab] = useState('PUBLIC');
 
   const options = [
@@ -66,7 +67,7 @@ export default function Groups() {
   ];
 
   useEffect(() => {
-    dispatch(getListGroups({ mode: activeTab }));
+    dispatch(getListGroups({ mode: activeTab, user: id, type: 'USER' }));
   }, [activeTab]);
 
   return (

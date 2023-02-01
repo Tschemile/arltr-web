@@ -51,7 +51,7 @@ export default function Modal(props: ModalProps) {
           &#8203;
         </span>
         <div
-          className={`absolute top-1/2 left-1/2 m-0 inline-block w-[60%] -translate-x-1/2 -translate-y-1/2 items-center overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:w-full sm:max-w-lg sm:align-middle`}
+          className={`absolute top-1/2 left-1/2 m-0 inline-block w-[80%] -translate-x-1/2 -translate-y-1/2 items-center overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:w-full sm:max-w-lg sm:align-middle`}
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-headline"

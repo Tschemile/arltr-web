@@ -28,7 +28,7 @@ const Main = (props: IMainProps) => {
   }, []);
 
   return (
-    <div className="h-full w-full overflow-y-auto text-gray-700 antialiased">
+    <div className="h-full w-full text-gray-700 antialiased sm:overflow-y-auto">
       {props.meta}
       <Headers />
       <div

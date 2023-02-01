@@ -1,5 +1,6 @@
 import type { ChangeEvent, FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
 import { toast } from 'react-toastify';
 
 import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
@@ -168,51 +169,66 @@ export default function CardPost(props: ICardPost) {
   };
 
   const getLayout = () => {
-    switch (images.length) {
-      case 1:
-      case 2:
-        return (images as []).map((x: any) => (
-          <div
-            key={x}
-            className="relative max-h-[185px] min-h-[300px] overflow-hidden rounded"
-          >
-            <img
-              className="absolute top-1/2 right-0 left-1/2 bottom-0 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
-              src={x}
-              alt="post-img"
-            />
-          </div>
-        ));
-      case 3:
+    switch (images.length > 2) {
+      case false:
         return (
-          <div className="relative">
-            <div className="relative max-h-[185px] min-h-[300px] overflow-hidden rounded">
-              <img
-                className="h-full w-full rounded object-cover"
-                src={images[0] as string | undefined}
-                alt="post-img"
-              />
+          <PhotoProvider>
+            <div className="max-h-[185px] min-h-[300px] cursor-pointer overflow-hidden rounded">
+              {(images as []).map((x: string) => (
+                <PhotoView key={x} src={x}>
+                  <img
+                    className=" h-full w-full object-cover"
+                    src={x}
+                    alt="post-img"
+                  />
+                </PhotoView>
+              ))}
             </div>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              <div>
-                <img
-                  className="h-full w-full rounded object-cover"
-                  src={images[1] as string | undefined}
-                  alt="post-img"
-                />
+          </PhotoProvider>
+        );
+      case true:
+        return (
+          <PhotoProvider>
+            <div className="relative">
+              <div className="relative max-h-[185px] min-h-[300px] overflow-hidden rounded">
+                <PhotoView src={images[0]}>
+                  <img
+                    className="h-full w-full cursor-pointer rounded object-cover"
+                    src={images[0] as string | undefined}
+                    alt="post-img"
+                  />
+                </PhotoView>
               </div>
-              <div>
-                <img
-                  className="h-full w-full rounded object-cover"
-                  src={images[2] as string | undefined}
-                  alt="post-img"
-                />
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                <PhotoView src={images[1]}>
+                  <img
+                    className="h-full w-full cursor-pointer rounded object-cover"
+                    src={images[1] as string | undefined}
+                    alt="post-img"
+                  />
+                </PhotoView>
+                <PhotoView src={images[2]}>
+                  <img
+                    className="h-full w-full cursor-pointer rounded object-cover"
+                    src={images[2] as string | undefined}
+                    alt="post-img"
+                  />
+                </PhotoView>
+                {(images.slice(0, 2) as []).map((x: string) => (
+                  <PhotoView key={x} src={x}>
+                    <img
+                      className="hidden h-full w-full cursor-pointer rounded object-cover"
+                      src={x as string | undefined}
+                      alt="post-img"
+                    />
+                  </PhotoView>
+                ))}
+              </div>
+              <div className="absolute bottom-0 right-0 rounded bg-[rgba(0,0,0,0.5)] p-4 text-white">
+                + {images.length - 2}
               </div>
             </div>
-            <div className="absolute bottom-0 right-0 rounded bg-[rgba(0,0,0,0.5)] p-4 text-white">
-              + {images.length - 2}
-            </div>
-          </div>
+          </PhotoProvider>
         );
       default:
         return '';
@@ -234,9 +250,6 @@ export default function CardPost(props: ICardPost) {
       dispatch(getCommentsOfPost({ post: id, limit }));
     }
   }, [isDeletedCmtID]);
-
-  if (listPosts.length <= 0)
-    return <p className="text-center">Don&apos;t have any post! </p>;
 
   return (
     <div className={`mb-4 rounded-lg bg-white px-4 shadow-lg`}>
@@ -279,7 +292,7 @@ export default function CardPost(props: ICardPost) {
         </Dropdown>
       </div>
       <div className="whitespace-pre-line py-2 ">{content}</div>
-      {!!images && getLayout()}
+      {images && images.length > 0 && getLayout()}
       <div className="mt-4 flex items-center justify-between text-sm">
         <div className="flex items-center">
           <IconButton className="ml-0 mr-1 p-0">

@@ -200,14 +200,14 @@ const User = () => {
                 <UploadButton
                   id="upload-avatar"
                   handleChange={handleUploadAvatar}
-                  className="absolute top-[55%] left-[53%] -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 border-white bg-primary-color p-1"
+                  className="absolute top-[60%] left-[60%] -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 border-white bg-primary-color p-1 sm:left-[53%]"
                 >
                   <Camera />
                 </UploadButton>
               )}
             </div>
             <div className="">
-              <h1 className="text-3xl">{name}</h1>
+              <h1 className="text-xl font-medium sm:text-2xl">{name}</h1>
               <div className="text-sm">
                 {isEditIntro ? (
                   <form
@@ -236,15 +236,15 @@ const User = () => {
             </div>
           </div>
 
-          <div className="flex flex-col-reverse items-center justify-between py-2 px-4 text-base lg:flex-row">
-            <div className="mt-2 flex items-center lg:mt-0">
+          <div className="flex flex-col-reverse items-center justify-between p-2 text-base sm:px-4 lg:flex-row">
+            <div className="mt-2 text-xs sm:text-base lg:mt-0">
               <Tabs
                 options={options}
                 defaultKey={active}
                 handleChange={(key) => setIsActive(key)}
                 border={false}
               />
-              <span className="px-4 py-2">More</span>
+              {/* <span className="px-4 py-2">More</span> */}
             </div>
             <div className="flex">
               {isCurrentUser ? (
@@ -357,7 +357,7 @@ const User = () => {
         </div>
       </div>
       <TabsContent
-        className="lg:mx-[10%] xl:mx-[15%]"
+        className="py-4 lg:mx-[10%] xl:mx-[15%]"
         options={options}
         active={active}
       />
