@@ -1,16 +1,17 @@
 import Image from 'next/dist/client/image';
 import Link from 'next/dist/client/link';
-import { useRouter } from 'next/router';
-import React from 'react';
+import router, { useRouter } from 'next/router';
+import React, { useState } from 'react';
 
 import Logo from '@/assets/logo.png';
 import { onShowNavbar } from '@/redux/features/home/homeSlice';
-import { useAppDispatch } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
+import Avatar from '../common/Avatar';
+import Dropdown from '../common/Dropdown';
 import IconButton from '../common/IconButton';
 import Input from '../common/Input';
 import Tooltip from '../common/Tooltip';
-import ArrowDown from '../Icons/ArrowDown';
 import Bars from '../Icons/Bars';
 import BarsBottomLeft from '../Icons/BarsBottomLeft';
 import Bell from '../Icons/Bell';
@@ -20,6 +21,12 @@ import PlusIcon from '../Icons/PlusIcon';
 export default function Headers() {
   const dispatch = useAppDispatch();
   const { pathname } = useRouter();
+  const [open, setOpen] = useState(false);
+
+  const { avatar = '', gender = '' } = useAppSelector(
+    (state) => state.auth.currentUser
+  );
+
   return (
     <div className="fixed z-20 h-[60px] w-full bg-white py-2 px-4">
       <div className="flex items-center justify-between">
@@ -60,7 +67,7 @@ export default function Headers() {
           width="550px"
           className="hidden xl:block"
         />
-        <div>
+        <div className="flex items-center">
           <IconButton>
             <Tooltip description="Create">
               <PlusIcon />
@@ -71,14 +78,36 @@ export default function Headers() {
               <Message />
             </Tooltip>
           </IconButton>
-          <IconButton>
+          <IconButton className="mr-4">
             <Tooltip description="Notifications">
               <Bell />
             </Tooltip>
           </IconButton>
-          <IconButton>
-            <ArrowDown />
-          </IconButton>
+          <Dropdown
+            open={open}
+            content={[
+              {
+                id: '1',
+                title: 'Log out',
+                handleCLick: () => {
+                  localStorage.clear();
+                  router.push('/login');
+                },
+              },
+            ]}
+          >
+            <div
+              className="h-10 w-10 cursor-pointer"
+              onClick={() => setOpen(!open)}
+            >
+              <Avatar
+                src={avatar}
+                alt="avatar"
+                className="m-auto h-full w-full rounded-full p-1"
+                gender={gender}
+              />
+            </div>
+          </Dropdown>
         </div>
       </div>
     </div>

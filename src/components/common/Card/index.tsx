@@ -9,7 +9,7 @@ interface CardProps {
 export default function Card(props: CardProps) {
   const { img = '' } = props;
   return (
-    <div className={`rounded-lg bg-white shadow-lg`}>
+    <div className={`min-h-[50vh] rounded-lg bg-white shadow-lg`}>
       {!!img && (
         <div className="relative max-h-[185px] min-h-[185px] overflow-hidden rounded-t-lg lg:min-h-[200px] 2xl:min-h-[15rem]">
           <img

@@ -27,6 +27,7 @@ export interface ICreatePost {
   content: string;
   type: 'STORY' | 'POST' | 'REEL';
   images?: Record<string, string>[] | (string | undefined)[];
+  mode?: 'PUBLIC' | 'PRIVATE' | 'FRIEND' | string;
 }
 
 export interface IReaction {
@@ -37,15 +38,17 @@ export interface IReaction {
 
 export interface IGetGroups {
   limit?: number;
-  type?: 'COMMUNICATE' | 'SELF';
+  type?: 'COMMUNICATE' | 'USER';
   search?: string;
   mode?: 'HIDDEN' | 'PUBLIC' | 'PRIVATE' | string;
+  user: string;
 }
 
 export interface IGetListPosts {
   limit?: number;
-  type?: string | 'POST' | 'REEL' | 'STORY';
-  queryType?: string | 'USER' | 'COMMUNITY' | 'GROUP';
+  type?: 'POST' | 'REEL' | 'STORY' | string;
+  queryType?: 'USER' | 'COMMUNITY' | 'GROUP' | string;
+  user: string;
 }
 
 export interface IEditComment {

@@ -104,7 +104,7 @@ export default function CreatePost(props: ICreatePost) {
         </div>
       </div>
       <Divider />
-      <div className="flex">
+      <div className="hidden sm:flex ">
         {listActions.map((x) => (
           <ActionButton
             icon={x.icon}

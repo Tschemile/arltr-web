@@ -8,6 +8,7 @@ import ActionButton from '@/components/common/ActionButton';
 import Avatar from '@/components/common/Avatar';
 import Divider from '@/components/common/Divider';
 import Modal from '@/components/common/Modal';
+import Select from '@/components/common/Select';
 import Tooltip from '@/components/common/Tooltip';
 import UploadButton from '@/components/common/UploadButton';
 import CreatePost from '@/components/CreatePost';
@@ -59,6 +60,7 @@ export default function Timeline(props: ITimeline) {
     totalFollowers = 0,
     groups = [],
     followers = [],
+    id: profileId = '',
   } = profileUser;
 
   const [openModal, setOpenModal] = useState(false);
@@ -67,6 +69,7 @@ export default function Timeline(props: ITimeline) {
   const [isEdit, setIsEdit] = useState(false);
   const [postIdEdit, setPostIdEdit] = useState('');
   const [fileDataURL, setFileDataURL] = useState<string[]>([]);
+  const [mode, setMode] = useState('PUBLIC');
 
   const onClose = () => {
     setOpenModal(false);
@@ -84,6 +87,7 @@ export default function Timeline(props: ITimeline) {
             type: 'POST',
             content,
             images: fileDataURL,
+            mode,
           },
         })
       ).then((res: any) => {
@@ -105,6 +109,7 @@ export default function Timeline(props: ITimeline) {
           type: 'POST',
           content,
           images: fileDataURL,
+          mode,
         })
       ).then((res: any) => {
         if (res.payload?.status === 201) {
@@ -129,64 +134,54 @@ export default function Timeline(props: ITimeline) {
     }
   };
 
+  const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
+    setMode(e.target.value);
+  };
+
   const getLayout = () => {
-    switch (fileDataURL.length) {
-      case 1:
-      case 2:
-        return fileDataURL.map((x: any) => (
-          <div key={x} className="h-[200px] w-full">
+    if (fileDataURL.length <= 2) {
+      return fileDataURL.map((x: any) => (
+        <div key={x} className="h-[150px] w-full">
+          <img
+            className="h-full w-full rounded object-cover"
+            src={x}
+            alt="post-img"
+          />
+        </div>
+      ));
+    }
+
+    return (
+      <div className="relative">
+        <div className="h-[150px] w-full">
+          <img
+            className="h-full w-full rounded object-cover"
+            src={fileDataURL[0] as string | undefined}
+            alt="post-img"
+          />
+        </div>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          <div>
             <img
-              className="h-full w-full rounded object-cover"
-              src={x}
+              className="h-[150px] w-full rounded object-cover"
+              src={fileDataURL[1] as string | undefined}
               alt="post-img"
             />
           </div>
-        ));
-      case 3:
-        return (
-          <div className="relative">
-            <div className="h-[200px] w-full">
-              <img
-                className="h-full w-full rounded object-cover"
-                src={fileDataURL[0] as string | undefined}
-                alt="post-img"
-              />
-            </div>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              <div>
-                <img
-                  className="h-full w-full rounded object-cover"
-                  src={fileDataURL[1] as string | undefined}
-                  alt="post-img"
-                />
-              </div>
-              <div>
-                <img
-                  className="h-full w-full rounded object-cover"
-                  src={fileDataURL[2] as string | undefined}
-                  alt="post-img"
-                />
-              </div>
-            </div>
-            <div className="absolute bottom-0 right-0 rounded bg-[rgba(0,0,0,0.5)] p-4 text-white">
-              + {fileDataURL.length - 2}
-            </div>
+          <div>
+            <img
+              className="h-[150px] w-full rounded object-cover"
+              src={fileDataURL[2] as string | undefined}
+              alt="post-img"
+            />
           </div>
-        );
-      default:
-        return '';
-    }
-  };
-
-  useEffect(() => {
-    setListPosts(listPostsProps as []);
-  }, [JSON.stringify(listPostsProps)]);
-
-  useEffect(() => {
-    dispatch(
-      getProfileListPosts({ type: 'POST', queryType: 'COMMUNITY', limit: 10 })
+        </div>
+        <div className="absolute bottom-0 right-0 rounded bg-[rgba(0,0,0,0.5)] p-4 text-white">
+          + {fileDataURL.length - 2}
+        </div>
+      </div>
     );
-  }, []);
+  };
 
   const getContent = () => {
     return (
@@ -201,7 +196,22 @@ export default function Timeline(props: ITimeline) {
                 className="h-full w-full"
               />
             </div>
-            <p className="font-medium">{name}</p>
+            <div>
+              <p className="text-lg font-medium sm:text-xl">{name}</p>
+              <Select
+                handleChange={handleSelect}
+                options={[
+                  {
+                    id: '1',
+                    value: 'PUBLIC',
+                    label: 'Public',
+                  },
+                  { id: '2', value: 'PRIVATE', label: 'Private' },
+                  { id: '3', value: 'FRIEND', label: 'Friend' },
+                ]}
+                name="mode"
+              />
+            </div>
           </div>
           <div className="my-4">
             <textarea
@@ -211,9 +221,9 @@ export default function Timeline(props: ITimeline) {
               value={content}
             />
           </div>
-          {fileDataURL.length > 0 && getLayout()}
+          {fileDataURL?.length > 0 && getLayout()}
         </>
-        <div className="my-4 flex items-center">
+        <div className="my-4 grid grid-cols-3 gap-2">
           <UploadButton
             className="cursor-pointer"
             id="upload-file-post"
@@ -228,25 +238,45 @@ export default function Timeline(props: ITimeline) {
     );
   };
 
+  useEffect(() => {
+    setListPosts(listPostsProps as []);
+  }, [JSON.stringify(listPostsProps)]);
+
+  useEffect(() => {
+    if (profileId)
+      dispatch(
+        getProfileListPosts({
+          type: 'POST',
+          queryType: 'USER',
+          limit: 10,
+          user: profileId,
+        })
+      );
+  }, [profileId]);
+
   return (
     <>
-      <div className="grid gap-2 md:grid-cols-3 md:gap-8">
+      <div className="flex w-full flex-col-reverse gap-2 sm:grid md:grid-cols-3 md:gap-8">
         <div className="md:col-span-2">
           {isFriend && <CreatePost setOpenModal={setOpenModal} />}
-          {(listPosts as Record<string, string>[])?.map((x) => (
-            <CardPost
-              setIsEdit={setIsEdit}
-              post={x}
-              key={x.id}
-              listComments={listComments}
-              setOpenModal={setOpenModal}
-              setContent={setContent}
-              setPostIdEdit={setPostIdEdit}
-              setListPosts={setListPosts}
-              setFileDataURL={setFileDataURL}
-              listPosts={listPosts}
-            />
-          ))}
+          {listPosts.length <= 0 ? (
+            <p className="text-center">Don&apos;t have any post! </p>
+          ) : (
+            (listPosts as Record<string, string>[]).map((x) => (
+              <CardPost
+                setIsEdit={setIsEdit}
+                post={x}
+                key={x.id}
+                listComments={listComments}
+                setOpenModal={setOpenModal}
+                setContent={setContent}
+                setPostIdEdit={setPostIdEdit}
+                setListPosts={setListPosts}
+                setFileDataURL={setFileDataURL}
+                listPosts={listPosts}
+              />
+            ))
+          )}
         </div>
 
         <div className="row-start-1 h-full md:row-start-auto">

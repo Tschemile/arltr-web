@@ -13,7 +13,7 @@ export default function Dropdown(props: IDropdown) {
     <div className="relative text-base">
       {children}
       {open && (
-        <ul className="absolute top-6 right-0 z-10 rounded border bg-white shadow-lg">
+        <ul className="absolute top-8 right-0 z-10 rounded border bg-white shadow-lg">
           {content.map((x: any) => (
             <li
               key={x.id}
