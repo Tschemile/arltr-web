@@ -18,6 +18,11 @@ export interface IRelation {
   type: 'FOLLOW' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';
 }
 
+export interface IUpdateRelation {
+  id: string;
+  action: 'UPDATE' | 'DELETE';
+}
+
 export interface IInRelation {
   status?: string;
   type: 'FOLLOWING' | 'FOLLOWER' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';

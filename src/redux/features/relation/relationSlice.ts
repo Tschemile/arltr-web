@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { breakUp, getListFriend, makeRelation } from '@/redux/actions';
+import { getListFriend, makeRelation, updateRelation } from '@/redux/actions';
 
 export interface RelationState {
   listFriend: Record<string, string>[];
@@ -63,19 +63,19 @@ export const relationSlice = createSlice({
           isLoading: { ...state.isLoading, loadingListFriend: false },
         };
       })
-      .addCase(breakUp.pending, (state) => {
+      .addCase(updateRelation.pending, (state) => {
         return {
           ...state,
           isLoading: { ...state.isLoading, loadingBreakUp: true },
         };
       })
-      .addCase(breakUp.fulfilled, (state) => {
+      .addCase(updateRelation.fulfilled, (state) => {
         return {
           ...state,
           isLoading: { ...state.isLoading, loadingBreakUp: false },
         };
       })
-      .addCase(breakUp.rejected, (state) => {
+      .addCase(updateRelation.rejected, (state) => {
         return {
           ...state,
           isLoading: { ...state.isLoading, loadingBreakUp: false },

@@ -27,23 +27,33 @@ const Main = (props: IMainProps) => {
     });
   }, []);
 
-  return (
-    <div className="h-full w-full text-gray-700 antialiased sm:overflow-y-auto">
-      {props.meta}
-      <Headers />
-      <div
-        onClick={() => {
-          if (isShow) dispatch(onHideNavbar());
-        }}
-        className={`${
-          isShow ? 'cursor-pointer bg-[rgba(0,0,0,0.4)]' : 'bg-main'
-        } z-40 mt-[60px] grid h-full w-full text-xl`}
-      >
-        <Navbar />
-        <div className={`${isShow ? '-z-10' : ''} py-2 px-4 xl:pl-[320px]`}>
-          {props.children}
+  if (typeof window !== 'undefined' && localStorage.getItem('token'))
+    return (
+      <div className="h-full w-full overflow-y-auto text-gray-700 antialiased">
+        {props.meta}
+        <Headers />
+        <div
+          onClick={() => {
+            if (isShow) dispatch(onHideNavbar());
+          }}
+          className={`${
+            isShow ? 'cursor-pointer bg-[rgba(0,0,0,0.4)]' : 'bg-main'
+          } z-40 mt-[60px] grid h-full w-full text-xl`}
+        >
+          <Navbar />
+          <div
+            className={`${
+              isShow ? '-z-10' : ''
+            } min-h-[95vh] py-2 px-4 xl:pl-[320px]`}
+          >
+            {props.children}
+          </div>
         </div>
       </div>
+    );
+  return (
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl text-pink-500">
+      Loading...<span className="animate-ping">💕</span>
     </div>
   );
 };

@@ -4,30 +4,16 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import Avatar from '@/components/common/Avatar';
-import Button from '@/components/common/Button';
 import Tabs from '@/components/common/Tabs';
 import TabsContent from '@/components/common/Tabs/TabsContent';
 import UploadButton from '@/components/common/UploadButton';
-import BulletList from '@/components/Icons/BulletList';
 import Camera from '@/components/Icons/Camera';
-import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
-import Heart from '@/components/Icons/Heart';
-import SolidHeart from '@/components/Icons/Heart/solid';
-import Lock from '@/components/Icons/Lock';
-import Message from '@/components/Icons/Message';
-import PlusIcon from '@/components/Icons/PlusIcon';
 import Friends from '@/components/Profile/Friends';
 import Groups from '@/components/Profile/Groups';
+import OptionAction from '@/components/Profile/OptionAction';
 import Timeline from '@/components/Profile/Timeline';
 import { Meta } from '@/layouts/Meta';
-import {
-  breakUp,
-  editProfile,
-  getListFriend,
-  getProfileUser,
-  makeRelation,
-  uploadFile,
-} from '@/redux/actions';
+import { editProfile, getProfileUser, uploadFile } from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { TimelineLayout } from '@/templates/TimelineLayout';
 
@@ -246,113 +232,12 @@ const User = () => {
               />
               {/* <span className="px-4 py-2">More</span> */}
             </div>
-            <div className="flex">
-              {isCurrentUser ? (
-                <div className="flex items-center text-sm">
-                  <Button>
-                    <PlusIcon /> Add your story
-                  </Button>
-                  <div className="ml-1">
-                    <Button background="secondary">
-                      <BulletList />
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center text-sm">
-                  <Button className="bg-gray-600">
-                    <Message />
-                    Chat
-                  </Button>
-
-                  {!isFollowing ? (
-                    <Button
-                      className="ml-1"
-                      onSubmit={() =>
-                        dispatch(makeRelation({ user: id, type: 'FOLLOW' }))
-                      }
-                    >
-                      <Heart />
-                      Follow
-                    </Button>
-                  ) : (
-                    <Button
-                      className="ml-1"
-                      onSubmit={() =>
-                        dispatch(getListFriend({ type: 'FOLLOWING' })).then(
-                          (x) =>
-                            dispatch(
-                              breakUp(
-                                x.payload.relations.find(
-                                  (y: any) => y.user.id === id
-                                ).id
-                              )
-                            )
-                        )
-                      }
-                    >
-                      <SolidHeart color="pink" />
-                      Following
-                    </Button>
-                  )}
-
-                  {!isFriend ? (
-                    <Button
-                      className="ml-1 bg-gray-600"
-                      onSubmit={() =>
-                        dispatch(makeRelation({ user: id, type: 'FRIEND' }))
-                      }
-                    >
-                      <PlusIcon />
-                      Add friend
-                    </Button>
-                  ) : (
-                    <Button
-                      className="ml-1 bg-gray-600"
-                      onSubmit={() =>
-                        dispatch(getListFriend({ type: 'FRIEND' })).then((x) =>
-                          dispatch(
-                            breakUp(
-                              x.payload.relations.find(
-                                (y: any) => y.user.id === id
-                              ).id
-                            )
-                          )
-                        )
-                      }
-                    >
-                      <Lock />
-                      Unfriend
-                    </Button>
-                  )}
-                </div>
-              )}
-              <div className="group flex flex-col">
-                <div className="ml-1">
-                  <Button background="secondary">
-                    <EllipsisHorizon />
-                  </Button>
-                </div>
-                <div>
-                  <ul className="absolute z-[2] hidden w-52 bg-white p-2 group-hover:block">
-                    {isCurrentUser ? (
-                      <li>
-                        <a href="#"> View as guast </a>
-                      </li>
-                    ) : (
-                      <>
-                        <li>
-                          <a href="#"> Block this person </a>
-                        </li>
-                        <li>
-                          <a href="#"> Report abuse</a>
-                        </li>
-                      </>
-                    )}
-                  </ul>
-                </div>
-              </div>
-            </div>
+            <OptionAction
+              isFollowing={isFollowing}
+              isCurrentUser={isCurrentUser}
+              id={id}
+              isFriend={isFriend}
+            />
           </div>
         </div>
       </div>

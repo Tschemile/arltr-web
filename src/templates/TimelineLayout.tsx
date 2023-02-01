@@ -23,13 +23,19 @@ const TimelineLayout = (props: ITimelineProps) => {
     });
   }, []);
 
-  return (
-    <div className="h-full w-full overflow-y-auto text-gray-700 antialiased">
-      {props.meta}
-      <Headers />
-      <div className="bg-main mt-[60px] grid  h-full w-full text-xl">
-        {props.children}
+  if (typeof window !== 'undefined' && localStorage.getItem('token'))
+    return (
+      <div className="h-full w-full overflow-y-auto text-gray-700 antialiased">
+        {props.meta}
+        <Headers />
+        <div className="bg-main mt-[60px] grid h-full w-full text-xl">
+          {props.children}
+        </div>
       </div>
+    );
+  return (
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl text-pink-500">
+      Loading...<span className="animate-ping">💕</span>
     </div>
   );
 };
