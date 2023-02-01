@@ -169,70 +169,66 @@ export default function CardPost(props: ICardPost) {
   };
 
   const getLayout = () => {
-    switch (images.length > 2) {
-      case false:
-        return (
-          <PhotoProvider>
-            <div className="max-h-[185px] min-h-[300px] cursor-pointer overflow-hidden rounded">
-              {(images as []).map((x: string) => (
-                <PhotoView key={x} src={x}>
-                  <img
-                    className=" h-full w-full object-cover"
-                    src={x}
-                    alt="post-img"
-                  />
-                </PhotoView>
-              ))}
-            </div>
-          </PhotoProvider>
-        );
-      case true:
-        return (
-          <PhotoProvider>
-            <div className="relative">
-              <div className="relative max-h-[185px] min-h-[300px] overflow-hidden rounded">
-                <PhotoView src={images[0]}>
-                  <img
-                    className="h-full w-full cursor-pointer rounded object-cover"
-                    src={images[0] as string | undefined}
-                    alt="post-img"
-                  />
-                </PhotoView>
-              </div>
-              <div className="mt-2 grid grid-cols-2 gap-2">
-                <PhotoView src={images[1]}>
-                  <img
-                    className="h-full w-full cursor-pointer rounded object-cover"
-                    src={images[1] as string | undefined}
-                    alt="post-img"
-                  />
-                </PhotoView>
-                <PhotoView src={images[2]}>
-                  <img
-                    className="h-full w-full cursor-pointer rounded object-cover"
-                    src={images[2] as string | undefined}
-                    alt="post-img"
-                  />
-                </PhotoView>
-                {(images.slice(0, 2) as []).map((x: string) => (
-                  <PhotoView key={x} src={x}>
-                    <img
-                      className="hidden h-full w-full cursor-pointer rounded object-cover"
-                      src={x as string | undefined}
-                      alt="post-img"
-                    />
-                  </PhotoView>
-                ))}
-              </div>
-              <div className="absolute bottom-0 right-0 rounded bg-[rgba(0,0,0,0.5)] p-4 text-white">
-                + {images.length - 2}
-              </div>
-            </div>
-          </PhotoProvider>
-        );
-      default:
-        return '';
+    if (images.length <= 2) {
+      return (
+        <PhotoProvider>
+          <div className="max-h-[185px] min-h-[300px] cursor-pointer overflow-hidden rounded">
+            {(images as []).map((x: string) => (
+              <PhotoView key={x} src={x}>
+                <img
+                  className=" h-full w-full object-cover"
+                  src={x}
+                  alt="post-img"
+                />
+              </PhotoView>
+            ))}
+          </div>
+        </PhotoProvider>
+      );
     }
+    return (
+      <PhotoProvider>
+        <div className="relative">
+          <div className="relative max-h-[185px] min-h-[300px] overflow-hidden rounded">
+            <PhotoView src={images[0]}>
+              <img
+                className="h-full w-full cursor-pointer rounded object-cover"
+                src={images[0] as string | undefined}
+                alt="post-img"
+              />
+            </PhotoView>
+          </div>
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            <PhotoView src={images[1]}>
+              <img
+                className="h-full w-full cursor-pointer rounded object-cover"
+                src={images[1] as string | undefined}
+                alt="post-img"
+              />
+            </PhotoView>
+            <PhotoView src={images[2]}>
+              <img
+                className="h-full w-full cursor-pointer rounded object-cover"
+                src={images[2] as string | undefined}
+                alt="post-img"
+              />
+            </PhotoView>
+            {(images.slice(0, 2) as []).map((x: string) => (
+              <PhotoView key={x} src={x}>
+                <img
+                  className="hidden h-full w-full cursor-pointer rounded object-cover"
+                  src={x as string | undefined}
+                  alt="post-img"
+                />
+              </PhotoView>
+            ))}
+          </div>
+          <div className="absolute bottom-0 right-0 rounded bg-[rgba(0,0,0,0.5)] p-4 text-white">
+            + {images.length - 2}
+          </div>
+        </div>
+      </PhotoProvider>
+    );
   };
 
   useEffect(() => {

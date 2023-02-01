@@ -139,51 +139,48 @@ export default function Timeline(props: ITimeline) {
   };
 
   const getLayout = () => {
-    switch (fileDataURL.length > 2) {
-      case false:
-        return fileDataURL.map((x: any) => (
-          <div key={x} className="h-[150px] w-full">
+    if (fileDataURL.length <= 2) {
+      return fileDataURL.map((x: any) => (
+        <div key={x} className="h-[150px] w-full">
+          <img
+            className="h-full w-full rounded object-cover"
+            src={x}
+            alt="post-img"
+          />
+        </div>
+      ));
+    }
+
+    return (
+      <div className="relative">
+        <div className="h-[150px] w-full">
+          <img
+            className="h-full w-full rounded object-cover"
+            src={fileDataURL[0] as string | undefined}
+            alt="post-img"
+          />
+        </div>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          <div>
             <img
-              className="h-full w-full rounded object-cover"
-              src={x}
+              className="h-[150px] w-full rounded object-cover"
+              src={fileDataURL[1] as string | undefined}
               alt="post-img"
             />
           </div>
-        ));
-      case true:
-        return (
-          <div className="relative">
-            <div className="h-[150px] w-full">
-              <img
-                className="h-full w-full rounded object-cover"
-                src={fileDataURL[0] as string | undefined}
-                alt="post-img"
-              />
-            </div>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              <div>
-                <img
-                  className="h-[150px] w-full rounded object-cover"
-                  src={fileDataURL[1] as string | undefined}
-                  alt="post-img"
-                />
-              </div>
-              <div>
-                <img
-                  className="h-[150px] w-full rounded object-cover"
-                  src={fileDataURL[2] as string | undefined}
-                  alt="post-img"
-                />
-              </div>
-            </div>
-            <div className="absolute bottom-0 right-0 rounded bg-[rgba(0,0,0,0.5)] p-4 text-white">
-              + {fileDataURL.length - 2}
-            </div>
+          <div>
+            <img
+              className="h-[150px] w-full rounded object-cover"
+              src={fileDataURL[2] as string | undefined}
+              alt="post-img"
+            />
           </div>
-        );
-      default:
-        return '';
-    }
+        </div>
+        <div className="absolute bottom-0 right-0 rounded bg-[rgba(0,0,0,0.5)] p-4 text-white">
+          + {fileDataURL.length - 2}
+        </div>
+      </div>
+    );
   };
 
   const getContent = () => {
