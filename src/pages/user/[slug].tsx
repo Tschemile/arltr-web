@@ -11,6 +11,7 @@ import Camera from '@/components/Icons/Camera';
 import Friends from '@/components/Profile/Friends';
 import Groups from '@/components/Profile/Groups';
 import OptionAction from '@/components/Profile/OptionAction';
+import Photos from '@/components/Profile/Photos';
 import Timeline from '@/components/Profile/Timeline';
 import { Meta } from '@/layouts/Meta';
 import { editProfile, getProfileUser, uploadFile } from '@/redux/actions';
@@ -61,7 +62,7 @@ const User = () => {
     },
     {
       key: '2',
-      title: 'Friend',
+      title: 'Friends',
       content: (
         <Friends isCurrentUser={isCurrentUser} profileUser={profileUser} />
       ),
@@ -69,7 +70,7 @@ const User = () => {
     {
       key: '3',
       title: 'Photos',
-      content: 'hihi',
+      content: <Photos />,
     },
     {
       key: '4',

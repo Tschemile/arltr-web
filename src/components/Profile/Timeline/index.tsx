@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 
-import { baseURL } from '@/api';
 import CardPost from '@/components/CardPost';
 import ActionButton from '@/components/common/ActionButton';
 import Avatar from '@/components/common/Avatar';
@@ -227,6 +226,7 @@ export default function Timeline(props: ITimeline) {
           <UploadButton
             className="cursor-pointer"
             id="upload-file-post"
+            multiple
             handleChange={handleChangeFile}
           >
             <ActionButton icon={<Comment />} text="Image" />
@@ -321,7 +321,7 @@ export default function Timeline(props: ITimeline) {
                 <div key={x.id} className="col-span-1 h-[100px] w-full">
                   <img
                     alt="photo"
-                    src={`${baseURL}/file/${x.filename}`}
+                    src={x.url}
                     className="h-full w-full rounded-lg object-cover"
                   />
                 </div>

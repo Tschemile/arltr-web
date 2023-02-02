@@ -1,6 +1,6 @@
 import type { ChangeEvent, FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import { PhotoProvider, PhotoView } from 'react-photo-view';
+import { PhotoView } from 'react-photo-view';
 import { toast } from 'react-toastify';
 
 import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
@@ -10,8 +10,9 @@ import {
   deletePost,
   getCommentsOfPost,
   makeReaction,
+  uploadFile,
 } from '@/redux/actions';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useAppDispatch } from '@/redux/hooks';
 import { timeSince } from '@/utils/func';
 
 import ActionButton from '../common/ActionButton';
@@ -19,6 +20,7 @@ import Avatar from '../common/Avatar';
 import Divider from '../common/Divider';
 import Dropdown from '../common/Dropdown';
 import IconButton from '../common/IconButton';
+import PreviewImage from '../common/PreviewImage';
 import Tooltip from '../common/Tooltip';
 import Comment from '../Icons/Comment';
 import CommentBox from './components/CommentBox';
@@ -79,6 +81,7 @@ export default function CardPost(props: ICardPost) {
   const [isLiked, setIsLiked] = useState(false);
   const [totalReacts, setTotalReacts] = useState(0);
   const [isDeletedCmtID, setIsDeletedCmtID] = useState('');
+  const [image, setImage] = useState('');
 
   const datePosts = new Date(datePostProps);
   const dateFormated = `${datePosts.getDate()}/${
@@ -93,7 +96,20 @@ export default function CardPost(props: ICardPost) {
 
   const timeOfPosts = timeSince(timeCreated, dateFormated);
 
-  const currentUser = useAppSelector((state) => state.auth.currentUser);
+  // const currentUser = useAppSelector((state) => state.auth.currentUser);
+
+  const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const formData = new FormData();
+      formData.append('file', e.target.files[0] as string | Blob);
+      dispatch(uploadFile(formData)).then((res: any) => {
+        const { payload: { status = 0, data = '' } = {} } = res;
+        if (status === 201) {
+          setImage(data.url);
+        }
+      });
+    }
+  };
 
   const getAllCommentsOfPost = (postId: string) => {
     if (totalComments > 0 && !isClickedCmt) {
@@ -105,36 +121,21 @@ export default function CardPost(props: ICardPost) {
 
   const handleAddComment = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(
-      addComment({ post: id, content: contentCmt, image: currentUser?.avatar })
-    ).then((res) => {
-      if (res.payload.comment) {
-        setContentCmt('');
-        dispatch(getCommentsOfPost({ post: id, limit }));
-        setTotalComments(totalComments + 1);
+    dispatch(addComment({ post: id, content: contentCmt, image })).then(
+      (res) => {
+        if (res.payload.comment) {
+          setContentCmt('');
+          setImage('');
+          dispatch(getCommentsOfPost({ post: id, limit }));
+          setTotalComments(totalComments + 1);
+        }
       }
-    });
+    );
   };
 
   const handleChangeComment = (e: ChangeEvent<HTMLInputElement>) => {
     setContentCmt(e.target.value);
   };
-
-  useEffect(() => {
-    if (listComments && listComments.length) {
-      const find = listComments.find((x) => {
-        return x.postId === id;
-      });
-      if (find) setComments(find.data);
-    }
-  }, [JSON.stringify(listComments)]);
-
-  useEffect(() => {
-    return () => {
-      setIsClickedCmt(false);
-      setLimit(2);
-    };
-  }, []);
 
   const handleEditPost = () => {
     setOpen(false);
@@ -171,23 +172,26 @@ export default function CardPost(props: ICardPost) {
   const getLayout = () => {
     if (images.length <= 2) {
       return (
-        <PhotoProvider>
-          <div className="max-h-[185px] min-h-[300px] cursor-pointer overflow-hidden rounded">
-            {(images as []).map((x: string) => (
-              <PhotoView key={x} src={x}>
+        <PreviewImage>
+          {(images as []).map((x: string) => (
+            <div
+              key={x}
+              className="mb-2 h-[150px] max-h-[185px] min-h-[300px] cursor-pointer overflow-hidden rounded"
+            >
+              <PhotoView src={x}>
                 <img
-                  className=" h-full w-full object-cover"
+                  className="h-full w-full object-cover"
                   src={x}
                   alt="post-img"
                 />
               </PhotoView>
-            ))}
-          </div>
-        </PhotoProvider>
+            </div>
+          ))}
+        </PreviewImage>
       );
     }
     return (
-      <PhotoProvider>
+      <PreviewImage>
         <div className="relative">
           <div className="relative max-h-[185px] min-h-[300px] overflow-hidden rounded">
             <PhotoView src={images[0]}>
@@ -227,7 +231,7 @@ export default function CardPost(props: ICardPost) {
             + {images.length - 2}
           </div>
         </div>
-      </PhotoProvider>
+      </PreviewImage>
     );
   };
 
@@ -237,6 +241,22 @@ export default function CardPost(props: ICardPost) {
 
   useEffect(() => {
     setIsLiked(Object.keys(react).length > 0);
+  }, []);
+
+  useEffect(() => {
+    if (listComments && listComments.length) {
+      const find = listComments.find((x) => {
+        return x.postId === id;
+      });
+      if (find) setComments(find.data);
+    }
+  }, [JSON.stringify(listComments)]);
+
+  useEffect(() => {
+    return () => {
+      setIsClickedCmt(false);
+      setLimit(2);
+    };
   }, []);
 
   useEffect(() => {
@@ -351,8 +371,14 @@ export default function CardPost(props: ICardPost) {
         onChange={(e) => handleChangeComment(e)}
         onSubmit={(e) => handleAddComment(e)}
         contentCmt={contentCmt}
+        handleChangeFile={handleChangeFile}
         refs={refs}
       />
+      {image && (
+        <div className="ml-14 h-20 w-20 pb-4">
+          <img className="h-full w-full rounded" src={image} alt="img" />
+        </div>
+      )}
     </div>
   );
 }

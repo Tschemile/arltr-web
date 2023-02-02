@@ -11,7 +11,7 @@ interface AuthLayoutProps {
 export default function AuthLayout(props: AuthLayoutProps) {
   return (
     <div className="flex h-[100vh] w-full items-center justify-center">
-      <div className=" w-full overflow-hidden rounded-lg border border-solid shadow-lg sm:w-[65%] lg:h-[70%]">
+      <div className="w-full overflow-hidden rounded-lg border border-solid shadow-lg sm:w-[65%] lg:h-[80%]">
         <div className="lg:flex lg:h-full lg:items-center lg:justify-center">
           <div className="w-full bg-gradient-to-tr from-[#78a6fc] to-[#3576ef] py-4 px-12 text-center text-white lg:flex lg:h-full lg:flex-col lg:justify-center">
             <div>

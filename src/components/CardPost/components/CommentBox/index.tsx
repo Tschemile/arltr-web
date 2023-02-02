@@ -1,7 +1,9 @@
 import type { ChangeEvent, FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
+import { PhotoView } from 'react-photo-view';
 
-import { deleteComment, editComment } from '@/redux/actions';
+import PreviewImage from '@/components/common/PreviewImage';
+import { deleteComment, editComment, uploadFile } from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 import Avatar from '../../../common/Avatar';
@@ -19,17 +21,22 @@ export default function CommentBox(props: IComment) {
   const refs = useRef<null>(null);
   const { item = {}, setIsDeletedCmtID = () => {} } = props;
   const {
-    image = '',
+    image: imageProps = '',
     user = {},
     content: contentProps = '',
     id: commentId = '',
   } = item;
-  const { name = '', id: authorId = '' } = user as Record<string, string>;
+  const {
+    name = '',
+    id: authorId = '',
+    avatar = '',
+  } = user as Record<string, string>;
   const currentUser = useAppSelector((state) => state.auth.currentUser);
 
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [contentCmt, setContentCmt] = useState('');
+  const [image, setImage] = useState('');
 
   const handleDeleteComment = () => {
     dispatch(deleteComment(commentId)).then((res: any) => {
@@ -56,6 +63,19 @@ export default function CommentBox(props: IComment) {
     );
   };
 
+  const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const formData = new FormData();
+      formData.append('file', e.target.files[0] as string | Blob);
+      dispatch(uploadFile(formData)).then((res: any) => {
+        const { payload: { status = 0, data = '' } = {} } = res;
+        if (status === 201) {
+          setImage(data.url);
+        }
+      });
+    }
+  };
+
   useEffect(() => {
     if (contentProps) setContentCmt(contentProps);
   }, [contentProps]);
@@ -69,6 +89,7 @@ export default function CommentBox(props: IComment) {
       <>
         <CommentForm
           contentCmt={contentCmt}
+          handleChangeFile={handleChangeFile}
           refs={refs}
           onChange={(e) => handleChangeComment(e)}
           onSubmit={(e) => handleEditCmt(e)}
@@ -87,10 +108,10 @@ export default function CommentBox(props: IComment) {
     );
 
   return (
-    <div className="group flex items-center py-2">
+    <div className="group flex  py-2">
       <div className="mr-4 h-[40px] w-[40px]">
         <Avatar
-          src={image}
+          src={avatar}
           alt="avatar"
           className="m-auto h-full w-full rounded-full"
         />
@@ -98,6 +119,19 @@ export default function CommentBox(props: IComment) {
       <div className="relative rounded-lg bg-primary-color p-2 after:absolute after:top-3 after:-left-5 after:border-[10px] after:border-transparent after:border-r-primary-color">
         <h3 className="text-lg font-medium">{name}</h3>
         <p className="whitespace-pre-line text-sm">{contentCmt}</p>
+        {imageProps && (
+          <PreviewImage>
+            <div className="mt-2 h-[200px] w-full">
+              <PhotoView src={imageProps}>
+                <img
+                  className="h-full w-full cursor-pointer rounded"
+                  src={imageProps}
+                  alt="img-cmt"
+                />
+              </PhotoView>
+            </div>
+          </PreviewImage>
+        )}
       </div>
       {currentUser.id === authorId && (
         <div className="">

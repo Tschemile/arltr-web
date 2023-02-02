@@ -2,6 +2,7 @@ import type { ChangeEvent, FormEvent } from 'react';
 import React from 'react';
 
 import Avatar from '@/components/common/Avatar';
+import UploadButton from '@/components/common/UploadButton';
 import Chain from '@/components/Icons/Chain';
 import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
 import Smite from '@/components/Icons/Smite';
@@ -12,6 +13,7 @@ interface ICommentForm {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   contentCmt?: string;
   refs?: any;
+  handleChangeFile: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function CommentForm(props: ICommentForm) {
@@ -20,6 +22,7 @@ export default function CommentForm(props: ICommentForm) {
     onChange = () => {},
     contentCmt = '',
     refs = {},
+    handleChangeFile = () => {},
   } = props;
 
   const currentUser = useAppSelector((state) => state.auth.currentUser);
@@ -46,7 +49,13 @@ export default function CommentForm(props: ICommentForm) {
         />
         <ul className="flex items-center">
           <li className="cursor-pointer">
-            <Chain />
+            <UploadButton
+              className="cursor-pointer"
+              id="upload-file-cmt"
+              handleChange={handleChangeFile}
+            >
+              <Chain />
+            </UploadButton>
           </li>
           <li className="cursor-pointer">
             <Smite />
