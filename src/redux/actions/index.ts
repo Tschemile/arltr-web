@@ -11,7 +11,6 @@ import type {
   ILogin,
   IReaction,
   IRelation,
-  IUpdateRelation,
   IUser,
 } from './Interface';
 
@@ -65,10 +64,10 @@ export const editProfile = createAsyncThunk(
 
 // relationship ❤️
 
-export const makeRelation = createAsyncThunk(
-  'relation/makeRelation',
+export const changeRelation = createAsyncThunk(
+  'relation/changeRelation',
   async (payload: IRelation) => {
-    const res = await api.post(`/relation`, { ...payload });
+    const res = await api.put(`/relation`, { ...payload });
     return res;
   }
 );
@@ -77,14 +76,6 @@ export const getListFriend = createAsyncThunk(
   'relation/getListFriend',
   async (params: IInRelation) => {
     const res = await api.get(`/relation`, { params });
-    return res.data;
-  }
-);
-
-export const updateRelation = createAsyncThunk(
-  'relation/updateRelation',
-  async (payload: IUpdateRelation) => {
-    const res = await api.patch(`/relation/${payload.id}?${[payload.action]}`);
     return res.data;
   }
 );

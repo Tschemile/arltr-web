@@ -1,22 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { getListFriend, makeRelation, updateRelation } from '@/redux/actions';
+import { changeRelation, getListFriend } from '@/redux/actions';
 
 export interface RelationState {
   listFriend: Record<string, string>[];
-  isLoading: Record<
-    'loadingMakeRelation' | 'loadingListFriend' | 'loadingBreakUp',
-    boolean
-  >;
+  isLoading: Record<'loadingChangeRelation' | 'loadingListFriend', boolean>;
 }
 
 // Initial state
 const initialState: RelationState = {
   listFriend: [],
   isLoading: {
-    loadingMakeRelation: false,
+    loadingChangeRelation: false,
     loadingListFriend: false,
-    loadingBreakUp: false,
   },
 };
 
@@ -26,22 +22,22 @@ export const relationSlice = createSlice({
   reducers: {},
   extraReducers: (builer) => {
     builer
-      .addCase(makeRelation.pending, (state) => {
+      .addCase(changeRelation.pending, (state) => {
         return {
           ...state,
-          isLoading: { ...state.isLoading, loadingMakeRelation: true },
+          isLoading: { ...state.isLoading, loadingChangeRelation: true },
         };
       })
-      .addCase(makeRelation.fulfilled, (state) => {
+      .addCase(changeRelation.fulfilled, (state) => {
         return {
           ...state,
-          isLoading: { ...state.isLoading, loadingMakeRelation: false },
+          isLoading: { ...state.isLoading, loadingChangeRelation: false },
         };
       })
-      .addCase(makeRelation.rejected, (state) => {
+      .addCase(changeRelation.rejected, (state) => {
         return {
           ...state,
-          isLoading: { ...state.isLoading, loadingMakeRelation: false },
+          isLoading: { ...state.isLoading, loadingChangeRelation: false },
         };
       })
       .addCase(getListFriend.pending, (state) => {
@@ -61,24 +57,6 @@ export const relationSlice = createSlice({
         return {
           ...state,
           isLoading: { ...state.isLoading, loadingListFriend: false },
-        };
-      })
-      .addCase(updateRelation.pending, (state) => {
-        return {
-          ...state,
-          isLoading: { ...state.isLoading, loadingBreakUp: true },
-        };
-      })
-      .addCase(updateRelation.fulfilled, (state) => {
-        return {
-          ...state,
-          isLoading: { ...state.isLoading, loadingBreakUp: false },
-        };
-      })
-      .addCase(updateRelation.rejected, (state) => {
-        return {
-          ...state,
-          isLoading: { ...state.isLoading, loadingBreakUp: false },
         };
       });
   },

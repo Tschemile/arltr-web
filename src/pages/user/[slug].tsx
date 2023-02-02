@@ -14,7 +14,12 @@ import OptionAction from '@/components/Profile/OptionAction';
 import Photos from '@/components/Profile/Photos';
 import Timeline from '@/components/Profile/Timeline';
 import { Meta } from '@/layouts/Meta';
-import { editProfile, getProfileUser, uploadFile } from '@/redux/actions';
+import {
+  editProfile,
+  getListFriend,
+  getProfileUser,
+  uploadFile,
+} from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { TimelineLayout } from '@/templates/TimelineLayout';
 
@@ -27,6 +32,7 @@ const User = () => {
     followings: followingUser = [],
     friends: friendUser = [],
   } = useAppSelector((state) => state.auth.currentUser);
+  const { listFriend } = useAppSelector((state) => state.relation);
 
   const {
     name = '',
@@ -41,6 +47,11 @@ const User = () => {
   const isCurrentUser = currentUserId === id;
   const isFollowing = followingUser?.find((x: any) => x.domain === domain);
   const isFriend = friendUser?.find((x: any) => x.domain === domain);
+  const listRequesting = listFriend?.filter(
+    (x: any) => x.requester.id === currentUserId
+  );
+  const currentIsRequest =
+    listRequesting?.find((x: any) => x.user.domain === domain) || {};
 
   const [active, setIsActive] = useState('1');
   const [isEditIntro, setIsEditIntro] = useState(false);
@@ -127,6 +138,7 @@ const User = () => {
   useEffect(() => {
     if (query.slug) {
       dispatch(getProfileUser(query.slug));
+      dispatch(getListFriend({ type: 'FRIEND', status: 'REQUESTING' }));
     }
   }, [query.slug]);
 
@@ -238,6 +250,7 @@ const User = () => {
               isCurrentUser={isCurrentUser}
               id={id}
               isFriend={isFriend}
+              isRequest={Object.keys(currentIsRequest).length !== 0}
             />
           </div>
         </div>

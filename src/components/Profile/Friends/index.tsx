@@ -1,3 +1,4 @@
+import router from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import TabsContent from '@/components/common/Tabs/TabsContent';
@@ -26,8 +27,16 @@ const Grid = (props: GridProps) => {
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
         {(data as []).map((val: Record<string, string | undefined | any>) => (
           <Card img={val.requester?.avatar || val.avatar} key={val.id}>
-            <p>{val.requester?.name || val.name}</p>
-            <p className="mb-1 text-sm">{val.following} Following</p>
+            <div
+              onClick={() => router.push(`/user/${val.domain}`)}
+              className="cursor-pointer"
+            >
+              {val.requester?.name || val.name}
+            </div>
+            <p className="mb-1 text-sm">{val.about}</p>
+            {val.following && (
+              <p className="mb-1 text-sm">{val.following} Following</p>
+            )}
             <Button
               type="button"
               className="w-full justify-center bg-[#dbeafe] text-sm text-[#71a7f2]"
@@ -45,7 +54,7 @@ const Grid = (props: GridProps) => {
 };
 
 export default function Friends(props: TabsProps) {
-  const { isCurrentUser = true, profileUser = {} } = props;
+  const { isCurrentUser = false, profileUser = {} } = props;
   const [active, setIsActive] = useState<IInRelation['type']>('FRIEND');
   const dispatch = useAppDispatch();
   const {
@@ -84,7 +93,7 @@ export default function Friends(props: TabsProps) {
         defaultKey={active}
         handleChange={(key: any) => setIsActive(key)}
       />
-      <TabsContent options={options} active={active} />
+      <TabsContent options={options} active={active} className="min-h-[40vh]" />
     </Card>
   );
 }

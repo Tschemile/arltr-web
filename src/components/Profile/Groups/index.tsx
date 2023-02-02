@@ -82,7 +82,11 @@ export default function Groups() {
         defaultKey={activeTab}
         handleChange={(key) => setActiveTab(key)}
       />
-      <TabsContent options={options} active={activeTab} />
+      <TabsContent
+        options={options}
+        active={activeTab}
+        className="min-h-[40vh]"
+      />
     </Card>
   );
 }

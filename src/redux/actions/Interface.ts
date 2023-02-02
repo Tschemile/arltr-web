@@ -14,17 +14,13 @@ export interface ILogin {
 }
 
 export interface IRelation {
-  user: string;
+  user?: string;
   type: 'FOLLOW' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';
-}
-
-export interface IUpdateRelation {
-  id: string;
-  action: 'UPDATE' | 'DELETE';
+  status: 'REQUESTING' | 'ACCEPTED' | 'REJECT';
 }
 
 export interface IInRelation {
-  status?: string;
+  status?: 'REQUESTING' | 'ACCEPTED' | 'REJECT';
   type: 'FOLLOWING' | 'FOLLOWER' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';
 }
 

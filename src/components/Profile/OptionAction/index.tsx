@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Button from '@/components/common/Button';
 import BulletList from '@/components/Icons/BulletList';
@@ -8,13 +8,14 @@ import SolidHeart from '@/components/Icons/Heart/solid';
 import Lock from '@/components/Icons/Lock';
 import Message from '@/components/Icons/Message';
 import PlusIcon from '@/components/Icons/PlusIcon';
-import { getListFriend, makeRelation, updateRelation } from '@/redux/actions';
+import { changeRelation } from '@/redux/actions';
 import { useAppDispatch } from '@/redux/hooks';
 
 interface OptionProps {
   isFollowing: Record<string, string>;
   id: string;
   isCurrentUser: boolean;
+  isRequest: boolean;
   isFriend: Record<string, string>;
 }
 
@@ -25,11 +26,22 @@ function OptionAction(props: OptionProps) {
     id = '',
     isCurrentUser = false,
     isFriend = {},
+    isRequest = false,
   } = props;
-  const [friend, setFriend] = useState(Object.keys(isFriend).length === 0);
-  const [following, setFollowing] = useState(
-    Object.keys(isFollowing).length === 0
-  );
+
+  const checkFriend = Object.keys(isFriend).length === 0;
+  const checkFollowing = Object.keys(isFollowing).length === 0;
+  const [friend, setFriend] = useState(!isRequest && checkFriend);
+  const [following, setFollowing] = useState(checkFollowing);
+
+  useEffect(() => {
+    if (!checkFollowing) setFollowing(false);
+    if (isRequest && checkFriend) setFriend(false);
+    return () => {
+      setFollowing(true);
+      setFriend(true);
+    };
+  }, [checkFollowing, checkFriend, isRequest]);
 
   return (
     <div className="flex">
@@ -55,7 +67,13 @@ function OptionAction(props: OptionProps) {
             <Button
               className="ml-1"
               onSubmit={() => {
-                dispatch(makeRelation({ user: id, type: 'FOLLOW' }));
+                dispatch(
+                  changeRelation({
+                    user: id,
+                    type: 'FOLLOW',
+                    status: 'ACCEPTED',
+                  })
+                );
                 setFollowing(false);
               }}
             >
@@ -64,22 +82,17 @@ function OptionAction(props: OptionProps) {
             </Button>
           ) : (
             <Button
-              className="ml-1"
-              onSubmit={() =>
-                dispatch(getListFriend({ type: 'FOLLOWING' })).then((x) => {
-                  if (x.payload) {
-                    dispatch(
-                      updateRelation({
-                        id: x.payload.relations.find(
-                          (y: any) => y.user.id === id
-                        ).id,
-                        action: 'DELETE',
-                      })
-                    );
-                    setFollowing(true);
-                  }
-                })
-              }
+              className="ml-1 text-pink-200"
+              onSubmit={() => {
+                dispatch(
+                  changeRelation({
+                    user: id,
+                    type: 'FOLLOW',
+                    status: 'REJECT',
+                  })
+                );
+                setFollowing(true);
+              }}
             >
               <SolidHeart color="pink" />
               Following
@@ -90,7 +103,13 @@ function OptionAction(props: OptionProps) {
             <Button
               className="ml-1 bg-gray-600"
               onSubmit={() => {
-                dispatch(makeRelation({ user: id, type: 'FRIEND' }));
+                dispatch(
+                  changeRelation({
+                    user: id,
+                    type: 'FRIEND',
+                    status: 'REQUESTING',
+                  })
+                );
                 setFriend(false);
               }}
             >
@@ -100,24 +119,19 @@ function OptionAction(props: OptionProps) {
           ) : (
             <Button
               className="ml-1 bg-gray-600"
-              onSubmit={() =>
-                dispatch(getListFriend({ type: 'FRIEND' })).then((x) => {
-                  if (x.payload) {
-                    dispatch(
-                      updateRelation({
-                        id: x.payload.relations.find(
-                          (y: any) => y.user.id === id
-                        ).id,
-                        action: 'DELETE',
-                      })
-                    );
-                    setFriend(true);
-                  }
-                })
-              }
+              onSubmit={() => {
+                dispatch(
+                  changeRelation({
+                    user: id,
+                    type: 'FRIEND',
+                    status: 'REJECT',
+                  })
+                );
+                setFriend(true);
+              }}
             >
               <Lock />
-              Unfriend
+              {isRequest || !friend ? 'Cancel request' : 'Unfriend'}
             </Button>
           )}
         </div>
@@ -137,13 +151,19 @@ function OptionAction(props: OptionProps) {
             ) : (
               <>
                 <li>
-                  <a
+                  <button
                     onClick={() =>
-                      dispatch(makeRelation({ user: id, type: 'BLOCKED' }))
+                      dispatch(
+                        changeRelation({
+                          user: id,
+                          type: 'BLOCKED',
+                          status: 'ACCEPTED',
+                        })
+                      )
                     }
                   >
                     Block this person
-                  </a>
+                  </button>
                 </li>
                 <li>
                   <a href="#"> Report abuse</a>
