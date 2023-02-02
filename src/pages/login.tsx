@@ -66,7 +66,7 @@ export default function Login() {
       </form>
       <div className="flex items-center justify-between">
         <div>
-          Don&apos;t have account{' '}
+          Don&apos;t have account?{' '}
           <Link href="/register" className="text-gray-600 hover:border-none">
             Sign up
           </Link>

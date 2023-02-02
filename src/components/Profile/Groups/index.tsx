@@ -12,8 +12,13 @@ interface IContentGroups {
 
 const ContentGroups = (props: IContentGroups) => {
   const { data = [] } = props;
+  if (data.length <= 0)
+    return (
+      <p className="text-center">Don&lsquo;t have any group here!! 😄😄😄 </p>
+    );
+
   return (
-    <div>
+    <>
       <div className="grid grid-cols-2 gap-8 px-4 py-6">
         {data.map((x) => (
           <div key={x.id} className="col-span-1">
@@ -37,7 +42,7 @@ const ContentGroups = (props: IContentGroups) => {
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

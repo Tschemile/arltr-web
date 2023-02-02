@@ -1,10 +1,11 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import router from 'next/router';
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
 
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
+import Select from '@/components/common/Select';
 import Envelope from '@/components/Icons/Envelope';
 import Lock from '@/components/Icons/Lock';
 import User from '@/components/Icons/User';
@@ -14,9 +15,9 @@ import AuthLayout from '@/templates/AuthLayout';
 
 export default function Register() {
   const dispatch = useAppDispatch();
-  const [dd, setDD] = useState('');
-  const [mm, setMM] = useState('');
-  const [yyyy, setYYYY] = useState('');
+  const [dd, setDD] = useState('01');
+  const [mm, setMM] = useState('01');
+  const [yyyy, setYYYY] = useState('2000');
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',
@@ -26,7 +27,6 @@ export default function Register() {
     gender: '',
     birth: '',
   });
-  const router = useRouter();
   const isLoading = useAppSelector(
     (state) => state.auth.isLoading.loadingRegister
   );
@@ -47,6 +47,34 @@ export default function Register() {
       });
     }
   };
+
+  const optionsDD = [...Array(32).keys()]
+    .filter((y) => y !== 0)
+    .map((x) => {
+      return {
+        id: x,
+        label: x < 10 ? `0${x}` : `${x}`,
+        value: x < 10 ? `0${x}` : `${x}`,
+      };
+    });
+
+  const optionsMM = [...Array(13).keys()]
+    .filter((y) => y !== 0)
+    .map((x) => {
+      return {
+        id: x,
+        label: x < 10 ? `0${x}` : `${x}`,
+        value: x < 10 ? `0${x}` : `${x}`,
+      };
+    });
+
+  const optionsYYYY = [...Array(101).keys()].map((x) => {
+    return {
+      id: x,
+      label: `${2023 - x}`,
+      value: `${2023 - x}`,
+    };
+  });
 
   return (
     <AuthLayout>
@@ -111,23 +139,20 @@ export default function Register() {
         <div className="my-4">
           <p className="mb-2 text-lg font-medium">Birthdays</p>
           <div className="my-4 grid grid-cols-3 gap-4">
-            <Input
-              placeholder="DD"
-              width="100%"
+            <Select
               name="dd"
-              onChange={(e) => setDD(e.target.value)}
+              options={optionsDD as []}
+              handleChange={(e) => setDD(e.target.value)}
             />
-            <Input
-              placeholder="MM"
-              width="100%"
+            <Select
               name="mm"
-              onChange={(e) => setMM(e.target.value)}
+              options={optionsMM as []}
+              handleChange={(e) => setMM(e.target.value)}
             />
-            <Input
-              placeholder="YYYY"
-              width="100%"
+            <Select
               name="yyyy"
-              onChange={(e) => setYYYY(e.target.value)}
+              options={optionsYYYY as []}
+              handleChange={(e) => setYYYY(e.target.value)}
             />
           </div>
         </div>

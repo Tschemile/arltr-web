@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import Headers from '@/components/Headers';
 import Navbar from '@/components/Navbar';
@@ -17,6 +17,8 @@ const Main = (props: IMainProps) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
+  const [isValid, setIsValid] = useState(false);
+
   const isShow = useAppSelector((state) => state.home.isShowNavbar);
 
   useEffect(() => {
@@ -27,7 +29,12 @@ const Main = (props: IMainProps) => {
     });
   }, []);
 
-  if (typeof window !== 'undefined' && localStorage.getItem('token'))
+  useEffect(() => {
+    if (typeof window !== 'undefined' && localStorage.getItem('token'))
+      setIsValid(true);
+  }, []);
+
+  if (isValid)
     return (
       <div className="h-full w-full overflow-y-auto text-gray-700 antialiased">
         {props.meta}
