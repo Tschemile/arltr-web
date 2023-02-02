@@ -37,6 +37,7 @@ export default function CommentBox(props: IComment) {
   const [isEdit, setIsEdit] = useState(false);
   const [contentCmt, setContentCmt] = useState('');
   const [image, setImage] = useState('');
+  console.log(image);
 
   const handleDeleteComment = () => {
     dispatch(deleteComment(commentId)).then((res: any) => {
