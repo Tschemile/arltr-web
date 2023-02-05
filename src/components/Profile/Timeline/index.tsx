@@ -304,10 +304,7 @@ export default function Timeline(props: ITimeline) {
             {work && (
               <>
                 <Divider />
-                <InfoContent
-                  icon={<Briefcase width={30} />}
-                  content={work}
-                />{' '}
+                <InfoContent icon={<Briefcase width={30} />} content={work} />
               </>
             )}
           </Block>

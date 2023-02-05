@@ -5,10 +5,17 @@ interface CardProps {
   children: ReactNode;
   img?: string;
   className?: string;
+  imgClassName?: string;
+  onClickImg?: () => void;
 }
 
 export default function Card(props: CardProps) {
-  const { img = '', className = '' } = props;
+  const {
+    img = '',
+    className = '',
+    onClickImg = () => {},
+    imgClassName = '',
+  } = props;
   return (
     <div className={`rounded-lg bg-white shadow-lg ${className}`}>
       {!!img && (
@@ -16,7 +23,8 @@ export default function Card(props: CardProps) {
           <img
             src={img}
             alt="image"
-            className="absolute top-1/2 right-0 left-1/2 bottom-0 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
+            onClick={onClickImg}
+            className={`absolute top-1/2 right-0 left-1/2 bottom-0 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover ${imgClassName}`}
           />
         </div>
       )}

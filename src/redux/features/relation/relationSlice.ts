@@ -1,18 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { changeRelation, getListFriend } from '@/redux/actions';
+import { changeRelation, getListRelation } from '@/redux/actions';
 
 export interface RelationState {
-  listFriend: Record<string, string>[];
-  isLoading: Record<'loadingChangeRelation' | 'loadingListFriend', boolean>;
+  listRelation: Record<string, string>[];
+  isLoading: Record<'loadingChangeRelation' | 'loadingListRelation', boolean>;
 }
 
 // Initial state
 const initialState: RelationState = {
-  listFriend: [],
+  listRelation: [],
   isLoading: {
     loadingChangeRelation: false,
-    loadingListFriend: false,
+    loadingListRelation: false,
   },
 };
 
@@ -40,23 +40,23 @@ export const relationSlice = createSlice({
           isLoading: { ...state.isLoading, loadingChangeRelation: false },
         };
       })
-      .addCase(getListFriend.pending, (state) => {
+      .addCase(getListRelation.pending, (state) => {
         return {
           ...state,
-          isLoading: { ...state.isLoading, loadingListFriend: true },
+          isLoading: { ...state.isLoading, loadingListRelation: true },
         };
       })
-      .addCase(getListFriend.fulfilled, (state, action) => {
+      .addCase(getListRelation.fulfilled, (state, action) => {
         return {
           ...state,
-          listFriend: action.payload.relations,
-          isLoading: { ...state.isLoading, loadingListFriend: false },
+          listRelation: action.payload.relations,
+          isLoading: { ...state.isLoading, loadingListRelation: false },
         };
       })
-      .addCase(getListFriend.rejected, (state) => {
+      .addCase(getListRelation.rejected, (state) => {
         return {
           ...state,
-          isLoading: { ...state.isLoading, loadingListFriend: false },
+          isLoading: { ...state.isLoading, loadingListRelation: false },
         };
       });
   },

@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import router, { useRouter } from 'next/router';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -13,10 +13,11 @@ import Groups from '@/components/Profile/Groups';
 import OptionAction from '@/components/Profile/OptionAction';
 import Photos from '@/components/Profile/Photos';
 import Timeline from '@/components/Profile/Timeline';
+import ProfileHeader from '@/components/Skeleton/ProfileHeader';
 import { Meta } from '@/layouts/Meta';
 import {
   editProfile,
-  getListFriend,
+  getListRelation,
   getProfileUser,
   uploadFile,
 } from '@/redux/actions';
@@ -27,12 +28,19 @@ const User = () => {
   const { query } = useRouter();
   const dispatch = useAppDispatch();
   const profileUser = useAppSelector((state) => state.profile.profileUser);
+  const loadingUser = useAppSelector((state) => state.profile.loading);
   const {
-    id: currentUserId = '',
-    followings: followingUser = [],
-    friends: friendUser = [],
-  } = useAppSelector((state) => state.auth.currentUser);
-  const { listFriend } = useAppSelector((state) => state.relation);
+    currentUser: {
+      id: currentUserId = '',
+      followings: followingUser = [],
+      friends: friendUser = [],
+    },
+    isLoading: { loadingCurrentUser = false },
+  } = useAppSelector((state) => state.auth);
+  const {
+    listRelation,
+    isLoading: { loadingListRelation = false },
+  } = useAppSelector((state) => state.relation);
 
   const {
     name = '',
@@ -47,7 +55,7 @@ const User = () => {
   const isCurrentUser = currentUserId === id;
   const isFollowing = followingUser?.find((x: any) => x.domain === domain);
   const isFriend = friendUser?.find((x: any) => x.domain === domain);
-  const listRequesting = listFriend?.filter(
+  const listRequesting = listRelation?.filter(
     (x: any) => x.requester.id === currentUserId
   );
   const currentIsRequest =
@@ -137,8 +145,12 @@ const User = () => {
 
   useEffect(() => {
     if (query.slug) {
-      dispatch(getProfileUser(query.slug));
-      dispatch(getListFriend({ type: 'FRIEND', status: 'REQUESTING' }));
+      dispatch(getProfileUser(query.slug))
+        .unwrap()
+        .catch((err) => {
+          if (err.code === 'ERR_BAD_REQUEST') router.back();
+        });
+      dispatch(getListRelation({ type: 'FRIEND', status: 'REQUESTING' }));
     }
   }, [query.slug]);
 
@@ -161,99 +173,103 @@ const User = () => {
       }
     >
       <div className="w-full bg-gradient-to-t from-white to-[#4d80a4]">
-        <div className="bg-white lg:mx-[10%] xl:mx-[15%]">
-          <div className="relative max-h-full min-h-[285px]">
-            <img
-              src={
-                coverImg ||
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiO6M2jjKviDwF34WYZNnre5zTIVjw5if7AwVY47W6aaC85ilP1Npnd2-fkjpziXouC-M&usqp=CAU'
-              }
-              alt="cover-img"
-              className="absolute top-1/2 right-0 bottom-0 left-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
-            />
-            {isCurrentUser && (
-              <div className="absolute bottom-2 right-3 z-[3]">
-                <UploadButton
-                  handleChange={handleUploadCover}
-                  id="upload-cover"
-                  className="flex cursor-pointer items-center rounded-md bg-primary-color px-2 py-1"
-                >
-                  <Camera width={24} />
-                  <span className="p-1 text-sm">Edit</span>
-                </UploadButton>
-              </div>
-            )}
-          </div>
-
-          <div className="relative z-[2] -mt-24 mb-4 text-center">
-            <div className="mx-auto mb-2 h-[120px] w-[120px]">
-              <Avatar
-                src={avatarImg}
-                alt="avatar"
-                gender={gender}
-                width={125}
-                height={125}
-                className="h-full w-full border-[3px] border-solid border-white"
+        {loadingListRelation || loadingCurrentUser || loadingUser ? (
+          <ProfileHeader />
+        ) : (
+          <div className="bg-white lg:mx-[10%] xl:mx-[15%]">
+            <div className="relative max-h-full min-h-[285px]">
+              <img
+                src={
+                  coverImg ||
+                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiO6M2jjKviDwF34WYZNnre5zTIVjw5if7AwVY47W6aaC85ilP1Npnd2-fkjpziXouC-M&usqp=CAU'
+                }
+                alt="cover-img"
+                className="absolute top-1/2 right-0 bottom-0 left-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
               />
               {isCurrentUser && (
-                <UploadButton
-                  id="upload-avatar"
-                  handleChange={handleUploadAvatar}
-                  className="absolute top-[60%] left-[60%] -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 border-white bg-primary-color p-1 sm:left-[53%]"
-                >
-                  <Camera />
-                </UploadButton>
+                <div className="absolute bottom-2 right-3 z-[3]">
+                  <UploadButton
+                    handleChange={handleUploadCover}
+                    id="upload-cover"
+                    className="flex cursor-pointer items-center rounded-md bg-primary-color px-2 py-1"
+                  >
+                    <Camera width={24} />
+                    <span className="p-1 text-sm">Edit</span>
+                  </UploadButton>
+                </div>
               )}
             </div>
-            <div className="">
-              <h1 className="text-xl font-medium sm:text-2xl">{name}</h1>
-              <div className="text-sm">
-                {isEditIntro ? (
-                  <form
-                    onSubmit={(e) => handleEditIntro(e)}
-                    className="inline-block w-1/3 text-sm"
-                  >
-                    <input
-                      placeholder="Let introduce yourself now..."
-                      className="w-full rounded border border-primary-border py-1 px-4 text-base outline-none placeholder:text-base"
-                      defaultValue={about}
-                      onChange={(e) => setIntroValue(e.target.value)}
-                    />
-                  </form>
-                ) : (
-                  about
-                )}
+
+            <div className="relative z-[2] -mt-24 mb-4 text-center">
+              <div className="mx-auto mb-2 h-[120px] w-[120px]">
+                <Avatar
+                  src={avatarImg}
+                  alt="avatar"
+                  gender={gender}
+                  width={125}
+                  height={125}
+                  className="h-full w-full border-[3px] border-solid border-white"
+                />
                 {isCurrentUser && (
-                  <button
-                    className="pl-4 text-blue-500"
-                    onClick={() => setIsEditIntro(!isEditIntro)}
+                  <UploadButton
+                    id="upload-avatar"
+                    handleChange={handleUploadAvatar}
+                    className="absolute top-[60%] left-[60%] -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 border-white bg-primary-color p-1 sm:left-[53%]"
                   >
-                    {isEditIntro ? 'Cancel' : 'Edit'}
-                  </button>
+                    <Camera />
+                  </UploadButton>
                 )}
               </div>
+              <div className="">
+                <h1 className="text-xl font-medium sm:text-2xl">{name}</h1>
+                <div className="text-sm">
+                  {isEditIntro ? (
+                    <form
+                      onSubmit={(e) => handleEditIntro(e)}
+                      className="inline-block w-1/3 text-sm"
+                    >
+                      <input
+                        placeholder="Let introduce yourself now..."
+                        className="w-full rounded border border-primary-border py-1 px-4 text-base outline-none placeholder:text-base"
+                        defaultValue={about}
+                        onChange={(e) => setIntroValue(e.target.value)}
+                      />
+                    </form>
+                  ) : (
+                    about
+                  )}
+                  {isCurrentUser && (
+                    <button
+                      className="pl-4 text-blue-500"
+                      onClick={() => setIsEditIntro(!isEditIntro)}
+                    >
+                      {isEditIntro ? 'Cancel' : 'Edit'}
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div className="flex flex-col-reverse items-center justify-between p-2 text-base sm:px-4 lg:flex-row">
-            <div className="mt-2 text-xs sm:text-base lg:mt-0">
-              <Tabs
-                options={options}
-                defaultKey={active}
-                handleChange={(key) => setIsActive(key)}
-                border={false}
+            <div className="flex flex-col-reverse items-center justify-between p-2 text-base sm:px-4 lg:flex-row">
+              <div className="mt-2 text-xs sm:text-base lg:mt-0">
+                <Tabs
+                  options={options}
+                  defaultKey={active}
+                  handleChange={(key) => setIsActive(key)}
+                  border={false}
+                />
+                {/* <span className="px-4 py-2">More</span> */}
+              </div>
+              <OptionAction
+                isFollowing={isFollowing}
+                isCurrentUser={isCurrentUser}
+                id={id}
+                isFriend={isFriend}
+                isRequest={Object.keys(currentIsRequest).length !== 0}
               />
-              {/* <span className="px-4 py-2">More</span> */}
             </div>
-            <OptionAction
-              isFollowing={isFollowing}
-              isCurrentUser={isCurrentUser}
-              id={id}
-              isFriend={isFriend}
-              isRequest={Object.keys(currentIsRequest).length !== 0}
-            />
           </div>
-        </div>
+        )}
       </div>
       <TabsContent
         className="py-4 lg:mx-[10%] xl:mx-[15%]"

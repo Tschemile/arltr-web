@@ -2,8 +2,8 @@ import router from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import TabsContent from '@/components/common/Tabs/TabsContent';
-import { notUser } from '@/constants';
-import { getListFriend } from '@/redux/actions';
+import { typeUser } from '@/constants';
+import { changeRelation, getListRelation } from '@/redux/actions';
 import type { IInRelation } from '@/redux/actions/Interface';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
@@ -21,30 +21,57 @@ interface GridProps {
 }
 
 const Grid = (props: GridProps) => {
+  const dispatch = useAppDispatch();
   const { data = [] } = props;
   return data?.length ? (
     <>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-        {(data as []).map((val: Record<string, string | undefined | any>) => (
-          <Card img={val.requester?.avatar || val.avatar} key={val.id}>
-            <div
-              onClick={() => router.push(`/user/${val.domain}`)}
-              className="cursor-pointer"
+        {(data as []).map((val: Record<string, string | undefined | any>) => {
+          return (
+            <Card
+              img={val.user?.avatar || val.avatar}
+              key={val.id}
+              onClickImg={() =>
+                router.push(`/user/${val.domain || val.user?.domain}`)
+              }
+              imgClassName="cursor-pointer"
             >
-              {val.requester?.name || val.name}
-            </div>
-            <p className="mb-1 text-sm">{val.about}</p>
-            {val.following && (
-              <p className="mb-1 text-sm">{val.following} Following</p>
-            )}
-            <Button
-              type="button"
-              className="w-full justify-center bg-[#dbeafe] text-sm text-[#71a7f2]"
-            >
-              Following
-            </Button>
-          </Card>
-        ))}
+              <div
+                onClick={() =>
+                  router.push(`/user/${val.domain || val.user?.domain}`)
+                }
+                className="cursor-pointer"
+              >
+                {val.user?.name || val.name}
+              </div>
+
+              <p className="mb-1 overflow-hidden text-ellipsis text-sm">
+                {val.user?.about || val.about || 'siu 🥵'}
+              </p>
+
+              <Button
+                type="button"
+                className="w-full justify-center bg-[#dbeafe] text-sm text-[#71a7f2]"
+                onSubmit={
+                  val.type === 'BLOCKED'
+                    ? () =>
+                        dispatch(
+                          changeRelation({
+                            user: val.user.id,
+                            type: 'BLOCKED',
+                            status: 'REJECT',
+                          })
+                        )
+                    : () => {}
+                }
+              >
+                {val.type === 'BLOCKED'
+                  ? 'Unblock'
+                  : typeUser[val.type as IInRelation['type']] || 'Following'}
+              </Button>
+            </Card>
+          );
+        })}
       </div>
       <Button className="m-auto mt-4">load more</Button>
     </>
@@ -57,32 +84,38 @@ export default function Friends(props: TabsProps) {
   const { isCurrentUser = false, profileUser = {} } = props;
   const [active, setIsActive] = useState<IInRelation['type']>('FRIEND');
   const dispatch = useAppDispatch();
-  const {
-    // isLoading: { loadingListFriend },
-    listFriend: allFriend,
-  } = useAppSelector((state) => state.relation);
+  const { listRelation: allRelation } = useAppSelector(
+    (state) => state.relation
+  );
 
-  const listFriend = isCurrentUser ? allFriend : profileUser[notUser[active]];
+  const listRelation = isCurrentUser
+    ? allRelation
+    : profileUser[typeUser[active]];
 
   useEffect(() => {
-    if (isCurrentUser) dispatch(getListFriend({ type: active }));
+    if (isCurrentUser) dispatch(getListRelation({ type: active }));
   }, [active]);
 
   const options = [
     {
       key: 'FRIEND',
       title: `All Friends (${profileUser.totalFriends})`,
-      content: <Grid data={listFriend} />,
+      content: <Grid data={listRelation} />,
     },
     {
       key: 'FOLLOWING',
       title: `Following (${profileUser.totalFollowing})`,
-      content: <Grid data={listFriend} />,
+      content: <Grid data={listRelation} />,
     },
     {
       key: 'FOLLOWER',
       title: `Follower (${profileUser.totalFollowers})`,
-      content: <Grid data={listFriend} />,
+      content: <Grid data={listRelation} />,
+    },
+    {
+      key: 'BLOCKED',
+      title: `Blocked (${profileUser.totalBlocks})`,
+      content: <Grid data={listRelation} />,
     },
   ];
   return (

@@ -35,6 +35,8 @@ export default function Sidebar() {
           <div className="col-span-2 h-2 rounded bg-slate-700"></div>
         </div>
         <div className="h-2 rounded bg-slate-700"></div>
+        <div className="h-2 rounded bg-slate-700"></div>
+        <div className="h-2 rounded bg-slate-700"></div>
       </div>
     </div>
   );

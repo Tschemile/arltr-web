@@ -72,8 +72,8 @@ export const changeRelation = createAsyncThunk(
   }
 );
 
-export const getListFriend = createAsyncThunk(
-  'relation/getListFriend',
+export const getListRelation = createAsyncThunk(
+  'relation/getListRelation',
   async (params: IInRelation) => {
     const res = await api.get(`/relation`, { params });
     return res.data;

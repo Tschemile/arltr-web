@@ -1,4 +1,4 @@
-export const notUser = {
+export const typeUser = {
   FRIEND: 'friends',
   FOLLOWING: 'followings',
   FOLLOWER: 'followers',
