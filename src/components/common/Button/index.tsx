@@ -4,7 +4,7 @@ import React from 'react';
 interface ButtonProps {
   children: ReactNode;
   className?: string;
-  onSubmit?: () => void;
+  onSubmit?: (e: any) => void;
   type?: 'submit' | 'button' | 'reset';
   loading?: boolean;
   background?: 'primary' | 'secondary' | 'gray';
@@ -40,7 +40,7 @@ export default function Button(props: ButtonProps) {
       } disabled:cursor-not-allowed disabled:bg-slate-400 ${className}`}
     >
       {loading && (
-        <span className="spinner mr-2 block h-[20px] w-[20px]"></span>
+        <span className="spinner mr-2 inline-block h-[20px] w-[20px]"></span>
       )}
       {props.children}
     </button>

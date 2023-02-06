@@ -21,6 +21,7 @@ import Divider from '../common/Divider';
 import Dropdown from '../common/Dropdown';
 import IconButton from '../common/IconButton';
 import PreviewImage from '../common/PreviewImage';
+import ReactButton from '../common/ReactButton';
 import Tooltip from '../common/Tooltip';
 import Comment from '../Icons/Comment';
 import CommentBox from './components/CommentBox';
@@ -82,6 +83,7 @@ export default function CardPost(props: ICardPost) {
   const [totalReacts, setTotalReacts] = useState(0);
   const [isDeletedCmtID, setIsDeletedCmtID] = useState('');
   const [image, setImage] = useState('');
+  // const [type, setType] = useState('');
 
   const datePosts = new Date(datePostProps);
   const dateFormated = `${datePosts.getDate()}/${
@@ -156,8 +158,8 @@ export default function CardPost(props: ICardPost) {
     });
   };
 
-  const handleLikePost = () => {
-    dispatch(makeReaction({ post: id, type: 'LIKE' })).then((res: any) => {
+  const handleLikePost = (type: string) => {
+    dispatch(makeReaction({ post: id, type })).then((res: any) => {
       if (res.payload.status === 200) {
         setIsLiked((prevState) => !prevState);
         if (!isLiked) {
@@ -326,12 +328,16 @@ export default function CardPost(props: ICardPost) {
       </div>
       <Divider />
       <div className="-my-3 flex">
-        <ActionButton
-          className={`justify-center ${isLiked ? 'text-red-700' : ''}`}
-          onClick={() => handleLikePost()}
+        <ReactButton
+          // eslint-disable-next-line tailwindcss/no-custom-classname
+          className={`group/item relative justify-center ${
+            isLiked ? 'text-red-700' : ''
+          }`}
+          onClick={handleLikePost}
           icon={<Like />}
           text="Like"
         />
+
         <ActionButton
           className="justify-center"
           onClick={() => getAllCommentsOfPost(id)}

@@ -34,7 +34,7 @@ export interface ICreatePost {
 export interface IReaction {
   post: string;
   comment?: string;
-  type: 'LIKE' | 'HEART' | 'LAUGH' | 'CRY' | 'WOW' | 'ANGRY';
+  type: 'LIKE' | 'HEART' | 'LAUGH' | 'CRY' | 'WOW' | 'ANGRY' | string;
 }
 
 export interface IGetGroups {

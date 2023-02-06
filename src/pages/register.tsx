@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import router from 'next/router';
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 import React, { useState } from 'react';
 
 import Button from '@/components/common/Button';
@@ -35,7 +35,8 @@ export default function Register() {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     Object.assign(user, {
       birth: dd && mm && yyyy ? `${yyyy}-${mm}-${dd}` : '',
     });
@@ -78,88 +79,89 @@ export default function Register() {
 
   return (
     <AuthLayout>
-      <div className="text-center">
-        <h2 className="mb-2 text-2xl font-medium">Create New Account</h2>
-        <p>Login to manage your account.</p>
-      </div>
       <form onSubmit={handleSubmit} className="">
-        <div className="my-4 grid grid-cols-2 gap-4">
-          <div className="">
-            <p className="mb-2 text-lg font-medium">First Name</p>
+        <div className="text-center">
+          <h2 className="mb-2 text-3xl font-medium">Create New Account</h2>
+          <i>Create an account</i>
+        </div>
+        <div>
+          <div className="my-2 grid grid-cols-2 gap-4">
+            <div className="">
+              <p className="mb-2 text-lg font-medium">First Name</p>
+              <Input
+                placeholder="Enter first name"
+                width="100%"
+                name="firstName"
+                onChange={handleChange}
+                icons={<User />}
+              />
+            </div>
+            <div className="">
+              <p className="mb-2 text-lg font-medium">Last Name</p>
+              <Input
+                placeholder="Enter last name"
+                width="100%"
+                name="lastName"
+                onChange={handleChange}
+                icons={<User />}
+              />
+            </div>
+          </div>
+          <div className="my-2">
+            <p className="mb-2 text-lg font-medium">Email</p>
             <Input
-              placeholder="Enter first name"
+              placeholder="name@example.com"
               width="100%"
-              name="firstName"
+              name="email"
               onChange={handleChange}
+              icons={<Envelope />}
+            />
+          </div>
+          <div className="my-2">
+            <p className="mb-2 text-lg font-medium">User name</p>
+            <Input
+              placeholder="Enter user name"
+              width="100%"
+              onChange={handleChange}
+              name="username"
               icons={<User />}
             />
           </div>
-          <div className="">
-            <p className="mb-2 text-lg font-medium">Last Name</p>
+          <div className="my-2">
+            <p className="mb-2 text-lg font-medium">Password</p>
             <Input
-              placeholder="Enter last name"
+              placeholder="******"
               width="100%"
-              name="lastName"
+              type="password"
+              name="password"
               onChange={handleChange}
-              icons={<User />}
+              icons={<Lock />}
             />
           </div>
-        </div>
-        <div className="my-4">
-          <p className="mb-2 text-lg font-medium">Email</p>
-          <Input
-            placeholder="name@example.com"
-            width="100%"
-            name="email"
-            onChange={handleChange}
-            icons={<Envelope />}
-          />
-        </div>
-        <div className="my-4">
-          <p className="mb-2 text-lg font-medium">User name</p>
-          <Input
-            placeholder="Enter user name"
-            width="100%"
-            onChange={handleChange}
-            name="username"
-            icons={<User />}
-          />
-        </div>
-        <div className="my-4">
-          <p className="mb-2 text-lg font-medium">Password</p>
-          <Input
-            placeholder="******"
-            width="100%"
-            type="password"
-            name="password"
-            onChange={handleChange}
-            icons={<Lock />}
-          />
-        </div>
-        <div className="my-4">
-          <p className="mb-2 text-lg font-medium">Birthdays</p>
-          <div className="my-4 grid grid-cols-3 gap-4">
-            <Select
-              name="dd"
-              options={optionsDD as []}
-              handleChange={(e) => setDD(e.target.value)}
-            />
-            <Select
-              name="mm"
-              options={optionsMM as []}
-              handleChange={(e) => setMM(e.target.value)}
-            />
-            <Select
-              name="yyyy"
-              options={optionsYYYY as []}
-              handleChange={(e) => setYYYY(e.target.value)}
-            />
+          <div className="my-2">
+            <p className="mb-2 text-lg font-medium">Birthdays</p>
+            <div className="my-4 grid grid-cols-3 gap-4">
+              <Select
+                name="dd"
+                options={optionsDD as []}
+                handleChange={(e) => setDD(e.target.value)}
+              />
+              <Select
+                name="mm"
+                options={optionsMM as []}
+                handleChange={(e) => setMM(e.target.value)}
+              />
+              <Select
+                name="yyyy"
+                options={optionsYYYY as []}
+                handleChange={(e) => setYYYY(e.target.value)}
+              />
+            </div>
           </div>
-        </div>
-        <div className="my-4">
-          <p className="mb-2 text-lg font-medium">Gender</p>
-          <div className="flex items-center">
-            <div className="pr-8">
+          <div className="my-2 flex items-center justify-between">
+            <p className="text-lg font-medium">Gender</p>
+
+            <div className="">
               <input
                 type="radio"
                 id="male"
@@ -171,7 +173,7 @@ export default function Register() {
                 Male
               </label>
             </div>
-            <div className="pr-8">
+            <div className="">
               <input
                 type="radio"
                 id="female"
@@ -197,18 +199,20 @@ export default function Register() {
             </div>
           </div>
         </div>
-      </form>
-      <div className="flex items-center justify-between">
-        <div>
-          Don&apos;t have account{' '}
-          <Link href="/login" className="text-gray-600 hover:border-none">
-            Sign in
+        <Button
+          className="my-4 !block w-full rounded-full bg-primary-backgroundColor py-2"
+          loading={isLoading}
+          onSubmit={handleSubmit}
+        >
+          Register
+        </Button>
+        <div className="text-center">
+          Already an account?{' '}
+          <Link href="/login" className="text-blue-500 hover:border-none">
+            Login now
           </Link>
         </div>
-        <Button loading={isLoading} onSubmit={handleSubmit}>
-          Get Started
-        </Button>
-      </div>
+      </form>
     </AuthLayout>
   );
 }

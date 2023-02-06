@@ -43,6 +43,7 @@ module.exports = {
           color: '#f1f3f4',
           border: '#d6d6d6',
           hover: '#c4c4c4',
+          backgroundColor: '#081D24',
         },
       },
       keyframes: {
