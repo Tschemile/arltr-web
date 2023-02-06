@@ -3,7 +3,7 @@ import React from 'react';
 import type { IconProps } from '..';
 
 export default function ZoomIn(props: IconProps) {
-  const { color = '', width = 28 } = props;
+  const { color = '', width = 28, className = '' } = props;
 
   return (
     <svg
@@ -12,7 +12,7 @@ export default function ZoomIn(props: IconProps) {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      className="p-1"
+      className={`p-1 ${className}`}
       color={color}
       width={width}
     >

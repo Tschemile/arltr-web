@@ -19,12 +19,14 @@ export default function Card(props: CardProps) {
   return (
     <div className={`rounded-lg bg-white shadow-lg ${className}`}>
       {!!img && (
-        <div className="relative max-h-[185px] min-h-[185px] overflow-hidden rounded-t-lg lg:min-h-[200px] 2xl:min-h-[15rem]">
+        <div
+          className={`relative max-h-[185px] min-h-[185px] overflow-hidden rounded-t-lg lg:min-h-[200px] 2xl:min-h-[15rem] ${imgClassName}`}
+        >
           <img
             src={img}
             alt="image"
             onClick={onClickImg}
-            className={`absolute top-1/2 right-0 left-1/2 bottom-0 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover ${imgClassName}`}
+            className={`absolute top-1/2 right-0 left-1/2 bottom-0 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover`}
           />
         </div>
       )}

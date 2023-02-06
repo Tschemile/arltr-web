@@ -3,14 +3,14 @@ import React from 'react';
 import type { IconProps } from '..';
 
 export default function Like(props: IconProps) {
-  const { color = '', width = 28 } = props;
+  const { color = '', width = 28, className = '' } = props;
 
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="currentColor"
-      className="p-1"
+      className={`p-1 ${className}`}
       color={color}
       width={width}
     >

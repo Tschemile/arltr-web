@@ -173,7 +173,9 @@ const User = () => {
       }
     >
       <div className="w-full bg-gradient-to-t from-white to-[#4d80a4]">
-        {loadingListRelation || loadingCurrentUser || loadingUser ? (
+        {(loadingListRelation && !isCurrentUser) ||
+        loadingCurrentUser ||
+        loadingUser ? (
           <ProfileHeader />
         ) : (
           <div className="bg-white lg:mx-[10%] xl:mx-[15%]">

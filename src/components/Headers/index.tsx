@@ -103,7 +103,7 @@ export default function Headers() {
               <Avatar
                 src={avatar}
                 alt="avatar"
-                className="m-auto h-full w-full rounded-full p-1"
+                className="m-auto h-full w-full rounded-full"
                 gender={gender}
               />
             </div>

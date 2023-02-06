@@ -11,7 +11,7 @@ export default function ProfileHeader() {
           <div className="h-full w-full rounded-full border-[3px] border-solid border-white bg-slate-600" />
           {/* <div className="absolute top-[60%] left-[60%] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-slate-500 p-[18px] sm:left-[53%]" /> */}
           <>
-            <h1 className="mt-1 h-4 w-full rounded bg-slate-700" />
+            <h1 className="mt-3 h-4 w-full rounded bg-slate-700" />
             <div className="mx-auto mt-1 h-[13px] w-5/6 rounded bg-slate-700" />
           </>
         </div>

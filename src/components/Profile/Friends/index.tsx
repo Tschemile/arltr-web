@@ -122,11 +122,15 @@ export default function Friends(props: TabsProps) {
     <Card>
       <p>Friends</p>
       <Tabs
-        options={options}
+        options={isCurrentUser ? options : options.slice(0, -1)}
         defaultKey={active}
         handleChange={(key: any) => setIsActive(key)}
       />
-      <TabsContent options={options} active={active} className="min-h-[40vh]" />
+      <TabsContent
+        options={isCurrentUser ? options : options.slice(0, -1)}
+        active={active}
+        className="min-h-[40vh]"
+      />
     </Card>
   );
 }

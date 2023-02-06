@@ -7,12 +7,14 @@ import Avatar from '../common/Avatar';
 import Divider from '../common/Divider';
 import ArrowDown from '../Icons/ArrowDown';
 import ArrowUp from '../Icons/ArrowUp';
+import Group from '../Icons/Group';
 import { Sidebar } from '../Skeleton';
 
 const listMenu = [
   {
     id: 1,
     title: 'News Feed',
+    link: '#',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -33,6 +35,7 @@ const listMenu = [
   {
     id: 2,
     title: 'Albums',
+    link: 'albums',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -53,6 +56,7 @@ const listMenu = [
   {
     id: 3,
     title: 'Explore',
+    link: 'explore',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -73,26 +77,13 @@ const listMenu = [
   {
     id: 4,
     title: 'Groups',
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="h-4 w-4"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
-        />
-      </svg>
-    ),
+    link: 'groups',
+    icon: <Group width={16} className="!p-0" />,
   },
   {
     id: 5,
     title: 'Pages',
+    link: 'pages',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -113,6 +104,7 @@ const listMenu = [
   {
     id: 6,
     title: 'Fundings',
+    link: '#',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -136,6 +128,7 @@ const listExplore = [
   {
     id: 1,
     title: 'Market',
+    link: '#',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -156,6 +149,7 @@ const listExplore = [
   {
     id: 2,
     title: 'Forum',
+    link: '#',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -176,6 +170,7 @@ const listExplore = [
   {
     id: 3,
     title: 'Events',
+    link: '#',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -196,6 +191,7 @@ const listExplore = [
   {
     id: 4,
     title: 'Jobs',
+    link: '#',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -256,7 +252,11 @@ export default function Navbar() {
           </button>
           <div className="my-4">
             {listMenu.slice(0, isVisible).map((x) => (
-              <button className="nav-item mb-2" key={x.id}>
+              <button
+                className="nav-item mb-2"
+                key={x.id}
+                onClick={() => router.push(`/${x.link}`)}
+              >
                 <span className="rounded-full border-2 bg-primary-hover p-2">
                   {x.icon}
                 </span>
