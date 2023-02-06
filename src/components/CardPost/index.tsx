@@ -160,7 +160,6 @@ export default function CardPost(props: ICardPost) {
 
   const handleLikePost = (type: string) => {
     dispatch(makeReaction({ post: id, type })).then((res: any) => {
-      console.log(res);
       if (res.payload.status === 200) {
         setIsLiked((prevState) => !prevState);
         if (!isLiked) {

@@ -1,10 +1,10 @@
-import type { FormEvent, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 
 interface ButtonProps {
   children: ReactNode;
   className?: string;
-  onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
+  onSubmit?: (e: any) => void;
   type?: 'submit' | 'button' | 'reset';
   loading?: boolean;
   background?: 'primary' | 'secondary' | 'gray';
@@ -32,7 +32,7 @@ export default function Button(props: ButtonProps) {
 
   return (
     <button
-      onClick={(e: any) => onSubmit(e)}
+      onClick={onSubmit}
       type={type}
       disabled={loading}
       className={`flex items-center whitespace-nowrap rounded ${getBackground()} py-1 px-2 ${
