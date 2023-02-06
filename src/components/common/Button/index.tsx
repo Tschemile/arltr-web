@@ -1,10 +1,10 @@
-import type { ReactNode } from 'react';
+import type { FormEvent, ReactNode } from 'react';
 import React from 'react';
 
 interface ButtonProps {
   children: ReactNode;
   className?: string;
-  onSubmit?: () => void;
+  onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
   type?: 'submit' | 'button' | 'reset';
   loading?: boolean;
   background?: 'primary' | 'secondary' | 'gray';
@@ -32,7 +32,7 @@ export default function Button(props: ButtonProps) {
 
   return (
     <button
-      onClick={onSubmit}
+      onClick={(e: any) => onSubmit(e)}
       type={type}
       disabled={loading}
       className={`flex items-center whitespace-nowrap rounded ${getBackground()} py-1 px-2 ${
@@ -40,7 +40,7 @@ export default function Button(props: ButtonProps) {
       } disabled:cursor-not-allowed disabled:bg-slate-400 ${className}`}
     >
       {loading && (
-        <span className="spinner mr-2 block h-[20px] w-[20px]"></span>
+        <span className="spinner mr-2 inline-block h-[20px] w-[20px]"></span>
       )}
       {props.children}
     </button>

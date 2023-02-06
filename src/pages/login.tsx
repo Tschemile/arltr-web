@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 import React, { useState } from 'react';
 
 import Button from '@/components/common/Button';
@@ -27,54 +27,77 @@ export default function Login() {
     setInfoUser({ ...infoUser, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    dispatch(login(infoUser)).then((res: any) => {
-      if (res.payload?.status === 201) {
-        router.push('/');
-      }
-    });
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (Object.values(infoUser).every((x) => Boolean(x))) {
+      dispatch(login(infoUser)).then((res: any) => {
+        if (res.payload?.status === 201) {
+          router.push('/');
+        }
+      });
+    }
   };
 
   return (
     <AuthLayout>
-      <div className="text-center">
-        <h2 className="mb-2 text-2xl font-medium">Welcome Back</h2>
-        <p>Login to manage your account.</p>
-      </div>
-      <form className="">
-        <div className="my-4">
-          <p className="mb-2 text-lg font-medium">Email or User name</p>
-          <Input
-            placeholder="Enter email or user name"
-            width="100%"
-            name="usernameOrEmail"
-            icons={<User />}
-            onChange={handleChange}
-          />
+      <form onSubmit={handleSubmit} className="">
+        <div className="my-12 text-center lg:my-24">
+          <h2 className="mb-2 text-3xl font-medium">Welcome Back</h2>
+          <i>Login to manage your account.</i>
         </div>
-        <div className="my-4">
-          <p className="mb-2 text-lg font-medium">Password</p>
-          <Input
-            placeholder="*********"
-            width="100%"
-            type="password"
-            name="password"
-            onChange={handleChange}
-            icons={<Lock />}
-          />
-        </div>
-      </form>
-      <div className="flex items-center justify-between">
         <div>
+          <div className="my-4">
+            <p className="mb-2 text-lg font-medium">Email or User name</p>
+            <Input
+              placeholder="Enter email or user name"
+              width="100%"
+              name="usernameOrEmail"
+              icons={<User />}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="my-4">
+            <p className="mb-2 text-lg font-medium">Password</p>
+            <Input
+              placeholder="*********"
+              width="100%"
+              type="password"
+              name="password"
+              onChange={handleChange}
+              icons={<Lock />}
+            />
+          </div>
+        </div>
+        <div className="my-4 flex items-center justify-between">
+          <div className="flex items-center">
+            <input type="checkbox" id="remember" />
+            <label className="cursor-pointer pl-2" htmlFor="remember">
+              Remember me
+            </label>
+          </div>
+          <i>
+            <Link
+              href="/forgot-password"
+              className="text-blue-500 hover:border-none"
+            >
+              Forgot password
+            </Link>
+          </i>
+        </div>
+        <Button
+          className="my-4 !block w-full rounded-full bg-primary-backgroundColor py-2"
+          loading={isLoading}
+          onSubmit={handleSubmit}
+        >
+          Login
+        </Button>
+        <div className="text-center">
           Don&apos;t have account?{' '}
-          <Link href="/register" className="text-gray-600 hover:border-none">
+          <Link href="/register" className="text-blue-500 hover:border-none">
             Sign up
           </Link>
         </div>
-        <Button loading={isLoading} onSubmit={handleSubmit}>
-          Get Started
-        </Button>
-      </div>
+      </form>
     </AuthLayout>
   );
 }
