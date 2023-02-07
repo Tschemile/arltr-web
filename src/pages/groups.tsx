@@ -5,7 +5,7 @@ import Divider from '@/components/common/Divider';
 import { Meta } from '@/layouts/Meta';
 import { Main } from '@/templates/Main';
 
-const Blog = () => (
+const Groups = () => (
   <Main meta={<Meta title="Fall in luv ❤️" description="Fall in luv ❤️" />}>
     <div className="grid grid-cols-8 gap-4">
       <div className="col-span-6 xl:ml-[20%]">
@@ -20,7 +20,13 @@ const Blog = () => (
             >
               <h1>Group {index}</h1>
               <p className="text-sm">1 Members 50posts</p>
-              <p className="text-sm">See all Members</p>
+              <div className="my-1 flex items-center text-sm">
+                <div className="mr-1 flex cursor-pointer -space-x-2 overflow-hidden">
+                  <span className="m-auto inline-block rounded-full bg-pink-400 p-3 ring-2 ring-white hover:z-10" />
+                  <span className="m-auto inline-block rounded-full bg-pink-400 p-3 ring-2 ring-white hover:z-10" />
+                </div>
+                See all Members
+              </div>
               <div className="flex justify-between">
                 <Button className="mr-1 h-8 w-full justify-center text-sm">
                   Join
@@ -41,11 +47,11 @@ const Blog = () => (
           {[...Array(10)].map((_, index) => (
             <div
               key={index}
-              className="relative m-1 min-h-[120px] overflow-hidden rounded-lg shadow-lg hover:-translate-y-1"
+              className="relative m-1 min-h-[120px] cursor-pointer overflow-hidden rounded-lg shadow-lg"
             >
               <img
                 src="https://i.pinimg.com/originals/99/fa/39/99fa392c68b57c46d579a977413b2925.jpg"
-                className={`absolute top-1/2 right-0 left-1/2 bottom-0 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover`}
+                className={`absolute top-1/2 right-0 left-1/2 bottom-0 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover hover:scale-125`}
                 alt="image"
               />
               <p className="absolute left-2 bottom-1 text-white">Animals</p>
@@ -58,12 +64,18 @@ const Blog = () => (
             <Card
               key={index}
               img="https://i.pinimg.com/originals/ad/39/ea/ad39ea262d0bd449e8a855c5c63bf2cc.jpg"
-              className="mr-3 text-left"
+              className="text-left hover:-translate-y-1"
               imgClassName="!min-h-[100px] cursor-pointer"
             >
               <h1>Group {index}</h1>
               <p className="text-sm">1 Members 50posts</p>
-              <p className="text-sm">See all Members</p>
+              <div className="my-1 flex items-center text-sm">
+                <div className="mr-1 flex cursor-pointer -space-x-2 overflow-hidden">
+                  <span className="m-auto inline-block rounded-full bg-pink-400 p-3 ring-2 ring-white hover:z-10" />
+                  <span className="m-auto inline-block rounded-full bg-pink-400 p-3 ring-2 ring-white hover:z-10" />
+                </div>
+                See all Members
+              </div>
               <div className="flex justify-between">
                 <Button className="mr-1 h-8 w-full justify-center text-sm">
                   Join
@@ -88,14 +100,14 @@ const Blog = () => (
           <li className="cursor-pointer py-2 px-3 text-base">My Groups</li>
           <li className="cursor-pointer py-2 px-3 text-base">Joined Groups</li>
         </ul>
-        <Button className="w-full justify-center bg-blue-200 text-base text-blue-700">
+        <Button className="w-full justify-center bg-blue-200 text-base text-white">
           + Create
         </Button>
         <Divider />
         <div className="flex justify-between text-base">
           Suggested Groups <a>See all</a>
         </div>
-        <div className="flex h-9 w-full items-center px-3 py-2">
+        <div className="flex h-16 w-full items-center rounded px-3 py-2 hover:bg-pink-200">
           <div className="relative mr-2 min-h-full w-1/4 overflow-hidden rounded-lg shadow-lg">
             <img
               src="https://i.pinimg.com/originals/34/72/b4/3472b42c7167bb8bea4ff833e83708fa.jpg"
@@ -111,7 +123,10 @@ const Blog = () => (
         <Divider />
         <div className="flex justify-between text-base">My Groups</div>
         {[...Array(3)].map((_, index) => (
-          <div className="flex h-9 w-full items-center px-3 py-2" key={index}>
+          <div
+            className="flex h-16 w-full items-center rounded px-3 py-2 hover:bg-pink-200"
+            key={index}
+          >
             <div className="relative mr-2 min-h-full w-1/4 overflow-hidden rounded-lg shadow-lg">
               <img
                 src="https://i.pinimg.com/originals/34/72/b4/3472b42c7167bb8bea4ff833e83708fa.jpg"
@@ -130,4 +145,4 @@ const Blog = () => (
   </Main>
 );
 
-export default Blog;
+export default Groups;

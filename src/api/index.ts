@@ -12,7 +12,7 @@ const isServer = () => {
 let accessToken: string | null = '';
 let context = <GetServerSidePropsContext>{};
 // const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL!;
-export const baseURL = 'https://arltr-apis-production.up.railway.app/api';
+export const baseURL = process.env.NEXT_PUBLIC_SERVER_URL;
 
 export const setAccessToken = (_accessToken: string) => {
   accessToken = _accessToken;
