@@ -1,8 +1,15 @@
+import Image from 'next/image';
 import type { ChangeEvent, FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 import { PhotoView } from 'react-photo-view';
 import { toast } from 'react-toastify';
 
+import Angry from '@/assets/angry.png';
+import Haha from '@/assets/haha.png';
+import Heart from '@/assets/heart.png';
+import LikeIcons from '@/assets/like.png';
+import Cry from '@/assets/sad.png';
+import Wow from '@/assets/wow.png';
 import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
 import Like from '@/components/Icons/Like';
 import {
@@ -37,6 +44,7 @@ interface ICardPost {
   setListPosts?: (value: Record<string, string>[]) => void;
   listPosts?: Record<string, string>[];
   setFileDataURL?: (value: string[]) => void;
+  setMode?: (value: string) => void;
 }
 
 export default function CardPost(props: ICardPost) {
@@ -52,6 +60,7 @@ export default function CardPost(props: ICardPost) {
     setListPosts = () => {},
     setFileDataURL = () => {},
     listPosts = [],
+    setMode = () => {},
   } = props;
 
   const {
@@ -63,7 +72,10 @@ export default function CardPost(props: ICardPost) {
     createdAt: datePostProps = new Date(),
     content = '',
     react = {},
+    mode: modeProps = '',
   } = post;
+
+  const { type: typeProps = '' } = react as Record<string, string>;
 
   const {
     name: authorName = '',
@@ -83,7 +95,7 @@ export default function CardPost(props: ICardPost) {
   const [totalReacts, setTotalReacts] = useState(0);
   const [isDeletedCmtID, setIsDeletedCmtID] = useState('');
   const [image, setImage] = useState('');
-  // const [type, setType] = useState('');
+  const [emoji, setEmoji] = useState('');
 
   const datePosts = new Date(datePostProps);
   const dateFormated = `${datePosts.getDate()}/${
@@ -144,6 +156,7 @@ export default function CardPost(props: ICardPost) {
     setContent(content);
     setFileDataURL(images as string[]);
     setPostIdEdit(id);
+    setMode(modeProps);
   };
 
   const handleDeletePost = () => {
@@ -157,6 +170,7 @@ export default function CardPost(props: ICardPost) {
   };
 
   const handleLikePost = (type: string) => {
+    setEmoji(type === emoji ? '' : type);
     dispatch(makeReaction({ post: id, type })).then((res: any) => {
       if (res.payload.status === 200) {
         setIsLiked((prevState) => !prevState);
@@ -235,6 +249,92 @@ export default function CardPost(props: ICardPost) {
     );
   };
 
+  const getEmoji = () => {
+    switch (emoji) {
+      case 'LIKE':
+        return (
+          <p
+            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base ${
+              emoji ? 'text-blue-700' : ''
+            }`}
+          >
+            <Image src={LikeIcons} alt="like" width={20} />
+            Like
+          </p>
+        );
+
+      case 'HEART':
+        return (
+          <p
+            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base ${
+              emoji ? 'text-red-500' : ''
+            }`}
+          >
+            <Image src={Heart} alt="heart" width={20} />
+            Heart
+          </p>
+        );
+
+      case 'LAUGH':
+        return (
+          <p
+            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base ${
+              emoji ? 'text-yellow-500' : ''
+            }`}
+          >
+            <Image src={Haha} alt="haha" width={20} />
+            Haha
+          </p>
+        );
+
+      case 'CRY':
+        return (
+          <p
+            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base ${
+              emoji ? 'text-yellow-500' : ''
+            }`}
+          >
+            <Image src={Cry} alt="cry" width={20} />
+            Sad
+          </p>
+        );
+
+      case 'WOW':
+        return (
+          <p
+            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base ${
+              emoji ? 'text-yellow-500' : ''
+            }`}
+          >
+            <Image src={Wow} alt="wow" width={20} />
+            Wow
+          </p>
+        );
+
+      case 'ANGRY':
+        return (
+          <p
+            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base ${
+              emoji ? 'text-orange-700' : ''
+            }`}
+          >
+            <Image src={Angry} alt="angry" width={20} />
+            Grừưư
+          </p>
+        );
+
+      default:
+        return (
+          <p
+            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base text-[#929292]`}
+          >
+            <Like />
+            Like
+          </p>
+        );
+    }
+  };
+
   useEffect(() => {
     if (totalReactsProps) setTotalReacts(Number(totalReactsProps));
   }, [totalReactsProps]);
@@ -266,6 +366,10 @@ export default function CardPost(props: ICardPost) {
       dispatch(getCommentsOfPost({ post: id, limit }));
     }
   }, [isDeletedCmtID]);
+
+  useEffect(() => {
+    if (typeProps) setEmoji(typeProps);
+  }, [typeProps]);
 
   return (
     <div className={`mb-4 rounded-lg bg-white px-4 shadow-lg`}>
@@ -328,13 +432,11 @@ export default function CardPost(props: ICardPost) {
       <div className="-my-3 flex">
         <ReactButton
           // eslint-disable-next-line tailwindcss/no-custom-classname
-          className={`group/item relative justify-center ${
-            isLiked ? 'text-red-700' : ''
-          }`}
+          className={`group/item relative justify-center`}
           onClick={handleLikePost}
-          icon={<Like />}
-          text="Like"
-        />
+        >
+          {getEmoji()}
+        </ReactButton>
 
         <ActionButton
           className="justify-center"

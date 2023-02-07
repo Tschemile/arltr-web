@@ -18,11 +18,9 @@ interface IEmoji {
 }
 
 interface IActionButton {
-  icon: ReactNode;
   className?: string;
-  text: string;
-  iconClassname?: string;
   onClick?: (value: string) => void;
+  children: ReactNode;
 }
 
 function Emoji(props: IEmoji) {
@@ -108,17 +106,10 @@ function Emoji(props: IEmoji) {
 }
 
 export default function ReactButton(props: IActionButton) {
-  const {
-    icon = '',
-    className = '',
-    onClick = () => {},
-    text = '',
-    iconClassname = '',
-  } = props;
+  const { className = '', onClick = () => {}, children = '' } = props;
   return (
     <div className={`nav-item ${className}`}>
-      <span className={iconClassname}>{icon}</span>
-      <p className="whitespace-nowrap pl-2 text-base text-[#929292]">{text}</p>
+      {children}
       <div className=" invisible absolute top-[-52px] opacity-0 transition-all duration-200 group-hover/item:visible group-hover/item:opacity-100">
         <div className="flex items-center gap-2 rounded-full bg-primary-color px-4 py-2">
           <Emoji type="Like" value="LIKE" onClick={onClick} />

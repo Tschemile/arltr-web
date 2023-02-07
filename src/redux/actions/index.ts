@@ -24,6 +24,22 @@ export const register = createAsyncThunk(
   }
 );
 
+export const verifyOTPCode = createAsyncThunk(
+  'auth/register',
+  async (payload: Record<'code', string>) => {
+    const res = await api.post('/verify', { ...payload });
+    return res;
+  }
+);
+
+export const resendOTPCode = createAsyncThunk(
+  'auth/register',
+  async (payload: Record<'email', string>) => {
+    const res = await api.post('/verify/generate-code', { ...payload });
+    return res;
+  }
+);
+
 export const login = createAsyncThunk('auth/login', async (payload: ILogin) => {
   const res = await api.post('/user/login', { ...payload });
   return res;

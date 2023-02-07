@@ -2,6 +2,7 @@ import Link from 'next/link';
 import router from 'next/router';
 import type { ChangeEvent, FormEvent } from 'react';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
@@ -10,6 +11,7 @@ import Envelope from '@/components/Icons/Envelope';
 import Lock from '@/components/Icons/Lock';
 import User from '@/components/Icons/User';
 import { register } from '@/redux/actions';
+import { getEmailRegister } from '@/redux/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import AuthLayout from '@/templates/AuthLayout';
 
@@ -40,10 +42,14 @@ export default function Register() {
     Object.assign(user, {
       birth: dd && mm && yyyy ? `${yyyy}-${mm}-${dd}` : '',
     });
+    if (user.email) {
+      dispatch(getEmailRegister(user.email));
+    }
     if (Object.values(user).every((x) => Boolean(x))) {
       dispatch(register(user)).then((result: any) => {
         if (result.payload?.status === 201) {
-          router.push('/login');
+          router.push('/verify-email');
+          toast.info(result.payload.data.message);
         }
       });
     }
@@ -81,7 +87,7 @@ export default function Register() {
     <AuthLayout>
       <form onSubmit={handleSubmit} className="">
         <div className="text-center">
-          <h2 className="mb-2 text-3xl font-medium">Create New Account</h2>
+          <h2 className="mb-2 text-3xl font-medium">Welcome to Roma</h2>
           <i>Create an account</i>
         </div>
         <div>
@@ -144,15 +150,18 @@ export default function Register() {
               <Select
                 name="dd"
                 options={optionsDD as []}
+                defaultValue="01"
                 handleChange={(e) => setDD(e.target.value)}
               />
               <Select
                 name="mm"
                 options={optionsMM as []}
+                defaultValue="01"
                 handleChange={(e) => setMM(e.target.value)}
               />
               <Select
                 name="yyyy"
+                defaultValue="1998"
                 options={optionsYYYY as []}
                 handleChange={(e) => setYYYY(e.target.value)}
               />
@@ -200,7 +209,7 @@ export default function Register() {
           </div>
         </div>
         <Button
-          className="my-4 !block w-full rounded-full bg-primary-backgroundColor py-2"
+          className="my-4 !block w-full !rounded-full !bg-primary-backgroundColor py-2"
           loading={isLoading}
           onSubmit={handleSubmit}
         >

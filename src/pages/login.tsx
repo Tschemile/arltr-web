@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import type { ChangeEvent, FormEvent } from 'react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
@@ -18,6 +18,7 @@ export default function Login() {
     usernameOrEmail: '',
     password: '',
   });
+  const [isRemember, setIsRemember] = useState<boolean>(false);
 
   const isLoading = useAppSelector(
     (state) => state.auth.isLoading.loadingLogin
@@ -30,6 +31,11 @@ export default function Login() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (Object.values(infoUser).every((x) => Boolean(x))) {
+      if (isRemember) {
+        localStorage.setItem('yourAccount', JSON.stringify(infoUser));
+      } else {
+        localStorage.removeItem('yourAccount');
+      }
       dispatch(login(infoUser)).then((res: any) => {
         if (res.payload?.status === 201) {
           router.push('/');
@@ -38,11 +44,19 @@ export default function Login() {
     }
   };
 
+  useEffect(() => {
+    const yourAccount = localStorage.getItem('yourAccount');
+    if (yourAccount) {
+      setInfoUser(JSON.parse(yourAccount));
+      setIsRemember(true);
+    }
+  }, []);
+
   return (
     <AuthLayout>
       <form onSubmit={handleSubmit} className="">
         <div className="my-12 text-center lg:my-24">
-          <h2 className="mb-2 text-3xl font-medium">Welcome Back</h2>
+          <h2 className="mb-2 text-3xl font-medium">Welcome to Roma</h2>
           <i>Login to manage your account.</i>
         </div>
         <div>
@@ -54,6 +68,7 @@ export default function Login() {
               name="usernameOrEmail"
               icons={<User />}
               onChange={handleChange}
+              value={infoUser.usernameOrEmail}
             />
           </div>
           <div className="my-4">
@@ -65,12 +80,20 @@ export default function Login() {
               name="password"
               onChange={handleChange}
               icons={<Lock />}
+              value={infoUser.password}
             />
           </div>
         </div>
         <div className="my-4 flex items-center justify-between">
           <div className="flex items-center">
-            <input type="checkbox" id="remember" />
+            <input
+              type="checkbox"
+              id="remember"
+              checked={isRemember}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setIsRemember(e.target.checked)
+              }
+            />
             <label className="cursor-pointer pl-2" htmlFor="remember">
               Remember me
             </label>
@@ -85,7 +108,7 @@ export default function Login() {
           </i>
         </div>
         <Button
-          className="my-4 !block w-full rounded-full bg-primary-backgroundColor py-2"
+          className="my-4 !block w-full !rounded-full !bg-primary-backgroundColor py-2"
           loading={isLoading}
           onSubmit={handleSubmit}
         >
