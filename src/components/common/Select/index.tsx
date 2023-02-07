@@ -5,15 +5,22 @@ interface ISelect {
   name: string;
   options: Record<'label' | 'value' | 'id' | string, string>[];
   handleChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+  defaultValue?: string;
 }
 
 export default function Select(props: ISelect) {
-  const { name = '', options = [], handleChange = () => {} } = props;
+  const {
+    name = '',
+    options = [],
+    handleChange = () => {},
+    defaultValue = '',
+  } = props;
   return (
     <select
       className="cursor-pointer rounded border border-primary-border px-2 py-1 text-base outline-none"
       name={name}
       id={name}
+      defaultValue={defaultValue}
       onChange={handleChange}
     >
       {options.length &&

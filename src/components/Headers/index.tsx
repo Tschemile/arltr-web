@@ -3,7 +3,7 @@ import Link from 'next/dist/client/link';
 import router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-import Logo from '@/assets/logo.png';
+import Logo from '@/assets/Logo.svg';
 import { onShowNavbar } from '@/redux/features/home/homeSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
@@ -90,7 +90,7 @@ export default function Headers() {
                 id: '1',
                 title: 'Log out',
                 handleCLick: () => {
-                  localStorage.clear();
+                  localStorage.removeItem('token');
                   router.push('/login');
                 },
               },

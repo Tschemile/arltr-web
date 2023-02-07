@@ -75,6 +75,7 @@ export default function Timeline(props: ITimeline) {
     setIsEdit(false);
     setContent('');
     setFileDataURL([]);
+    setMode('PUBLIC');
   };
 
   const onSubmit = () => {
@@ -209,6 +210,7 @@ export default function Timeline(props: ITimeline) {
                   { id: '3', value: 'FRIEND', label: 'Friend' },
                 ]}
                 name="mode"
+                defaultValue={mode}
               />
             </div>
           </div>
@@ -274,6 +276,7 @@ export default function Timeline(props: ITimeline) {
                 setListPosts={setListPosts}
                 setFileDataURL={setFileDataURL}
                 listPosts={listPosts}
+                setMode={setMode}
               />
             ))
           )}

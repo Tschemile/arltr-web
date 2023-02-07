@@ -9,6 +9,7 @@ interface InputProps {
   type?: 'text' | 'password' | 'number';
   name?: string;
   className?: string;
+  value?: string;
 }
 
 export default function Input(props: InputProps) {
@@ -20,6 +21,7 @@ export default function Input(props: InputProps) {
     type = 'text',
     name = '',
     className = '',
+    value = '',
   } = props;
   return (
     <div className={`relative ${className}`}>
@@ -34,6 +36,7 @@ export default function Input(props: InputProps) {
         style={{ width }}
         type={type}
         name={name}
+        defaultValue={value}
         onChange={(e) => onChange(e)}
       />
     </div>

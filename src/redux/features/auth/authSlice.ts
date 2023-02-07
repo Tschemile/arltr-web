@@ -8,6 +8,7 @@ export interface AuthState {
     'loadingRegister' | 'loadingLogin' | 'loadingCurrentUser',
     boolean
   >;
+  emailRegister: string;
   currentUser: Record<string, any>;
 }
 
@@ -18,6 +19,7 @@ const initialState: AuthState = {
     loadingLogin: false,
     loadingCurrentUser: false,
   },
+  emailRegister: '',
   currentUser: {},
 };
 
@@ -25,7 +27,11 @@ const initialState: AuthState = {
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    getEmailRegister: (state, { payload }) => {
+      return { ...state, emailRegister: payload };
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(register.pending, (state) => {
@@ -81,5 +87,7 @@ export const authSlice = createSlice({
       });
   },
 });
+
+export const { getEmailRegister } = authSlice.actions;
 
 export const { reducer: authReducer } = authSlice;
