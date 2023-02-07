@@ -271,7 +271,7 @@ export default function CardPost(props: ICardPost) {
             }`}
           >
             <Image src={Heart} alt="heart" width={20} />
-            Haha
+            Heart
           </p>
         );
 
