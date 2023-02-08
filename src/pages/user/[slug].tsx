@@ -76,6 +76,7 @@ const User = () => {
         <Timeline
           setIsActive={setIsActive}
           isFriend={isFriend || isCurrentUser}
+          isCurrentUser={isCurrentUser}
         />
       ),
     },

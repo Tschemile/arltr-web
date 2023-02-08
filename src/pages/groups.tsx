@@ -8,9 +8,9 @@ import { Main } from '@/templates/Main';
 const Groups = () => (
   <Main meta={<Meta title="Fall in luv ❤️" description="Fall in luv ❤️" />}>
     <div className="grid grid-cols-8 gap-4">
-      <div className="col-span-6 xl:ml-[20%]">
+      <div className="col-span-8 lg:col-span-6 xl:ml-[20%]">
         <p className="my-4">Popular Groups</p>
-        <Carousels numSlide={3}>
+        <Carousels childClassName="w-1/2 lg:w-1/3">
           {[...Array(10)].map((_, index) => (
             <Card
               key={index}
@@ -43,7 +43,7 @@ const Groups = () => (
         </Carousels>
         <p className="mt-4">Categories</p>
         <p className="mb-4 text-sm">Find A Group By Browsing Top Categories</p>
-        <Carousels numSlide={4}>
+        <Carousels childClassName="w-1/3 sm:w-1/4">
           {[...Array(10)].map((_, index) => (
             <div
               key={index}
@@ -59,7 +59,7 @@ const Groups = () => (
           ))}
         </Carousels>
         <p className="mt-4">Suggested Groups</p>
-        <div className="mt-4 grid grid-cols-3 gap-2">
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
           {[...Array(10)].map((_, index) => (
             <Card
               key={index}
@@ -91,14 +91,18 @@ const Groups = () => (
           ))}
         </div>
       </div>
-      <div className="col-span-2 h-fit p-2 shadow-lg">
+      <div className="col-span-2 hidden h-fit p-2 shadow-lg lg:block">
         <h1 className="text-xl">Groups</h1>
         <ul>
-          <li className="cursor-pointer py-2 px-3 text-base">
+          <li className="cursor-pointer py-2 px-3 text-base hover:bg-pink-200">
             Suggested Groups
           </li>
-          <li className="cursor-pointer py-2 px-3 text-base">My Groups</li>
-          <li className="cursor-pointer py-2 px-3 text-base">Joined Groups</li>
+          <li className="cursor-pointer py-2 px-3 text-base hover:bg-pink-200">
+            My Groups
+          </li>
+          <li className="cursor-pointer py-2 px-3 text-base hover:bg-pink-200">
+            Joined Groups
+          </li>
         </ul>
         <Button className="w-full justify-center bg-blue-200 text-base text-white">
           + Create

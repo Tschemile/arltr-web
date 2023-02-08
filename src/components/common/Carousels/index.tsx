@@ -9,10 +9,11 @@ import { showCarousels } from '@/constants';
 interface CarouselsProps {
   children?: ReactNode | any;
   numSlide?: 1 | 2 | 3 | 4 | 5 | 6;
+  childClassName?: string;
 }
 
 export default function Carousels(props: CarouselsProps) {
-  const { children, numSlide = 1 } = props;
+  const { children, numSlide = 1, childClassName = '' } = props;
   const carouselData = [...children];
   const [currentSlide, setCurrentSlide] = useState(0);
   // const [paused, setPaused] = useState(false);
@@ -79,7 +80,7 @@ export default function Carousels(props: CarouselsProps) {
           {currentSlide !== 0 && sliderControl(true)}
           {carouselData?.map((val, i) => (
             <div
-              className={`${showCarousels[numSlide]} shrink-0 object-contain text-center`}
+              className={`${showCarousels[numSlide]} shrink-0 object-contain text-center ${childClassName}`}
               key={i}
               ref={refs[i]}
             >

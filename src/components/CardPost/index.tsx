@@ -45,6 +45,7 @@ interface ICardPost {
   listPosts?: Record<string, string>[];
   setFileDataURL?: (value: string[]) => void;
   setMode?: (value: string) => void;
+  isPersonPage?: boolean;
 }
 
 export default function CardPost(props: ICardPost) {
@@ -61,6 +62,7 @@ export default function CardPost(props: ICardPost) {
     setFileDataURL = () => {},
     listPosts = [],
     setMode = () => {},
+    isPersonPage = true,
   } = props;
 
   const {
@@ -393,18 +395,28 @@ export default function CardPost(props: ICardPost) {
         </div>
         <Dropdown
           open={open}
-          content={[
-            {
-              id: '1',
-              title: 'Edit Post',
-              handleCLick: () => handleEditPost(),
-            },
-            {
-              id: '2',
-              title: 'Delete Post',
-              handleCLick: () => handleDeletePost(),
-            },
-          ]}
+          content={
+            isPersonPage
+              ? [
+                  {
+                    id: '1',
+                    title: 'Edit Post',
+                    handleCLick: () => handleEditPost(),
+                  },
+                  {
+                    id: '2',
+                    title: 'Delete Post',
+                    handleCLick: () => handleDeletePost(),
+                  },
+                ]
+              : [
+                  {
+                    id: '1',
+                    title: 'Report this post',
+                    handleCLick: () => console.log('haha'),
+                  },
+                ]
+          }
         >
           <button onClick={() => setOpen(!open)}>
             <EllipsisHorizon />

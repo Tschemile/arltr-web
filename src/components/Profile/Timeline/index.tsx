@@ -32,12 +32,17 @@ import InfoContent from './components/InfoContent';
 interface ITimeline {
   setIsActive?: (value: string) => void;
   isFriend?: boolean;
+  isCurrentUser?: boolean;
 }
 
 export default function Timeline(props: ITimeline) {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { setIsActive = () => {}, isFriend = false } = props;
+  const {
+    setIsActive = () => {},
+    isFriend = false,
+    isCurrentUser = true,
+  } = props;
 
   const profileUser = useAppSelector((state) => state.profile.profileUser);
   const listComments = useAppSelector((state) => state.comments.listComment);
@@ -277,6 +282,7 @@ export default function Timeline(props: ITimeline) {
                 setFileDataURL={setFileDataURL}
                 listPosts={listPosts}
                 setMode={setMode}
+                isPersonPage={isCurrentUser}
               />
             ))
           )}
