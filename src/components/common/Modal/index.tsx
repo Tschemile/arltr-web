@@ -77,9 +77,8 @@ export default function Modal(props: ModalProps) {
                 {showSecondButton && (
                   <Button
                     type="button"
-                    className="mr-2"
+                    className="mr-2 bg-gray-400 text-black"
                     onSubmit={onClose}
-                    background="secondary"
                   >
                     {textSecondButton}
                   </Button>

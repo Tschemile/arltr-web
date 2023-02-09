@@ -150,10 +150,7 @@ const Groups = () => {
                   <Button className="mr-1 h-8 w-full justify-center text-sm">
                     Join
                   </Button>
-                  <Button
-                    background="secondary"
-                    className="ml-1 h-8 w-full justify-center text-sm"
-                  >
+                  <Button className="ml-1 h-8 w-full justify-center bg-gray-400 text-sm text-black">
                     View
                   </Button>
                 </div>
@@ -201,10 +198,7 @@ const Groups = () => {
                   <Button className="mr-1 h-8 w-full justify-center text-sm">
                     Join
                   </Button>
-                  <Button
-                    background="secondary"
-                    className="ml-1 h-8 w-full justify-center text-sm"
-                  >
+                  <Button className="ml-1 h-8 w-full justify-center bg-gray-400 text-sm text-black">
                     View
                   </Button>
                 </div>
@@ -222,7 +216,7 @@ const Groups = () => {
             activeClassName="bg-pink-400 rounded text-white"
           />
           <Button
-            className="mt-2 w-full justify-center bg-blue-200 text-base text-white"
+            className="mt-2 w-full justify-center bg-pink-400 text-base text-white"
             onSubmit={() => setOpenModal(!openModal)}
           >
             + Create

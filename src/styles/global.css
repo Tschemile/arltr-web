@@ -16,6 +16,7 @@ a:hover {
 @layer base {
   html {
     font-family: 'Saira Stencil One', cursive;
+    scroll-behavior: smooth;
   }
 }
 

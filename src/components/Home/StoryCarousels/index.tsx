@@ -14,11 +14,17 @@ function StoryCarousels() {
             key={0}
             className="relative m-1 min-h-[160px] cursor-pointer overflow-hidden rounded-lg shadow-lg hover:opacity-75"
           >
-            <img
-              src={avatar}
-              className={`absolute top-1/2 right-0 left-1/2 bottom-0 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover transition-all hover:scale-125`}
-              alt="image"
-            />
+            {avatar ? (
+              <img
+                src={avatar}
+                className={`absolute top-1/2 right-0 left-1/2 bottom-0 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover transition-all hover:scale-125`}
+                alt="image"
+              />
+            ) : (
+              <span
+                className={`absolute top-1/2 right-0 left-1/2 bottom-0 h-full w-full -translate-x-1/2 -translate-y-1/2 bg-gray-500 object-cover transition-all hover:scale-125`}
+              />
+            )}
             <PlusIcon
               className="absolute top-2 left-2 rounded-full bg-pink-500"
               color="pink"

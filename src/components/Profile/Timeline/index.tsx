@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
@@ -269,9 +270,6 @@ export default function Timeline(props: ITimeline) {
       );
   }, [profileId]);
 
-  if (listPosts.length <= 0 && !loadingListPost && !loadingProfile)
-    return <p className="text-center">Don&apos;t have any post! </p>;
-
   return (
     <>
       <div className="flex w-full flex-col-reverse gap-2 sm:grid md:grid-cols-3 md:gap-8">
@@ -283,6 +281,8 @@ export default function Timeline(props: ITimeline) {
           )}
           {loadingListPost || loadingProfile ? (
             <CardPostSkeleton />
+          ) : listPosts.length <= 0 && !loadingListPost && !loadingProfile ? (
+            <p className="text-center">Don&apos;t have any post! </p>
           ) : (
             (listPosts as Record<string, string>[]).map((x) => (
               <CardPost
