@@ -18,6 +18,11 @@ import Heart from '@/components/Icons/Heart';
 import Sad from '@/components/Icons/Sad';
 import Smite from '@/components/Icons/Smite';
 import Star from '@/components/Icons/Star';
+import CardPostSkeleton from '@/components/Skeleton/CardPost';
+import CreatePostSkeleton from '@/components/Skeleton/CreatePost';
+import InfoBlock from '@/components/Skeleton/ProfileBlock/Info';
+import PhotosBlock from '@/components/Skeleton/ProfileBlock/Photos';
+import RelationShip from '@/components/Skeleton/ProfileBlock/Relationship';
 import {
   createPost,
   editPost,
@@ -48,6 +53,8 @@ export default function Timeline(props: ITimeline) {
   const listComments = useAppSelector((state) => state.comments.listComment);
   const currentUser = useAppSelector((state) => state.auth.currentUser);
   const listPostsProps = useAppSelector((state) => state.profile.listPosts);
+  const loadingListPost = useAppSelector((state) => state.profile.loadingPosts);
+  const loadingProfile = useAppSelector((state) => state.profile.loading);
 
   const { name = '', gender: genderCurrent = '', avatar = '' } = currentUser;
 
@@ -261,13 +268,20 @@ export default function Timeline(props: ITimeline) {
       );
   }, [profileId]);
 
+  if (listPosts.length <= 0 && !loadingListPost && !loadingProfile)
+    return <p className="text-center">Don&apos;t have any post! </p>;
+
   return (
     <>
       <div className="flex w-full flex-col-reverse gap-2 sm:grid md:grid-cols-3 md:gap-8">
         <div className="md:col-span-2">
-          {isFriend && <CreatePost setOpenModal={setOpenModal} />}
-          {listPosts.length <= 0 ? (
-            <p className="text-center">Don&apos;t have any post! </p>
+          {loadingProfile ? (
+            <CreatePostSkeleton />
+          ) : (
+            isFriend && <CreatePost setOpenModal={setOpenModal} />
+          )}
+          {loadingListPost || loadingProfile ? (
+            <CardPostSkeleton />
           ) : (
             (listPosts as Record<string, string>[]).map((x) => (
               <CardPost
@@ -289,127 +303,149 @@ export default function Timeline(props: ITimeline) {
         </div>
 
         <div className="row-start-1 h-full md:row-start-auto">
-          <Block title="Info" seeAll={false} showTotal={false}>
-            <InfoContent
-              icon={
-                gender === 'male' ? <Smite width={30} /> : <Sad width={30} />
-              }
-              content={gender === 'male' ? 'Male' : 'Female'}
-            />
-            {socialLinks && (
+          {loadingProfile ? (
+            <InfoBlock />
+          ) : (
+            <Block title="Info" seeAll={false} showTotal={false}>
               <InfoContent
-                isLink
-                content={socialLinks && socialLinks[0]}
-                icon={<Chain width={30} />}
+                icon={
+                  gender === 'male' ? <Smite width={30} /> : <Sad width={30} />
+                }
+                content={gender === 'male' ? 'Male' : 'Female'}
               />
-            )}
-            <InfoContent icon={<Heart width={30} />} content="Single" />
-            {hobbies && (
-              <InfoContent
-                icon={<Star width={30} />}
-                content={hobbies && hobbies[0]}
-              />
-            )}
-            {work && (
-              <>
-                <Divider />
-                <InfoContent icon={<Briefcase width={30} />} content={work} />
-              </>
-            )}
-          </Block>
-          <Block
-            total={totalAlbums}
-            title="Photos"
-            onClickSeeAll={() => setIsActive('3')}
-          >
-            <div className="grid grid-cols-3 gap-4">
-              {(albums as []).slice(0, 9).map((x: Record<string, string>) => (
-                <div key={x.id} className="col-span-1 h-[100px] w-full">
-                  <img
-                    alt="photo"
-                    src={x.url}
-                    className="h-full w-full rounded-lg object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          </Block>
+              {socialLinks && (
+                <InfoContent
+                  isLink
+                  content={socialLinks && socialLinks[0]}
+                  icon={<Chain width={30} />}
+                />
+              )}
+              <InfoContent icon={<Heart width={30} />} content="Single" />
+              {hobbies && (
+                <InfoContent
+                  icon={<Star width={30} />}
+                  content={hobbies && hobbies[0]}
+                />
+              )}
+              {work && (
+                <>
+                  <Divider />
+                  <InfoContent icon={<Briefcase width={30} />} content={work} />
+                </>
+              )}
+            </Block>
+          )}
 
-          <Block
-            title="Following"
-            total={totalFollowing}
-            onClickSeeAll={() => setIsActive('2')}
-          >
-            <div className="grid grid-cols-3 gap-2">
-              {(followings as []).map((x: any) => (
-                <div
-                  key={x.id}
-                  onClick={() => router.push(`/user/${x.domain}`)}
-                  className="hover:cursor-pointer"
-                >
-                  <div className="col-span-1 h-[100px] w-full">
+          {loadingProfile ? (
+            <PhotosBlock />
+          ) : (
+            <Block
+              total={totalAlbums}
+              title="Photos"
+              onClickSeeAll={() => setIsActive('3')}
+            >
+              <div className="grid grid-cols-3 gap-4">
+                {(albums as []).slice(0, 9).map((x: Record<string, string>) => (
+                  <div key={x.id} className="col-span-1 h-[100px] w-full">
                     <img
-                      alt="photo-following"
-                      src={x.avatar}
+                      alt="photo"
+                      src={x.url}
                       className="h-full w-full rounded-lg object-cover"
                     />
                   </div>
-                  <p className="mt-2 text-sm">{x.name}</p>
-                </div>
-              ))}
-            </div>
-          </Block>
-          <Block
-            title="Followers"
-            total={totalFollowers}
-            onClickSeeAll={() => setIsActive('2')}
-          >
-            <div className="grid grid-cols-3 gap-4">
-              {(followers as []).map((x: Record<string, string>) => (
-                <div
-                  key={x.id}
-                  onClick={() => router.push(`/user/${x.domain}`)}
-                  className="hover:cursor-pointer"
-                >
-                  <div className="col-span-1 h-[100px] w-full">
-                    <img
-                      alt="avatar-followers"
-                      src={x.avatar}
-                      className="h-full w-full rounded-lg object-cover"
-                    />
+                ))}
+              </div>
+            </Block>
+          )}
+
+          {loadingProfile ? (
+            <RelationShip />
+          ) : (
+            <Block
+              title="Following"
+              total={totalFollowing}
+              onClickSeeAll={() => setIsActive('2')}
+            >
+              <div className="grid grid-cols-3 gap-2">
+                {(followings as []).map((x: any) => (
+                  <div
+                    key={x.id}
+                    onClick={() => router.push(`/user/${x.domain}`)}
+                    className="hover:cursor-pointer"
+                  >
+                    <div className="col-span-1 h-[100px] w-full">
+                      <img
+                        alt="photo-following"
+                        src={x.avatar}
+                        className="h-full w-full rounded-lg object-cover"
+                      />
+                    </div>
+                    <p className="mt-2 text-sm">{x.name}</p>
                   </div>
-                  <p className="mt-2 text-sm font-medium">{x.name}</p>
-                </div>
-              ))}
-            </div>
-          </Block>
-          <Block
-            title="Groups"
-            total={totalGroups}
-            onClickSeeAll={() => setIsActive('4')}
-          >
-            <div className="grid grid-cols-3 gap-4">
-              {(groups as []).map((x: Record<string, string>) => (
-                <div key={x.id} className="hover:cursor-pointer">
-                  <div className="col-span-1 h-[100px] w-full">
-                    <img
-                      alt="avatar-followers"
-                      src={x.avatar}
-                      className="h-full w-full rounded-lg object-cover"
-                    />
+                ))}
+              </div>
+            </Block>
+          )}
+
+          {loadingProfile ? (
+            <RelationShip />
+          ) : (
+            <Block
+              title="Followers"
+              total={totalFollowers}
+              onClickSeeAll={() => setIsActive('2')}
+            >
+              <div className="grid grid-cols-3 gap-4">
+                {(followers as []).map((x: Record<string, string>) => (
+                  <div
+                    key={x.id}
+                    onClick={() => router.push(`/user/${x.domain}`)}
+                    className="hover:cursor-pointer"
+                  >
+                    <div className="col-span-1 h-[100px] w-full">
+                      <img
+                        alt="avatar-followers"
+                        src={x.avatar}
+                        className="h-full w-full rounded-lg object-cover"
+                      />
+                    </div>
+                    <p className="mt-2 text-sm font-medium">{x.name}</p>
                   </div>
-                  <Tooltip description={x.name}>
-                    <p className="mt-2 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium">
-                      {x.name}
-                    </p>
-                  </Tooltip>
-                </div>
-              ))}
-            </div>
-          </Block>
+                ))}
+              </div>
+            </Block>
+          )}
+
+          {loadingProfile ? (
+            <RelationShip />
+          ) : (
+            <Block
+              title="Groups"
+              total={totalGroups}
+              onClickSeeAll={() => setIsActive('4')}
+            >
+              <div className="grid grid-cols-3 gap-4">
+                {(groups as []).map((x: Record<string, string>) => (
+                  <div key={x.id} className="hover:cursor-pointer">
+                    <div className="col-span-1 h-[100px] w-full">
+                      <img
+                        alt="avatar-followers"
+                        src={x.avatar}
+                        className="h-full w-full rounded-lg object-cover"
+                      />
+                    </div>
+                    <Tooltip description={x.name}>
+                      <p className="mt-2 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium">
+                        {x.name}
+                      </p>
+                    </Tooltip>
+                  </div>
+                ))}
+              </div>
+            </Block>
+          )}
         </div>
       </div>
-
       <Modal
         title={isEdit ? 'Edit Post' : 'Create New Post'}
         textSubmitButton={isEdit ? 'Edit Post' : 'Create Post'}

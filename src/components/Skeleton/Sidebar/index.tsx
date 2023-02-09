@@ -15,13 +15,13 @@ export default function Sidebar() {
   );
   return (
     <div className="animate-pulse">
-      {[...Array(6)].map((x) => (
-        <Item key={x} />
+      {[...Array(6)].map((_, index) => (
+        <Item key={index} />
       ))}
       <Divider />
       <div className="h-6 w-1/2 rounded bg-slate-700"></div>
-      {[...Array(4)].map((x) => (
-        <Item key={x} />
+      {[...Array(4)].map((_, index) => (
+        <Item key={index} />
       ))}
       <Divider />
       <div className="space-y-3">

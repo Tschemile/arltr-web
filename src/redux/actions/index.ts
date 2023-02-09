@@ -158,6 +158,7 @@ export const editComment = createAsyncThunk(
   }
 );
 
+// Reaction post
 export const makeReaction = createAsyncThunk(
   'post/makeReaction',
   async (payload: IReaction) => {
@@ -165,6 +166,15 @@ export const makeReaction = createAsyncThunk(
     return res;
   }
 );
+
+export const getListReaction = createAsyncThunk(
+  'post/getListReaction',
+  async (params: any) => {
+    const res = await api.get('/react', { params });
+    return res.data;
+  }
+);
+
 // Upload File
 export const uploadFile = createAsyncThunk(
   'upload/uploadFile',
