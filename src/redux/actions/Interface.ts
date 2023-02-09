@@ -57,7 +57,7 @@ export interface IGetListPosts {
   limit?: number;
   type?: 'POST' | 'REEL' | 'STORY' | string;
   queryType?: 'USER' | 'COMMUNITY' | 'GROUP' | string;
-  user: string;
+  user?: string;
 }
 
 export interface IEditComment {

@@ -26,7 +26,6 @@ function NewsFeed() {
           type: 'POST',
           queryType: 'COMMUNITY',
           limit: 10,
-          user: profileId,
         })
       );
   }, [profileId]);

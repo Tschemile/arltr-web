@@ -3,7 +3,7 @@ import Tooltip from '@/components/common/Tooltip';
 import { Meta } from '@/layouts/Meta';
 import { Main } from '@/templates/Main';
 
-const About = () => {
+const Albums = () => {
   return (
     <Main meta={<Meta title="Album" description="Album" />}>
       <p>Phồtố</p>
@@ -25,4 +25,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default Albums;

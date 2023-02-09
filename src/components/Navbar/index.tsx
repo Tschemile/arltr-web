@@ -7,7 +7,9 @@ import Avatar from '../common/Avatar';
 import Divider from '../common/Divider';
 import ArrowDown from '../Icons/ArrowDown';
 import ArrowUp from '../Icons/ArrowUp';
+import Briefcase from '../Icons/Briefcase';
 import Group from '../Icons/Group';
+import Page from '../Icons/Page';
 import { Sidebar } from '../Skeleton';
 
 const listMenu = [
@@ -84,22 +86,7 @@ const listMenu = [
     id: 5,
     title: 'Pages',
     link: 'pages',
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="h-4 w-4"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
-        />
-      </svg>
-    ),
+    icon: <Page width={16} className="!p-0" />,
   },
   {
     id: 6,
@@ -191,23 +178,8 @@ const listExplore = [
   {
     id: 4,
     title: 'Jobs',
-    link: '#',
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="h-4 w-4"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
-        />
-      </svg>
-    ),
+    link: 'jobs',
+    icon: <Briefcase width={16} className="!p-0" />,
   },
 ];
 
@@ -279,7 +251,11 @@ export default function Navbar() {
           <h4 className="text-lg font-medium">Explore</h4>
           <div className="my-4">
             {listExplore.map((x) => (
-              <button className="nav-item mb-2" key={x.id}>
+              <button
+                className="nav-item mb-2"
+                key={x.id}
+                onClick={() => router.push(`/${x.link}`)}
+              >
                 <span className="rounded-full border-2 bg-primary-hover p-2">
                   {x.icon}
                 </span>
