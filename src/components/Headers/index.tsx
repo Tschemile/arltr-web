@@ -1,6 +1,6 @@
 import Image from 'next/dist/client/image';
 import Link from 'next/dist/client/link';
-import router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
 import Logo from '@/assets/Logo.svg';
@@ -20,12 +20,15 @@ import PlusIcon from '../Icons/PlusIcon';
 
 export default function Headers() {
   const dispatch = useAppDispatch();
-  const { pathname } = useRouter();
+  const { pathname, push } = useRouter();
   const [open, setOpen] = useState(false);
 
-  const { avatar = '', gender = '' } = useAppSelector(
-    (state) => state.auth.currentUser
-  );
+  const {
+    avatar = '',
+    gender = '',
+    domain = '',
+    name = '',
+  } = useAppSelector((state) => state.auth.currentUser);
 
   return (
     <div className="fixed z-20 h-[60px] w-full bg-white py-2 px-4">
@@ -88,10 +91,17 @@ export default function Headers() {
             content={[
               {
                 id: '1',
+                title: `${name}`,
+                handleClick: () => {
+                  push(`/user/${domain}`);
+                },
+              },
+              {
+                id: '2',
                 title: 'Log out',
                 handleCLick: () => {
                   localStorage.removeItem('token');
-                  router.push('/login');
+                  push('/login');
                 },
               },
             ]}

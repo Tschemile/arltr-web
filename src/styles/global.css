@@ -1,5 +1,6 @@
 @tailwind base;
 
+
 a {
   @apply text-blue-700;
 }
@@ -11,6 +12,12 @@ a:hover {
 @tailwind components;
 
 @tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Saira Stencil One', cursive;
+  }
+}
 
 .content p {
   @apply my-6;

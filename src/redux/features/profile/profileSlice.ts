@@ -1,6 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { getProfileListPosts, getProfileUser } from '@/redux/actions';
+import {
+  getListReaction,
+  getProfileListPosts,
+  getProfileUser,
+} from '@/redux/actions';
 
 export interface ProfileState {
   profileUser: Record<string, any>;
@@ -8,6 +12,7 @@ export interface ProfileState {
   totalRelation: Record<string, number>;
   listPosts: Record<string, string>[];
   loadingPosts: boolean;
+  listUserReaction: Record<'user' | 'total' | string, Record<string, string>[]>;
 }
 
 // Initial state
@@ -17,6 +22,7 @@ const initialState: ProfileState = {
   totalRelation: {},
   listPosts: [],
   loadingPosts: false,
+  listUserReaction: {},
 };
 
 export const profileSlice = createSlice({
@@ -42,6 +48,9 @@ export const profileSlice = createSlice({
       })
       .addCase(getProfileListPosts.rejected, (state) => {
         return { ...state, loadingPosts: false };
+      })
+      .addCase(getListReaction.fulfilled, (state, { payload }) => {
+        return { ...state, listUserReaction: payload };
       });
   },
 });

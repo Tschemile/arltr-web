@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import router from 'next/router';
 import type { ChangeEvent, FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 import { PhotoView } from 'react-photo-view';
@@ -16,10 +17,11 @@ import {
   addComment,
   deletePost,
   getCommentsOfPost,
+  getListReaction,
   makeReaction,
   uploadFile,
 } from '@/redux/actions';
-import { useAppDispatch } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { timeSince } from '@/utils/func';
 
 import ActionButton from '../common/ActionButton';
@@ -83,6 +85,7 @@ export default function CardPost(props: ICardPost) {
     name: authorName = '',
     gender: authorGender = '',
     avatar: authorAvatar = '',
+    domain = '',
   } = author as Record<string, string>;
 
   const [isClickedCmt, setIsClickedCmt] = useState(false);
@@ -110,7 +113,9 @@ export default function CardPost(props: ICardPost) {
 
   const timeOfPosts = timeSince(timeCreated, dateFormated);
 
-  // const currentUser = useAppSelector((state) => state.auth.currentUser);
+  const { id: currentUserId } = useAppSelector(
+    (state) => state.auth.currentUser
+  );
 
   const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -175,12 +180,17 @@ export default function CardPost(props: ICardPost) {
     setEmoji(type === emoji ? '' : type);
     dispatch(makeReaction({ post: id, type })).then((res: any) => {
       if (res.payload.status === 200) {
-        setIsLiked((prevState) => !prevState);
-        if (!isLiked) {
-          setTotalReacts(totalReacts + 1);
-        } else {
-          setTotalReacts(totalReacts - 1);
-        }
+        dispatch(getListReaction({ post: id })).then((result: any) => {
+          const { total: totalData = [], users = [] } = result.payload;
+          const total = totalData.find(
+            (x: Record<string, string>) => x.type === 'ALL'
+          );
+          const find = users.find(
+            (x: Record<string, string>) => x.id === currentUserId
+          );
+          setTotalReacts(Number(total.total));
+          setIsLiked(Boolean(find));
+        });
       }
     });
   };
@@ -273,7 +283,7 @@ export default function CardPost(props: ICardPost) {
             }`}
           >
             <Image src={Heart} alt="heart" width={20} />
-            Heart
+            Love
           </p>
         );
 
@@ -377,7 +387,10 @@ export default function CardPost(props: ICardPost) {
     <div className={`mb-4 rounded-lg bg-white px-4 shadow-lg`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center py-2">
-          <div className="mr-4 h-[45px] w-[45px]">
+          <div
+            className="mr-4 h-[45px] w-[45px] cursor-pointer"
+            onClick={() => router.push(`/user/${domain}`)}
+          >
             <Avatar
               src={authorAvatar}
               alt="avatar"
@@ -387,7 +400,12 @@ export default function CardPost(props: ICardPost) {
             />
           </div>
           <div className="">
-            <h3 className="text-lg font-medium">{authorName}</h3>
+            <h3
+              className="cursor-pointer text-lg font-medium"
+              onClick={() => router.push(`/user/${domain}`)}
+            >
+              {authorName}
+            </h3>
             <Tooltip description={dateFormated}>
               <p className="text-sm">{timeOfPosts}</p>
             </Tooltip>
@@ -430,7 +448,17 @@ export default function CardPost(props: ICardPost) {
           <IconButton className="ml-0 mr-1 p-0">
             <Like width={22} color="blue" />
           </IconButton>
-          <span className="text-sm">{totalReacts}</span>
+          <span className="text-sm">
+            {isLiked
+              ? `You ${
+                  totalReacts - 1 < 1
+                    ? ''
+                    : `and ${totalReacts - 1} other${
+                        totalReacts - 1 > 1 ? 's' : ''
+                      }`
+                }`
+              : totalReacts}
+          </span>
         </div>
         <div
           className="cursor-pointer"

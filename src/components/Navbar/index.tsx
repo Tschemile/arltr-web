@@ -220,12 +220,7 @@ export default function Navbar() {
   );
   const isShow = useAppSelector((state) => state.home.isShowNavbar);
 
-  const {
-    avatar = '' || undefined,
-    name = '' || undefined,
-    gender = '' || undefined,
-    domain = '' || undefined,
-  } = currentUser;
+  const { avatar = '', name = '', gender = '', domain = '' } = currentUser;
   return (
     <div
       className={`fixed top-[60px] h-[calc(100vh-60px)] w-[300px] ${
