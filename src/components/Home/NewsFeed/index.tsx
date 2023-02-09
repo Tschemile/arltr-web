@@ -10,7 +10,7 @@ function NewsFeed() {
   const { id: profileId = '' } = useAppSelector(
     (state) => state.auth.currentUser
   );
-  const listPostsProps = useAppSelector((state) => state.profile.listPosts);
+  const listPostsProps = useAppSelector((state) => state.posts.listPosts);
   const listComments = useAppSelector((state) => state.comments.listComment);
 
   const [listPosts, setListPosts] = useState<Record<string, string>[]>([]);

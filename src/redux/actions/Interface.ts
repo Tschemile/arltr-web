@@ -28,7 +28,7 @@ export interface ICreatePost {
   content: string;
   type: 'STORY' | 'POST' | 'REEL';
   images?: Record<string, string>[] | (string | undefined)[];
-  mode?: 'PUBLIC' | 'PRIVATE' | 'FRIEND' | string;
+  mode?: 'PUBLIC' | 'PRIVATE' | 'FRIEND';
 }
 
 export interface IReaction {
@@ -41,8 +41,16 @@ export interface IGetGroups {
   limit?: number;
   type?: 'COMMUNICATE' | 'USER';
   search?: string;
-  mode?: 'HIDDEN' | 'PUBLIC' | 'PRIVATE' | string;
+  mode?: 'HIDDEN' | 'PUBLIC' | 'PRIVATE';
   user: string;
+}
+
+export interface INewGroups {
+  name: string;
+  description?: string;
+  avatar?: string;
+  cover?: string;
+  mode: 'PUBLIC' | 'PRIVATE' | 'FRIEND';
 }
 
 export interface IGetListPosts {
