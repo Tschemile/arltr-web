@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
@@ -29,7 +30,9 @@ import {
   getProfileListPosts,
   uploadFile,
 } from '@/redux/actions';
+import type { ICreatePost } from '@/redux/actions/Interface';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { getFirstLetter } from '@/utils/func';
 
 import Block from './components/Block';
 import InfoContent from './components/InfoContent';
@@ -52,9 +55,10 @@ export default function Timeline(props: ITimeline) {
   const profileUser = useAppSelector((state) => state.profile.profileUser);
   const listComments = useAppSelector((state) => state.comments.listComment);
   const currentUser = useAppSelector((state) => state.auth.currentUser);
-  const listPostsProps = useAppSelector((state) => state.profile.listPosts);
-  const loadingListPost = useAppSelector((state) => state.profile.loadingPosts);
+  const listPostsProps = useAppSelector((state) => state.posts.listPosts);
+  const loadingListPost = useAppSelector((state) => state.posts.loadingPosts);
   const loadingProfile = useAppSelector((state) => state.profile.loading);
+  const isUpdatePost = useAppSelector((state) => state.posts.isUpdatePost);
 
   const { name = '', gender: genderCurrent = '', avatar = '' } = currentUser;
 
@@ -107,6 +111,7 @@ export default function Timeline(props: ITimeline) {
           setOpenModal(false);
           setContent('');
           setIsEdit(false);
+          setFileDataURL([]);
           const index = listPosts.findIndex(
             (x) => x.id === res.payload.data.post.id
           );
@@ -116,18 +121,13 @@ export default function Timeline(props: ITimeline) {
         }
       });
     } else {
-      dispatch(
-        createPost({
-          type: 'POST',
-          content,
-          images: fileDataURL,
-          mode,
-        })
-      ).then((res: any) => {
+      const newPost = { type: 'POST', content, images: fileDataURL, mode };
+      dispatch(createPost(newPost as ICreatePost)).then((res: any) => {
         if (res.payload?.status === 201) {
           setOpenModal(false);
           setContent('');
-          setListPosts([...listPosts, res.payload.data.post]);
+          setFileDataURL([]);
+          setListPosts([res.payload.data.post, ...listPosts]);
         }
       });
     }
@@ -211,15 +211,16 @@ export default function Timeline(props: ITimeline) {
             <div>
               <p className="text-lg font-medium sm:text-xl">{name}</p>
               <Select
+                className="mt-2 w-52"
                 handleChange={handleSelect}
                 options={[
                   {
                     id: '1',
                     value: 'PUBLIC',
-                    label: 'Public',
+                    label: 'Public 🌍',
                   },
-                  { id: '2', value: 'PRIVATE', label: 'Private' },
-                  { id: '3', value: 'FRIEND', label: 'Friend' },
+                  { id: '2', value: 'PRIVATE', label: 'Private 🔒' },
+                  { id: '3', value: 'FRIEND', label: 'Friend 👭' },
                 ]}
                 name="mode"
                 defaultValue={mode}
@@ -228,10 +229,11 @@ export default function Timeline(props: ITimeline) {
           </div>
           <div className="my-4">
             <textarea
-              className="h-full w-full resize-none py-1 outline-none placeholder:text-base placeholder:text-gray-500"
+              className="h-[200px] w-full resize-none py-1 outline-none placeholder:text-base placeholder:text-gray-500"
               placeholder={`What is your mind? ${name} !`}
               onChange={(e) => setContent(e.target.value)}
               value={content}
+              maxLength={500}
             />
           </div>
           {fileDataURL?.length > 0 && getLayout()}
@@ -268,9 +270,6 @@ export default function Timeline(props: ITimeline) {
       );
   }, [profileId]);
 
-  if (listPosts.length <= 0 && !loadingListPost && !loadingProfile)
-    return <p className="text-center">Don&apos;t have any post! </p>;
-
   return (
     <>
       <div className="flex w-full flex-col-reverse gap-2 sm:grid md:grid-cols-3 md:gap-8">
@@ -282,6 +281,8 @@ export default function Timeline(props: ITimeline) {
           )}
           {loadingListPost || loadingProfile ? (
             <CardPostSkeleton />
+          ) : listPosts.length <= 0 && !loadingListPost && !loadingProfile ? (
+            <p className="text-center">Don&apos;t have any post! </p>
           ) : (
             (listPosts as Record<string, string>[]).map((x) => (
               <CardPost
@@ -428,11 +429,17 @@ export default function Timeline(props: ITimeline) {
                 {(groups as []).map((x: Record<string, string>) => (
                   <div key={x.id} className="hover:cursor-pointer">
                     <div className="col-span-1 h-[100px] w-full">
-                      <img
-                        alt="avatar-followers"
-                        src={x.avatar}
-                        className="h-full w-full rounded-lg object-cover"
-                      />
+                      {x.avatar ? (
+                        <img
+                          alt="avatar-followers"
+                          src={x.avatar}
+                          className="h-full w-full rounded-lg object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center rounded-lg bg-pink-400 text-white">
+                          {getFirstLetter(x.name as string)}
+                        </div>
+                      )}
                     </div>
                     <Tooltip description={x.name}>
                       <p className="mt-2 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium">
@@ -453,6 +460,7 @@ export default function Timeline(props: ITimeline) {
         content={getContent()}
         onClose={onClose}
         onSubmit={onSubmit}
+        loading={isUpdatePost}
       />
     </>
   );

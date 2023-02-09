@@ -29,7 +29,7 @@ const listActions = [
   },
   {
     id: 2,
-    title: 'Phote/Video',
+    title: 'Photos/Video',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -77,11 +77,7 @@ export default function CreatePost(props: ICreatePost) {
   const { setOpenModal = () => {} } = props;
   const currentUser = useAppSelector((state) => state.auth.currentUser);
 
-  const {
-    name = '' || undefined,
-    gender = '' || undefined,
-    avatar = '' || undefined,
-  } = currentUser;
+  const { name = '', gender = '', avatar = '' } = currentUser;
 
   return (
     <div className="mb-4 rounded-md bg-white p-4">

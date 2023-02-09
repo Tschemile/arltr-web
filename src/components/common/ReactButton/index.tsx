@@ -30,7 +30,7 @@ function Emoji(props: IEmoji) {
       case 'Like':
         return (
           <Image
-            className="cursor-pointer hover:animate-bounce"
+            className="cursor-pointer transition-all hover:scale-125"
             width={40}
             height={40}
             src={Like}
@@ -41,7 +41,7 @@ function Emoji(props: IEmoji) {
       case 'Haha':
         return (
           <Image
-            className="cursor-pointer hover:animate-bounce"
+            className="cursor-pointer transition-all hover:scale-125"
             width={40}
             height={40}
             src={Haha}
@@ -52,7 +52,7 @@ function Emoji(props: IEmoji) {
       case 'Heart':
         return (
           <Image
-            className="cursor-pointer hover:animate-bounce"
+            className="cursor-pointer transition-all hover:scale-125"
             width={40}
             height={40}
             src={Heart}
@@ -63,7 +63,7 @@ function Emoji(props: IEmoji) {
       case 'Cry':
         return (
           <Image
-            className="cursor-pointer hover:animate-bounce"
+            className="cursor-pointer transition-all hover:scale-125"
             width={40}
             height={40}
             src={Cry}
@@ -74,7 +74,7 @@ function Emoji(props: IEmoji) {
       case 'Wow':
         return (
           <Image
-            className="cursor-pointer hover:animate-bounce"
+            className="cursor-pointer transition-all hover:scale-125"
             width={40}
             height={40}
             src={Wow}
@@ -85,7 +85,7 @@ function Emoji(props: IEmoji) {
       case 'Angry':
         return (
           <Image
-            className="cursor-pointer hover:animate-bounce"
+            className="cursor-pointer transition-all hover:scale-125"
             width={40}
             height={40}
             src={Angry}
@@ -110,7 +110,7 @@ export default function ReactButton(props: IActionButton) {
   return (
     <div className={`nav-item ${className}`}>
       {children}
-      <div className=" invisible absolute top-[-52px] opacity-0 transition-all duration-200 group-hover/item:visible group-hover/item:opacity-100">
+      <div className="invisible absolute top-[-52px] opacity-0 transition-all duration-200 group-hover/item:visible group-hover/item:opacity-100">
         <div className="flex items-center gap-2 rounded-full bg-primary-color px-4 py-2">
           <Emoji type="Like" value="LIKE" onClick={onClick} />
           <Emoji type="Heart" value="HEART" onClick={onClick} />

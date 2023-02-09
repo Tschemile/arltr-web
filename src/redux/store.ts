@@ -4,6 +4,7 @@ import { authReducer } from './features/auth/authSlice';
 import { commentsReducer } from './features/comments';
 import { groupsReducer } from './features/groups';
 import { homeReducer } from './features/home/homeSlice';
+import { postsReducer } from './features/posts';
 import { profileReducer } from './features/profile/profileSlice';
 import { relationReducer } from './features/relation/relationSlice';
 
@@ -12,6 +13,7 @@ export const store = configureStore({
     auth: authReducer,
     home: homeReducer,
     profile: profileReducer,
+    posts: postsReducer,
     comments: commentsReducer,
     relation: relationReducer,
     groups: groupsReducer,

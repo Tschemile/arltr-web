@@ -7,6 +7,7 @@ import Button from '../Button';
 import Divider from '../Divider';
 
 interface ModalProps {
+  loading?: boolean;
   content: ReactNode;
   showModal: boolean;
   showHeader?: boolean;
@@ -23,6 +24,7 @@ interface ModalProps {
 
 export default function Modal(props: ModalProps) {
   const {
+    loading = false,
     content,
     showModal = false,
     showHeader = true,
@@ -75,9 +77,8 @@ export default function Modal(props: ModalProps) {
                 {showSecondButton && (
                   <Button
                     type="button"
-                    className="mr-2"
+                    className="mr-2 bg-gray-400 text-black"
                     onSubmit={onClose}
-                    background="secondary"
                   >
                     {textSecondButton}
                   </Button>
@@ -87,6 +88,7 @@ export default function Modal(props: ModalProps) {
                     type="button"
                     // className="mr-2 rounded bg-blue-500 py-2 px-4 text-white hover:bg-blue-700"
                     onSubmit={onSubmit}
+                    loading={loading}
                   >
                     {textSubmitButton}
                   </Button>

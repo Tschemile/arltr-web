@@ -9,6 +9,7 @@ import type {
   IGetListPosts,
   IInRelation,
   ILogin,
+  INewGroups,
   IReaction,
   IRelation,
   IUser,
@@ -199,5 +200,13 @@ export const getListGroups = createAsyncThunk(
   async (params: IGetGroups) => {
     const res = await api.get('/group', { params });
     return res.data;
+  }
+);
+
+export const createNewGroups = createAsyncThunk(
+  'groups/createNewGroups',
+  async (payload: INewGroups) => {
+    const res = await api.post('/group', { ...payload });
+    return res;
   }
 );

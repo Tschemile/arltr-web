@@ -5,7 +5,7 @@ export const timeSince = (date: number, dateFormated: string) => {
 
   if (interval > 1) {
     return `${Math.floor(interval)} ${
-      Math.floor(interval) - 1 ? 'years' : 'year'
+      Math.floor(interval) - 1 ? 'years ago' : 'year ago'
     }`;
   }
   interval = seconds / 2592000;
@@ -15,18 +15,22 @@ export const timeSince = (date: number, dateFormated: string) => {
   interval = seconds / 86400;
   if (interval > 1) {
     return `${Math.floor(interval)} ${
-      Math.floor(interval) - 1 ? 'days' : 'day'
+      Math.floor(interval) - 1 ? 'days ago' : 'day ago'
     }`;
   }
   interval = seconds / 3600;
   if (interval > 1) {
     return `${Math.floor(interval)} ${
-      Math.floor(interval) - 1 ? 'hours' : 'hour'
+      Math.floor(interval) - 1 ? 'hours ago' : 'hour ago'
     }`;
   }
   interval = seconds / 60;
   if (interval > 1) {
-    return `${Math.floor(interval)} min`;
+    return `${Math.floor(interval)} min ago`;
   }
-  return `${Math.floor(seconds)} sec`;
+  return `${Math.floor(seconds)} sec ago`;
+};
+
+export const getFirstLetter = (keyword: string) => {
+  return keyword.toUpperCase().slice(0, 1);
 };

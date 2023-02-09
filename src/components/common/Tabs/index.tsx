@@ -6,6 +6,8 @@ interface TabsProps {
   handleChange?: (value: string) => void;
   border?: boolean;
   className?: string;
+  activeClassName?: string;
+  optionClassName?: string;
 }
 
 export default function Tabs(props: TabsProps) {
@@ -15,6 +17,8 @@ export default function Tabs(props: TabsProps) {
     handleChange = () => {},
     border = false,
     className = '',
+    activeClassName = 'border-b-2 border-b-[#1a73e8] text-[#1a73e8]',
+    optionClassName = '',
   } = props;
   return (
     <>
@@ -26,10 +30,8 @@ export default function Tabs(props: TabsProps) {
         {options.map((x) => (
           <li
             className={`${
-              defaultKey === x.key
-                ? 'border-b-2 border-b-[#1a73e8] text-[#1a73e8]'
-                : ''
-            } inline-block cursor-pointer px-4 py-2`}
+              defaultKey === x.key ? activeClassName : ''
+            } inline-block cursor-pointer px-4 py-2 ${optionClassName}`}
             key={x.key}
             onClick={() => handleChange(x.key)}
           >

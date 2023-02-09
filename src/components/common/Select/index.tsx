@@ -6,6 +6,7 @@ interface ISelect {
   options: Record<'label' | 'value' | 'id' | string, string>[];
   handleChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   defaultValue?: string;
+  className?: string;
 }
 
 export default function Select(props: ISelect) {
@@ -14,10 +15,11 @@ export default function Select(props: ISelect) {
     options = [],
     handleChange = () => {},
     defaultValue = '',
+    className = '',
   } = props;
   return (
     <select
-      className="cursor-pointer rounded border border-primary-border px-2 py-1 text-base outline-none"
+      className={`cursor-pointer rounded border border-primary-border px-2 py-1 text-base outline-none ${className}`}
       name={name}
       id={name}
       defaultValue={defaultValue}

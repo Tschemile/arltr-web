@@ -51,7 +51,7 @@ function OptionAction(props: OptionProps) {
             <PlusIcon /> Add your story
           </Button>
           <div className="ml-1">
-            <Button background="secondary">
+            <Button className="bg-gray-400">
               <BulletList />
             </Button>
           </div>
@@ -138,7 +138,7 @@ function OptionAction(props: OptionProps) {
       )}
       <div className="group flex flex-col">
         <div className="ml-1">
-          <Button background="secondary">
+          <Button className="bg-gray-400">
             <EllipsisHorizon />
           </Button>
         </div>

@@ -4,7 +4,9 @@ import Card from '@/components/common/Card';
 import Tabs from '@/components/common/Tabs';
 import TabsContent from '@/components/common/Tabs/TabsContent';
 import { getListGroups } from '@/redux/actions';
+import type { IGetGroups } from '@/redux/actions/Interface';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { getFirstLetter } from '@/utils/func';
 
 interface IContentGroups {
   data: Record<string, string>[];
@@ -19,19 +21,25 @@ const ContentGroups = (props: IContentGroups) => {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-8 px-4 py-6">
+      <div className="block px-4 py-6 md:grid md:grid-cols-2 md:gap-8">
         {data.map((x) => (
-          <div key={x.id} className="col-span-1">
-            <div className="flex items-center">
+          <div key={x.id} className="mb-4 md:col-span-1">
+            <div className="flex w-full items-center">
               <div className="h-[60px] w-[60px]">
-                <img
-                  className="h-[60px] w-[60px] rounded-md object-fill"
-                  src={x.avatar}
-                  alt=""
-                />
+                {x.avatar ? (
+                  <img
+                    className="h-[60px] w-[60px] rounded-md object-fill"
+                    src={x.avatar}
+                    alt="avatar-groups"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center rounded-lg bg-pink-400 text-white">
+                    {getFirstLetter(x.name as string)}
+                  </div>
+                )}
               </div>
               <div className="ml-4 overflow-hidden text-base">
-                <h3 className="overflow-hidden text-ellipsis whitespace-nowrap">
+                <h3 className="max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap sm:max-w-[300px] md:max-w-[500px]">
                   <strong>{x.name}</strong>
                 </h3>
                 <p>
@@ -72,7 +80,9 @@ export default function Groups() {
   ];
 
   useEffect(() => {
-    dispatch(getListGroups({ mode: activeTab, user: id, type: 'USER' }));
+    dispatch(
+      getListGroups({ mode: activeTab, user: id, type: 'USER' } as IGetGroups)
+    );
   }, [activeTab]);
 
   return (
