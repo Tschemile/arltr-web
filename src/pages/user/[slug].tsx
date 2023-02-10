@@ -148,10 +148,18 @@ const User = () => {
     if (query.slug) {
       dispatch(getProfileUser(query.slug))
         .unwrap()
+        .then((res) => {
+          if (res.profile.id !== currentUserId && currentUserId)
+            dispatch(
+              getListRelation({
+                type: 'FRIEND',
+                status: ['REQUESTING', 'ACCEPTED'],
+              })
+            );
+        })
         .catch((err) => {
           if (err.code === 'ERR_BAD_REQUEST') router.back();
         });
-      dispatch(getListRelation({ type: 'FRIEND', status: 'REQUESTING' }));
     }
   }, [query.slug]);
 

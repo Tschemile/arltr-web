@@ -71,7 +71,6 @@ function OptionAction(props: OptionProps) {
                   changeRelation({
                     user: id,
                     type: 'FOLLOW',
-                    status: 'ACCEPTED',
                   })
                 );
                 setFollowing(false);
@@ -157,7 +156,6 @@ function OptionAction(props: OptionProps) {
                         changeRelation({
                           user: id,
                           type: 'BLOCKED',
-                          status: 'ACCEPTED',
                         })
                       )
                     }

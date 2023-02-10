@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import Headers from '@/components/Headers';
 import { getCurrentUser } from '@/redux/actions';
-import { useAppDispatch } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 type ITimelineProps = {
   meta: ReactNode;
@@ -16,20 +16,21 @@ const TimelineLayout = (props: ITimelineProps) => {
   const dispatch = useAppDispatch();
 
   const [isValid, setIsValid] = useState(false);
+  const { currentUser } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    dispatch(getCurrentUser()).then((res: any) => {
-      if (res.payload?.status !== 200) {
-        router.push('/login');
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && localStorage.getItem('token')) {
+    if (typeof window !== 'undefined' && localStorage.getItem('token'))
       setIsValid(true);
-    }
   }, []);
+
+  useEffect(() => {
+    if (Object.keys(currentUser).length === 0)
+      dispatch(getCurrentUser()).then((res: any) => {
+        if (res.payload?.status !== 200) {
+          router.push('/login');
+        }
+      });
+  }, [JSON.stringify(currentUser)]);
 
   if (isValid)
     return (

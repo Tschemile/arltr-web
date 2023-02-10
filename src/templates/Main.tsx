@@ -21,18 +21,20 @@ const Main = (props: IMainProps) => {
   const [isValid, setIsValid] = useState(false);
 
   const isShow = useAppSelector((state) => state.home.isShowNavbar);
-
-  useEffect(() => {
-    dispatch(getCurrentUser()).then((res: any) => {
-      if (res.payload?.status !== 200) {
-        router.push('/login');
-      }
-    });
-  }, []);
+  const { currentUser } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && localStorage.getItem('token'))
       setIsValid(true);
+  }, []);
+
+  useEffect(() => {
+    if (Object.keys(currentUser).length === 0)
+      dispatch(getCurrentUser()).then((res: any) => {
+        if (res.payload?.status !== 200) {
+          router.push('/login');
+        }
+      });
   }, []);
 
   if (isValid)

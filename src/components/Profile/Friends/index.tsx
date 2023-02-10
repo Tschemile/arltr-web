@@ -27,41 +27,53 @@ const Grid = (props: GridProps) => {
     <>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
         {(data as []).map((val: Record<string, string | undefined | any>) => {
+          const person =
+            val.status === 'REQUESTING' ||
+            (val.type === 'FRIEND' && val.status === 'ACCEPTED')
+              ? val.requester
+              : val.user || val;
           return (
             <Card
-              img={val.user?.avatar || val.avatar}
+              img={person?.avatar}
               key={val.id}
-              onClickImg={() =>
-                router.push(`/user/${val.domain || val.user?.domain}`)
-              }
+              onClickImg={() => router.push(`/user/${person?.domain}`)}
               imgClassName="cursor-pointer"
             >
               <div
-                onClick={() =>
-                  router.push(`/user/${val.domain || val.user?.domain}`)
-                }
+                onClick={() => router.push(`/user/${person?.domain}`)}
                 className="cursor-pointer"
               >
-                {val.user?.name || val.name}
+                {person?.name}
               </div>
 
               <p className="mb-1 overflow-hidden text-ellipsis text-sm">
-                {val.user?.about || val.about || 'siu 🥵'}
+                {person?.about || 'siu 🥵'}
               </p>
 
               <Button
                 type="button"
                 className="w-full justify-center bg-[#dbeafe] text-sm text-[#71a7f2]"
                 onSubmit={
+                  // eslint-disable-next-line no-nested-ternary
                   val.type === 'BLOCKED'
                     ? () =>
                         dispatch(
                           changeRelation({
-                            user: val.user.id,
+                            user: person.id,
                             type: 'BLOCKED',
                             status: 'REJECT',
                           })
                         )
+                    : val.type === 'FRIEND'
+                    ? () => {
+                        dispatch(
+                          changeRelation({
+                            user: person.id,
+                            type: 'FRIEND',
+                            status: 'ACCEPTED',
+                          })
+                        );
+                      }
                     : () => {}
                 }
               >
@@ -82,7 +94,9 @@ const Grid = (props: GridProps) => {
 
 export default function Friends(props: TabsProps) {
   const { isCurrentUser = false, profileUser = {} } = props;
-  const [active, setIsActive] = useState<IInRelation['type']>('FRIEND');
+  const [active, setIsActive] = useState<IInRelation['type'] | 'REQUESTER'>(
+    'FRIEND'
+  );
   const dispatch = useAppDispatch();
   const { listRelation: allRelation } = useAppSelector(
     (state) => state.relation
@@ -90,10 +104,15 @@ export default function Friends(props: TabsProps) {
 
   const listRelation = isCurrentUser
     ? allRelation
-    : profileUser[typeUser[active]];
+    : profileUser[typeUser[active === 'REQUESTER' ? 'FRIEND' : active]];
 
   useEffect(() => {
-    if (isCurrentUser) dispatch(getListRelation({ type: active }));
+    if (isCurrentUser && active !== 'FRIEND' && active !== 'REQUESTER')
+      dispatch(getListRelation({ type: active as IInRelation['type'] }));
+    else if (active === 'FRIEND')
+      dispatch(getListRelation({ type: 'FRIEND', status: ['ACCEPTED'] }));
+    else if (active === 'REQUESTER')
+      dispatch(getListRelation({ type: 'FRIEND', status: ['REQUESTING'] }));
   }, [active]);
 
   const options = [
@@ -113,6 +132,11 @@ export default function Friends(props: TabsProps) {
       content: <Grid data={listRelation} />,
     },
     {
+      key: 'REQUESTER',
+      title: `Requester (${profileUser.totalBlocks})`,
+      content: <Grid data={listRelation} />,
+    },
+    {
       key: 'BLOCKED',
       title: `Blocked (${profileUser.totalBlocks})`,
       content: <Grid data={listRelation} />,
@@ -122,7 +146,7 @@ export default function Friends(props: TabsProps) {
     <Card>
       <p>Friends</p>
       <Tabs
-        options={isCurrentUser ? options : options.slice(0, -1)}
+        options={isCurrentUser ? options : options.slice(0, -2)}
         defaultKey={active}
         handleChange={(key: any) => setIsActive(key)}
       />

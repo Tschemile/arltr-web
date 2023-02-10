@@ -91,8 +91,8 @@ export default function Headers() {
             content={[
               {
                 id: '1',
-                title: `${name}`,
-                handleClick: () => {
+                title: name,
+                handleCLick: () => {
                   push(`/user/${domain}`);
                 },
               },
