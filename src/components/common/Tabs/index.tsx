@@ -17,7 +17,7 @@ export default function Tabs(props: TabsProps) {
     handleChange = () => {},
     border = false,
     className = '',
-    activeClassName = 'border-b-2 border-b-[#1a73e8] text-[#1a73e8]',
+    activeClassName = 'border-b-2 border-b-pink-400 text-pink-400',
     optionClassName = '',
   } = props;
   return (

@@ -1,3 +1,5 @@
+import type { GROUPS, POSTS, REACTION, RELATIONSHIPS } from '@/constants/enum';
+
 export interface IUser {
   firstName: string;
   lastName: string;
@@ -16,51 +18,56 @@ export interface ILogin {
 export interface IRelation {
   user?: string;
   type: 'FOLLOW' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';
-  status: 'REQUESTING' | 'ACCEPTED' | 'REJECT';
+  status: keyof typeof RELATIONSHIPS.STATUS;
 }
 
 export interface IInRelation {
-  status?: 'REQUESTING' | 'ACCEPTED' | 'REJECT';
+  status?: keyof typeof RELATIONSHIPS.STATUS;
   type: 'FOLLOWING' | 'FOLLOWER' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';
 }
 
-export interface ICreatePost {
-  content: string;
-  type: 'STORY' | 'POST' | 'REEL';
-  images?: Record<string, string>[] | (string | undefined)[];
-  mode?: 'PUBLIC' | 'PRIVATE' | 'FRIEND';
-}
-
-export interface IReaction {
-  post: string;
-  comment?: string;
-  type: 'LIKE' | 'HEART' | 'LAUGH' | 'CRY' | 'WOW' | 'ANGRY' | string;
-}
-
-export interface IGetGroups {
-  limit?: number;
-  type?: 'COMMUNICATE' | 'USER';
-  search?: string;
-  mode?: 'HIDDEN' | 'PUBLIC' | 'PRIVATE';
-  user: string;
-}
-
-export interface INewGroups {
-  name: string;
-  description?: string;
-  avatar?: string;
-  cover?: string;
-  mode: 'PUBLIC' | 'PRIVATE' | 'FRIEND';
-}
-
+// POST
 export interface IGetListPosts {
   limit?: number;
-  type?: 'POST' | 'REEL' | 'STORY' | string;
-  queryType?: 'USER' | 'COMMUNITY' | 'GROUP' | string;
+  type?: keyof typeof POSTS.TYPE;
+  queryType?: keyof typeof POSTS.QUERYTYPE;
   user?: string;
 }
 
 export interface IEditComment {
   image?: string;
   content: string;
+}
+
+export interface ICreatePost {
+  content: string;
+  type: keyof typeof POSTS.TYPE;
+  images?: string[];
+  mode?: keyof typeof POSTS.MODE;
+  tags: string[];
+}
+
+export interface IReaction {
+  post: string;
+  comment?: string;
+  type: keyof typeof REACTION.TYPE;
+}
+
+// GROUPSs
+
+export interface IGetGroups {
+  limit?: number;
+  type?: GROUPS.TYPE;
+  search?: string;
+  mode?: keyof typeof GROUPS.MODE;
+  user: string;
+}
+
+export interface IGroups {
+  id?: string;
+  name?: string;
+  description?: string;
+  avatar?: string;
+  cover?: string;
+  mode?: keyof typeof GROUPS.MODE;
 }

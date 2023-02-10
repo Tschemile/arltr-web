@@ -12,19 +12,22 @@ import Select from '@/components/common/Select';
 import Tabs from '@/components/common/Tabs';
 import { Meta } from '@/layouts/Meta';
 import { createNewGroups } from '@/redux/actions';
-import type { INewGroups } from '@/redux/actions/Interface';
-import { useAppDispatch } from '@/redux/hooks';
+import type { IGroups } from '@/redux/actions/Interface';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Main } from '@/templates/Main';
 
 const Groups = () => {
   const dispatch = useAppDispatch();
   const [active, setActive] = useState('suggestedGroups');
   const [openModal, setOpenModal] = useState(false);
-  const [newGroups, setNewGroups] = useState<INewGroups>({
+  const [newGroups, setNewGroups] = useState<IGroups>({
     name: '',
     description: '',
     mode: 'PUBLIC',
   });
+
+  const isUpdated = useAppSelector((state) => state.groups.isUpdated);
+
   const options = [
     {
       key: 'suggestedGroups',
@@ -50,7 +53,7 @@ const Groups = () => {
       label: 'Public',
     },
     { id: '2', value: 'PRIVATE', label: 'Private' },
-    { id: '3', value: 'FRIEND', label: 'Friend' },
+    { id: '3', value: 'HIDDEN', label: 'Hidden' },
   ];
 
   const handleChange = (
@@ -62,11 +65,11 @@ const Groups = () => {
   const getTextByMode = () => {
     switch (newGroups.mode) {
       case 'PUBLIC':
-        return <p>Everyone can see and join this group.</p>;
-      case 'FRIEND':
-        return <p>Only your friend can see and join this group.</p>;
+        return <p>Everyone can see all posts of this group.</p>;
       case 'PRIVATE':
-        return <p>Just member of group can see this group.</p>;
+        return <p>Just member of group can see all posts of this group.</p>;
+      case 'HIDDEN':
+        return <p>Only you can see all posts of this group.</p>;
       default:
         return '';
     }
@@ -118,6 +121,11 @@ const Groups = () => {
       dispatch(createNewGroups(newGroups)).then((res: any) => {
         if (res.payload.status === 201) {
           toast.success('Your group has created!');
+          setNewGroups({
+            name: '',
+            description: '',
+            mode: 'PUBLIC',
+          });
           setOpenModal(false);
         }
       });
@@ -267,6 +275,7 @@ const Groups = () => {
         content={getContentCreateGroups()}
         onClose={onClose}
         onSubmit={onSubmit}
+        loading={isUpdated}
       />
     </Main>
   );

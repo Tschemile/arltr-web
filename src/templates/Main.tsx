@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 type IMainProps = {
   meta: ReactNode;
   children: ReactNode;
+  className?: string;
 };
 
 const Main = (props: IMainProps) => {
@@ -51,7 +52,7 @@ const Main = (props: IMainProps) => {
           <div
             className={`${
               isShow ? '-z-10' : ''
-            } min-h-[95vh] py-2 px-4 xl:pl-[320px]`}
+            } min-h-[95vh] py-2 px-4 xl:pl-[320px] ${props.className}`}
           >
             {props.children}
           </div>

@@ -7,9 +7,9 @@ import type {
   IEditComment,
   IGetGroups,
   IGetListPosts,
+  IGroups,
   IInRelation,
   ILogin,
-  INewGroups,
   IReaction,
   IRelation,
   IUser,
@@ -205,8 +205,26 @@ export const getListGroups = createAsyncThunk(
 
 export const createNewGroups = createAsyncThunk(
   'groups/createNewGroups',
-  async (payload: INewGroups) => {
+  async (payload: IGroups) => {
     const res = await api.post('/group', { ...payload });
+    return res;
+  }
+);
+
+export const getGroupsById = createAsyncThunk(
+  'groups/getGroupsById',
+  async (id: string) => {
+    const res = await api.get(`/group/${id}`);
+    return res.data;
+  }
+);
+
+export const editGroup = createAsyncThunk(
+  'groups/editGroup',
+  async (arg: Record<'id' | 'payload', IGroups | string>) => {
+    const res = await api.patch(`/group/${arg.id}`, {
+      ...(arg.payload as IGroups),
+    });
     return res;
   }
 );

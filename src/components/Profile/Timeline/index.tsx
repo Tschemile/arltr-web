@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import CardPost from '@/components/CardPost';
 import ActionButton from '@/components/common/ActionButton';
 import Avatar from '@/components/common/Avatar';
+import Block from '@/components/common/Block';
 import Divider from '@/components/common/Divider';
 import Modal from '@/components/common/Modal';
 import Select from '@/components/common/Select';
@@ -34,7 +35,6 @@ import type { ICreatePost } from '@/redux/actions/Interface';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getFirstLetter } from '@/utils/func';
 
-import Block from './components/Block';
 import InfoContent from './components/InfoContent';
 
 interface ITimeline {
@@ -103,6 +103,7 @@ export default function Timeline(props: ITimeline) {
             type: 'POST',
             content,
             images: fileDataURL,
+            tags: [],
             mode,
           },
         })
@@ -427,7 +428,11 @@ export default function Timeline(props: ITimeline) {
             >
               <div className="grid grid-cols-3 gap-4">
                 {(groups as []).map((x: Record<string, string>) => (
-                  <div key={x.id} className="hover:cursor-pointer">
+                  <div
+                    key={x.id}
+                    className="hover:cursor-pointer"
+                    onClick={() => router.push(`/groups/${x.id}`)}
+                  >
                     <div className="col-span-1 h-[100px] w-full">
                       {x.avatar ? (
                         <img
