@@ -1,3 +1,4 @@
+import router from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import Card from '@/components/common/Card';
@@ -25,7 +26,10 @@ const ContentGroups = (props: IContentGroups) => {
         {data.map((x) => (
           <div key={x.id} className="mb-4 md:col-span-1">
             <div className="flex w-full items-center">
-              <div className="h-[60px] w-[60px]">
+              <div
+                className="h-[60px] w-[60px] cursor-pointer"
+                onClick={() => router.push(`/groups/${x.id}`)}
+              >
                 {x.avatar ? (
                   <img
                     className="h-[60px] w-[60px] rounded-md object-fill"
@@ -39,7 +43,10 @@ const ContentGroups = (props: IContentGroups) => {
                 )}
               </div>
               <div className="ml-4 overflow-hidden text-base">
-                <h3 className="max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap sm:max-w-[300px] md:max-w-[500px]">
+                <h3
+                  className="max-w-[150px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap sm:max-w-[300px] md:max-w-[500px]"
+                  onClick={() => router.push(`/groups/${x.id}`)}
+                >
                   <strong>{x.name}</strong>
                 </h3>
                 <p>

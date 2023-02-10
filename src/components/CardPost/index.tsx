@@ -21,6 +21,7 @@ import {
   makeReaction,
   uploadFile,
 } from '@/redux/actions';
+import type { IReaction } from '@/redux/actions/Interface';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { timeSince } from '@/utils/func';
 
@@ -178,7 +179,7 @@ export default function CardPost(props: ICardPost) {
 
   const handleLikePost = (type: string) => {
     setEmoji(type === emoji ? '' : type);
-    dispatch(makeReaction({ post: id, type })).then((res: any) => {
+    dispatch(makeReaction({ post: id, type } as IReaction)).then((res: any) => {
       if (res.payload.status === 200) {
         dispatch(getListReaction({ post: id })).then((result: any) => {
           const { total: totalData = [], users = [] } = result.payload;
