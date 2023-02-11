@@ -18,11 +18,11 @@ export interface ILogin {
 export interface IRelation {
   user?: string;
   type: 'FOLLOW' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';
-  status: keyof typeof RELATIONSHIPS.STATUS;
+  status?: keyof typeof RELATIONSHIPS.STATUS;
 }
 
 export interface IInRelation {
-  status?: keyof typeof RELATIONSHIPS.STATUS;
+  status?: (keyof typeof RELATIONSHIPS.STATUS)[];
   type: 'FOLLOWING' | 'FOLLOWER' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';
 }
 
