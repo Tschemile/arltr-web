@@ -1,7 +1,7 @@
 import Image from 'next/dist/client/image';
 import Link from 'next/dist/client/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React from 'react';
 
 import Logo from '@/assets/Logo.svg';
 import { onShowNavbar } from '@/redux/features/home/homeSlice';
@@ -22,7 +22,6 @@ import Search from '../Icons/Search';
 export default function Headers() {
   const dispatch = useAppDispatch();
   const { pathname, push } = useRouter();
-  const [open, setOpen] = useState(false);
 
   const {
     avatar = '',
@@ -75,36 +74,32 @@ export default function Headers() {
             </Tooltip>
           </IconButton>
           <Dropdown
-            open={open}
             content={[
               {
                 id: '1',
                 title: name,
-                handleCLick: () => {
+                handleClick: () => {
                   push(`/user/${domain}`);
                 },
               },
               {
                 id: '2',
                 title: 'Log out',
-                handleCLick: () => {
+                handleClick: () => {
                   localStorage.removeItem('token');
                   push('/login');
                 },
               },
             ]}
           >
-            <div
-              className="h-10 w-10 cursor-pointer"
-              onClick={() => setOpen(!open)}
-            >
+            <button className="h-10 w-10">
               <Avatar
                 src={avatar}
                 alt="avatar"
                 className="m-auto h-full w-full rounded-full"
                 gender={gender}
               />
-            </div>
+            </button>
           </Dropdown>
         </div>
       </div>

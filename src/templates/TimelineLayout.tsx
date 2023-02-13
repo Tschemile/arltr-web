@@ -37,7 +37,13 @@ const TimelineLayout = (props: ITimelineProps) => {
       <div className="h-full w-full overflow-y-auto text-gray-700 antialiased">
         {props.meta}
         <Headers />
-        <div className="bg-main mt-[60px] grid h-full w-full text-xl">
+        <div
+          className="bg-main mt-[60px] grid h-full min-h-fit w-full bg-repeat-round text-xl"
+          style={{
+            backgroundImage:
+              'url(https://www.kaartje2go.nl/wenskaarten/unicorn-kaart/img/unicorn-kaart.jpg)',
+          }}
+        >
           {props.children}
         </div>
       </div>

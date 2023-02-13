@@ -33,7 +33,6 @@ export default function CommentBox(props: IComment) {
   } = user as Record<string, string>;
   const currentUser = useAppSelector((state) => state.auth.currentUser);
 
-  const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [contentCmt, setContentCmt] = useState('');
   const [image, setImage] = useState('');
@@ -58,7 +57,6 @@ export default function CommentBox(props: IComment) {
         if (res.payload.status === 200) {
           setContentCmt(res.payload.data.comment.content);
           setIsEdit(false);
-          setOpen(false);
         }
       }
     );
@@ -99,7 +97,6 @@ export default function CommentBox(props: IComment) {
           className="cursor-pointer pr-4 text-right text-xs text-blue-300"
           onClick={() => {
             setIsEdit(false);
-            setOpen(false);
             setContentCmt(contentProps);
           }}
         >
@@ -137,21 +134,20 @@ export default function CommentBox(props: IComment) {
       {currentUser.id === authorId && (
         <div className="">
           <Dropdown
-            open={open}
             content={[
               {
                 id: '1',
                 title: 'Edit',
-                handleCLick: () => setIsEdit(true),
+                handleClick: () => setIsEdit(true),
               },
               {
                 id: '2',
                 title: 'Delete',
-                handleCLick: () => handleDeleteComment(),
+                handleClick: () => handleDeleteComment(),
               },
             ]}
           >
-            <button onClick={() => setOpen(!open)}>
+            <button>
               <EllipsisHorizon />
             </button>
           </Dropdown>

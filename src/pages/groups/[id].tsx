@@ -55,7 +55,6 @@ export default function DetailGroup() {
   const [active, setActive] = useState('1');
   const [coverImg, setCoverImg] = useState('');
   const [avatarImg, setAvatarImg] = useState('');
-  const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [newGroups, setNewGroups] = useState<IGroups>({
     name: '',
@@ -190,7 +189,6 @@ export default function DetailGroup() {
 
   const onClose = () => {
     setOpenModal(false);
-    setOpen(false);
     setIsDelete(false);
   };
 
@@ -340,7 +338,6 @@ export default function DetailGroup() {
                   <PlusIcon /> Invite
                 </Button>
                 <Dropdown
-                  open={open}
                   content={[
                     {
                       id: '1',
@@ -350,7 +347,7 @@ export default function DetailGroup() {
                           <span>Edit group</span>
                         </div>
                       ),
-                      handleCLick: () => setOpenModal(true),
+                      handleClick: () => setOpenModal(true),
                     },
                     {
                       id: '2',
@@ -360,17 +357,14 @@ export default function DetailGroup() {
                           <span>Delete this group</span>
                         </div>
                       ),
-                      handleCLick: () => {
+                      handleClick: () => {
                         setIsDelete(true);
                         setOpenModal(true);
                       },
                     },
                   ]}
                 >
-                  <Button
-                    className="ml-2 bg-gray-600"
-                    onSubmit={() => setOpen(!open)}
-                  >
+                  <Button className="ml-2 bg-gray-600">
                     <BulletList />
                   </Button>
                 </Dropdown>

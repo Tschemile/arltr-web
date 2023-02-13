@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import Button from '@/components/common/Button';
+import Dropdown from '@/components/common/Dropdown';
 import BulletList from '@/components/Icons/BulletList';
+import Earth from '@/components/Icons/Earth';
 import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
 import Heart from '@/components/Icons/Heart';
 import SolidHeart from '@/components/Icons/Heart/solid';
@@ -16,6 +18,7 @@ interface OptionProps {
   id: string;
   isCurrentUser: boolean;
   isRequest: boolean;
+  isRequested: boolean;
   isFriend: Record<string, string>;
 }
 
@@ -27,21 +30,114 @@ function OptionAction(props: OptionProps) {
     isCurrentUser = false,
     isFriend = {},
     isRequest = false,
+    isRequested = false,
   } = props;
 
   const checkFriend = Object.keys(isFriend).length === 0;
   const checkFollowing = Object.keys(isFollowing).length === 0;
   const [friend, setFriend] = useState(!isRequest && checkFriend);
+  const [requested, setRequested] = useState(isRequested && !checkFriend);
   const [following, setFollowing] = useState(checkFollowing);
+
+  const action = () => {
+    if (requested)
+      return (
+        <Dropdown
+          content={[
+            {
+              id: '1',
+              title: 'Accept',
+              handleClick: () => {
+                dispatch(
+                  changeRelation({
+                    user: id,
+                    type: 'FRIEND',
+                    status: 'ACCEPTED',
+                  })
+                )
+                  .unwrap()
+                  .then(() => {
+                    setFriend(false);
+                    setRequested(false);
+                  });
+              },
+            },
+            {
+              id: '2',
+              title: 'Reject',
+              handleClick: () => {
+                dispatch(
+                  changeRelation({
+                    user: id,
+                    type: 'FRIEND',
+                    status: 'REJECT',
+                  })
+                )
+                  .unwrap()
+                  .then(() => {
+                    setFriend(true);
+                    setRequested(false);
+                  });
+              },
+            },
+          ]}
+        >
+          <Button>
+            <Earth className="fill-sky-600" />
+            Respond
+          </Button>
+        </Dropdown>
+      );
+    return friend ? (
+      <Button
+        className=" bg-gray-600"
+        onSubmit={() => {
+          dispatch(
+            changeRelation({
+              user: id,
+              type: 'FRIEND',
+              status: 'REQUESTING',
+            })
+          )
+            .unwrap()
+            .then(() => {
+              setFriend(false);
+            });
+        }}
+      >
+        <PlusIcon />
+        Add friend
+      </Button>
+    ) : (
+      <Button
+        className=" bg-gray-600"
+        onSubmit={() => {
+          dispatch(
+            changeRelation({
+              user: id,
+              type: 'FRIEND',
+              status: 'REJECT',
+            })
+          );
+          setFriend(true);
+        }}
+      >
+        <Lock />
+        {isRequest || !friend ? 'Cancel request' : 'Unfriend'}
+      </Button>
+    );
+  };
 
   useEffect(() => {
     if (!checkFollowing) setFollowing(false);
     if (isRequest && checkFriend) setFriend(false);
+    if (isRequested && !checkFriend) setRequested(true);
     return () => {
       setFollowing(true);
       setFriend(true);
+      setRequested(true);
     };
-  }, [checkFollowing, checkFriend, isRequest]);
+  }, [checkFollowing, checkFriend, isRequest, isRequested]);
 
   return (
     <div className="flex">
@@ -57,7 +153,7 @@ function OptionAction(props: OptionProps) {
           </div>
         </div>
       ) : (
-        <div className="flex items-center text-sm">
+        <div className="flex items-center space-x-1 text-sm">
           <Button className="bg-gray-600">
             <Message />
             Chat
@@ -65,7 +161,6 @@ function OptionAction(props: OptionProps) {
 
           {following ? (
             <Button
-              className="ml-1"
               onSubmit={() => {
                 dispatch(
                   changeRelation({
@@ -81,7 +176,7 @@ function OptionAction(props: OptionProps) {
             </Button>
           ) : (
             <Button
-              className="ml-1 text-pink-200"
+              className="text-pink-200"
               onSubmit={() => {
                 dispatch(
                   changeRelation({
@@ -98,41 +193,7 @@ function OptionAction(props: OptionProps) {
             </Button>
           )}
 
-          {friend ? (
-            <Button
-              className="ml-1 bg-gray-600"
-              onSubmit={() => {
-                dispatch(
-                  changeRelation({
-                    user: id,
-                    type: 'FRIEND',
-                    status: 'REQUESTING',
-                  })
-                );
-                setFriend(false);
-              }}
-            >
-              <PlusIcon />
-              Add friend
-            </Button>
-          ) : (
-            <Button
-              className="ml-1 bg-gray-600"
-              onSubmit={() => {
-                dispatch(
-                  changeRelation({
-                    user: id,
-                    type: 'FRIEND',
-                    status: 'REJECT',
-                  })
-                );
-                setFriend(true);
-              }}
-            >
-              <Lock />
-              {isRequest || !friend ? 'Cancel request' : 'Unfriend'}
-            </Button>
-          )}
+          {action()}
         </div>
       )}
       <div className="group flex flex-col">

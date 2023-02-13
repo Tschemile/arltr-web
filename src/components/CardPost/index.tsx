@@ -95,7 +95,6 @@ export default function CardPost(props: ICardPost) {
   const [totalComments, setTotalComments] = useState(
     Number(totalCommentsProps)
   );
-  const [open, setOpen] = useState(false);
   const [limit, setLimit] = useState(2);
   const [isLiked, setIsLiked] = useState(false);
   const [totalReacts, setTotalReacts] = useState(0);
@@ -158,7 +157,6 @@ export default function CardPost(props: ICardPost) {
   };
 
   const handleEditPost = () => {
-    setOpen(false);
     setOpenModal(true);
     setIsEdit(true);
     setContent(content);
@@ -170,7 +168,6 @@ export default function CardPost(props: ICardPost) {
   const handleDeletePost = () => {
     dispatch(deletePost(id)).then((res: any) => {
       if (res.payload.status === 200) {
-        setOpen(false);
         setListPosts(listPosts.filter((x) => x.id !== id));
         toast.success('Delete post success');
       }
@@ -413,31 +410,30 @@ export default function CardPost(props: ICardPost) {
           </div>
         </div>
         <Dropdown
-          open={open}
           content={
             isPersonPage
               ? [
                   {
                     id: '1',
                     title: 'Edit Post',
-                    handleCLick: () => handleEditPost(),
+                    handleClick: () => handleEditPost(),
                   },
                   {
                     id: '2',
                     title: 'Delete Post',
-                    handleCLick: () => handleDeletePost(),
+                    handleClick: () => handleDeletePost(),
                   },
                 ]
               : [
                   {
                     id: '1',
                     title: 'Report this post',
-                    handleCLick: () => console.log('haha'),
+                    handleClick: () => console.log('haha'),
                   },
                 ]
           }
         >
-          <button onClick={() => setOpen(!open)}>
+          <button>
             <EllipsisHorizon />
           </button>
         </Dropdown>

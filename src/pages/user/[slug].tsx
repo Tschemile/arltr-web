@@ -56,10 +56,12 @@ const User = () => {
   const isFollowing = followingUser?.find((x: any) => x.domain === domain);
   const isFriend = friendUser?.find((x: any) => x.domain === domain);
   const listRequesting = listRelation?.filter(
-    (x: any) => x.requester.id === currentUserId
+    (x: any) => x.user.id === currentUserId || x.requester.id === currentUserId
   );
   const currentIsRequest =
     listRequesting?.find((x: any) => x.user.domain === domain) || {};
+  const currentIsRequested =
+    listRequesting?.find((x: any) => x.requester.domain === domain) || {};
 
   const [active, setIsActive] = useState('1');
   const [isEditIntro, setIsEditIntro] = useState(false);
@@ -145,7 +147,7 @@ const User = () => {
   };
 
   useEffect(() => {
-    if (query.slug) {
+    if (query.slug && currentUserId) {
       dispatch(getProfileUser(query.slug))
         .unwrap()
         .then((res) => {
@@ -161,7 +163,7 @@ const User = () => {
           if (err.code === 'ERR_BAD_REQUEST') router.back();
         });
     }
-  }, [query.slug]);
+  }, [query.slug, currentUserId]);
 
   useEffect(() => {
     if (coverImgProps) setCoverImg(coverImgProps);
@@ -277,6 +279,7 @@ const User = () => {
                 id={id}
                 isFriend={isFriend}
                 isRequest={Object.keys(currentIsRequest).length !== 0}
+                isRequested={Object.keys(currentIsRequested).length !== 0}
               />
             </div>
           </div>
