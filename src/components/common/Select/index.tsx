@@ -22,7 +22,7 @@ export default function Select(props: ISelect) {
       className={`cursor-pointer rounded border border-primary-border px-2 py-1 text-base outline-none ${className}`}
       name={name}
       id={name}
-      defaultValue={defaultValue}
+      value={defaultValue}
       onChange={handleChange}
     >
       {options.length &&

@@ -46,3 +46,21 @@ export namespace RELATIONSHIPS {
     REJECT = 'REJECT',
   }
 }
+
+export namespace MEMBERS {
+  export enum TYPE {
+    GROUP = 'GROUP',
+    USER = 'USER',
+  }
+  export enum STATUS {
+    REQUESTING = 'REQUESTING',
+    INVITING = 'INVITING',
+    ACTIVE = 'ACTIVE',
+    BANNED = 'BANNED',
+  }
+  export enum ROLE {
+    ADMIN = 'ADMIN',
+    MEMBER = 'MEMBER',
+    MODS = 'MODS',
+  }
+}
