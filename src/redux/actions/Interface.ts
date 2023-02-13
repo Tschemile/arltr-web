@@ -1,4 +1,10 @@
-import type { GROUPS, POSTS, REACTION, RELATIONSHIPS } from '@/constants/enum';
+import type {
+  GROUPS,
+  MEMBERS,
+  POSTS,
+  REACTION,
+  RELATIONSHIPS,
+} from '@/constants/enum';
 
 export interface IUser {
   firstName: string;
@@ -13,6 +19,24 @@ export interface IUser {
 export interface ILogin {
   usernameOrEmail: string;
   password: string;
+}
+
+export interface IInfoUser {
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string;
+  name?: string;
+  domain?: string;
+  birth?: string;
+  gender?: string;
+  avatar?: string;
+  cover?: string;
+  about?: string;
+  socialLinks?: string[];
+  hobbies?: string[];
+  status?: string;
+  role?: string;
 }
 
 export interface IRelation {
@@ -32,6 +56,7 @@ export interface IGetListPosts {
   type?: keyof typeof POSTS.TYPE;
   queryType?: keyof typeof POSTS.QUERYTYPE;
   user?: string;
+  group?: string;
 }
 
 export interface IEditComment {
@@ -70,4 +95,13 @@ export interface IGroups {
   avatar?: string;
   cover?: string;
   mode?: keyof typeof GROUPS.MODE;
+}
+
+// Members
+
+export interface IMembers {
+  user?: string;
+  group?: string;
+  status: string[];
+  type: keyof typeof MEMBERS.TYPE;
 }

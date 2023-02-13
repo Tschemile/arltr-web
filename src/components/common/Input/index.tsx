@@ -10,6 +10,7 @@ interface InputProps {
   name?: string;
   className?: string;
   value?: string;
+  inpulClassName?: string;
 }
 
 export default function Input(props: InputProps) {
@@ -22,6 +23,7 @@ export default function Input(props: InputProps) {
     name = '',
     className = '',
     value = '',
+    inpulClassName = '',
   } = props;
 
   const [defaultValue, setDefaultValue] = useState('');
@@ -37,7 +39,7 @@ export default function Input(props: InputProps) {
       <input
         className={`h-[40px] py-2 pr-4 ${
           icons ? 'pl-10' : 'pl-4'
-        } bg-main rounded-lg outline-none placeholder:text-[#929292]`}
+        } bg-main rounded-lg outline-none placeholder:text-[#929292] ${inpulClassName}`}
         placeholder={placeholder}
         style={{ width }}
         type={type}

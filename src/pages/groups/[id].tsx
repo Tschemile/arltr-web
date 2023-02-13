@@ -1,8 +1,10 @@
-import { useRouter } from 'next/router';
+import { FastAverageColor } from 'fast-average-color';
+import router, { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
+import Avatar from '@/components/common/Avatar';
 import Button from '@/components/common/Button';
 import Divider from '@/components/common/Divider';
 import Dropdown from '@/components/common/Dropdown';
@@ -11,7 +13,9 @@ import Modal from '@/components/common/Modal';
 import Select from '@/components/common/Select';
 import Tabs from '@/components/common/Tabs';
 import TabsContent from '@/components/common/Tabs/TabsContent';
+import Tooltip from '@/components/common/Tooltip';
 import UploadButton from '@/components/common/UploadButton';
+import Members from '@/components/Groups/Members';
 import NewFeeds from '@/components/Groups/NewFeeds';
 import BulletList from '@/components/Icons/BulletList';
 import Camera from '@/components/Icons/Camera';
@@ -19,7 +23,13 @@ import PencilSquare from '@/components/Icons/PenciSquare';
 import PlusIcon from '@/components/Icons/PlusIcon';
 import Trash from '@/components/Icons/Trash';
 import { Meta } from '@/layouts/Meta';
-import { editGroup, getGroupsById, uploadFile } from '@/redux/actions';
+import {
+  deleteGroup,
+  editGroup,
+  getGroupsById,
+  getListMembers,
+  uploadFile,
+} from '@/redux/actions';
 import type { IGroups } from '@/redux/actions/Interface';
 import { hasEdited } from '@/redux/features/groups';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -29,7 +39,10 @@ import { getFirstLetter } from '@/utils/func';
 export default function DetailGroup() {
   const dispatch = useAppDispatch();
   const { query } = useRouter();
+
   const currentGroup = useAppSelector((state) => state.groups.currentGroup);
+  const isUpdated = useAppSelector((state) => state.groups.isUpdated);
+  const listMembers = useAppSelector((state) => state.members.listMembers);
   const {
     name = '',
     cover: coverImgProps = '',
@@ -49,6 +62,8 @@ export default function DetailGroup() {
     description: '',
     mode: 'PUBLIC',
   });
+  const [isDelete, setIsDelete] = useState(false);
+  const [backGround, setBackGround] = useState('');
 
   const options = [
     {
@@ -59,7 +74,7 @@ export default function DetailGroup() {
     {
       key: '2',
       title: 'Members',
-      content: '',
+      content: <Members />,
     },
     {
       key: '3',
@@ -176,21 +191,40 @@ export default function DetailGroup() {
   const onClose = () => {
     setOpenModal(false);
     setOpen(false);
+    setIsDelete(false);
   };
 
   const onSubmit = () => {
-    dispatch(editGroup({ id, payload: newGroups })).then((res: any) => {
-      const { payload: { data: { group = {} } = {}, status = 200 } = {} } = res;
-      if (status === 200) {
-        onClose();
-        dispatch(hasEdited(group));
-      }
-    });
+    if (isDelete) {
+      dispatch(deleteGroup(id)).then((res: any) => {
+        if (res.payload.status === 200) {
+          onClose();
+          toast.success('Delete group success!');
+          router.push('/groups');
+        }
+      });
+    } else {
+      dispatch(editGroup({ id, payload: newGroups })).then((res: any) => {
+        const { payload: { data: { group = {} } = {}, status = 200 } = {} } =
+          res;
+        if (status === 200) {
+          onClose();
+          dispatch(hasEdited(group));
+        }
+      });
+    }
   };
 
   useEffect(() => {
     if (query.id) {
       dispatch(getGroupsById(query.id as string));
+      dispatch(
+        getListMembers({
+          status: ['ACTIVE'],
+          type: 'GROUP',
+          group: query.id as string,
+        })
+      );
     }
   }, [query.id]);
 
@@ -200,6 +234,12 @@ export default function DetailGroup() {
     } else {
       setCoverImg('');
     }
+    new FastAverageColor()
+      .getColorAsync(coverImgProps)
+      .then((color) => setBackGround(color.hex))
+      .catch((e) => {
+        console.log(e);
+      });
   }, [coverImgProps]);
 
   useEffect(() => {
@@ -221,7 +261,12 @@ export default function DetailGroup() {
         <Meta title={`${newGroups.name}`} description={`${newGroups.name}`} />
       }
     >
-      <div className="w-full bg-gradient-to-t from-white to-[#4d80a4]">
+      <div
+        className={`w-full`}
+        style={{
+          backgroundImage: `linear-gradient(to top, white , ${backGround})`,
+        }}
+      >
         <div className="lg:mx-[5%] xl:mx-[10%]">
           <div className="relative max-h-full min-h-[285px]">
             <div className="absolute bottom-3 left-3 z-10 h-[120px] w-[120px] ">
@@ -251,6 +296,7 @@ export default function DetailGroup() {
                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMiUvtkIL7TNaP5Md966DKyLLX8Qv-pFOpaQIPZiS-gZpnDgPa19fGVougiaSfftwtCcE&usqp=CAU'
               }
               alt="cover-img"
+              id="cover"
               className="absolute top-1/2 right-0 bottom-0 left-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
             />
             <div className="absolute bottom-2 right-3 z-[3]">
@@ -266,11 +312,30 @@ export default function DetailGroup() {
           </div>
 
           <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
-              <h1>
-                <strong>{newGroups.name}</strong>
-              </h1>
-              <div className="flex items-center">
+            <h1 className="text-center sm:text-left">
+              <strong>{newGroups.name}</strong>
+            </h1>
+            <div className="sm:flex sm:items-center sm:justify-between">
+              <div className="mt-2 flex items-center justify-center sm:justify-start">
+                {listMembers.slice(0, 5).map((x: any, index) => (
+                  <Tooltip key={x.id} description={x.user.name} direction="top">
+                    <div
+                      className={`h-12 w-12 cursor-pointer ${
+                        index === 0 ? 'z-[1]' : '-ml-3'
+                      }`}
+                      onClick={() => router.push(`/user/${x.user.domain}`)}
+                    >
+                      <Avatar
+                        src={x.user.avatar}
+                        gender={x.user.gender}
+                        alt="avatar-member"
+                        className="h-full w-full border-2"
+                      />
+                    </div>
+                  </Tooltip>
+                ))}
+              </div>
+              <div className="mt-2 flex items-center justify-center sm:mt-0">
                 <Button className="bg-pink-400 text-base">
                   <PlusIcon /> Invite
                 </Button>
@@ -295,7 +360,10 @@ export default function DetailGroup() {
                           <span>Delete this group</span>
                         </div>
                       ),
-                      // handleCLick: () => handleDeletePost(),
+                      handleCLick: () => {
+                        setIsDelete(true);
+                        setOpenModal(true);
+                      },
                     },
                   ]}
                 >
@@ -308,6 +376,7 @@ export default function DetailGroup() {
                 </Dropdown>
               </div>
             </div>
+
             <Divider />
             <Tabs
               options={options}
@@ -324,13 +393,21 @@ export default function DetailGroup() {
         active={active}
       />
       <Modal
-        title="Edit this group"
-        textSubmitButton="Edit now"
+        title={isDelete ? 'Delete this group' : 'Edit this group'}
+        textSubmitButton={isDelete ? 'Delete now' : 'Edit now'}
         showModal={openModal}
-        content={getContentCreateGroups()}
+        content={
+          isDelete ? (
+            <p className="text-center">
+              Are you sure you want to delete this group?
+            </p>
+          ) : (
+            getContentCreateGroups()
+          )
+        }
         onClose={onClose}
         onSubmit={onSubmit}
-        // loading={isUpdated}
+        loading={isUpdated}
       />
     </Main>
   );

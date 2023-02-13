@@ -17,9 +17,9 @@ import AuthLayout from '@/templates/AuthLayout';
 
 export default function Register() {
   const dispatch = useAppDispatch();
-  const [dd, setDD] = useState('01');
-  const [mm, setMM] = useState('01');
-  const [yyyy, setYYYY] = useState('2000');
+  // const [dd, setDD] = useState('01');
+  // const [mm, setMM] = useState('01');
+  // const [yyyy, setYYYY] = useState('2000');
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',
@@ -29,6 +29,11 @@ export default function Register() {
     gender: '',
     birth: '',
   });
+  const [birth, setBirth] = useState({
+    dd: '01',
+    mm: '01',
+    yyyy: '1998',
+  });
   const isLoading = useAppSelector(
     (state) => state.auth.isLoading.loadingRegister
   );
@@ -37,10 +42,14 @@ export default function Register() {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
+  const handleChangeBirth = (e: ChangeEvent<HTMLSelectElement>): void => {
+    setBirth({ ...birth, [e.target.name]: e.target.value });
+  };
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     Object.assign(user, {
-      birth: dd && mm && yyyy ? `${yyyy}-${mm}-${dd}` : '',
+      birth: birth ? `${birth.yyyy}-${birth.mm}-${birth.dd}` : '',
     });
     if (user.email) {
       dispatch(getEmailRegister(user.email));
@@ -150,20 +159,20 @@ export default function Register() {
               <Select
                 name="dd"
                 options={optionsDD as []}
-                defaultValue="01"
-                handleChange={(e) => setDD(e.target.value)}
+                defaultValue={birth.dd}
+                handleChange={handleChangeBirth}
               />
               <Select
                 name="mm"
                 options={optionsMM as []}
-                defaultValue="01"
-                handleChange={(e) => setMM(e.target.value)}
+                defaultValue={birth.mm}
+                handleChange={handleChangeBirth}
               />
               <Select
                 name="yyyy"
-                defaultValue="1998"
+                defaultValue={birth.yyyy}
                 options={optionsYYYY as []}
-                handleChange={(e) => setYYYY(e.target.value)}
+                handleChange={handleChangeBirth}
               />
             </div>
           </div>

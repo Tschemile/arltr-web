@@ -1,9 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { createNewGroups, getGroupsById, getListGroups } from '@/redux/actions';
+import {
+  createNewGroups,
+  editGroup,
+  getGroupsById,
+  getListGroups,
+} from '@/redux/actions';
 import type { IGroups } from '@/redux/actions/Interface';
-
-// import { getCommentsOfPost } from '@/redux/actions';
 
 export interface IListGroups {
   listGroups: Record<string, string>[];
@@ -48,6 +51,15 @@ export const groupsSlice = createSlice({
         return { ...state, isUpdated: false };
       })
       .addCase(createNewGroups.rejected, (state) => {
+        return { ...state, isUpdated: false };
+      })
+      .addCase(editGroup.pending, (state) => {
+        return { ...state, isUpdated: true };
+      })
+      .addCase(editGroup.fulfilled, (state) => {
+        return { ...state, isUpdated: false };
+      })
+      .addCase(editGroup.rejected, (state) => {
         return { ...state, isUpdated: false };
       })
       .addCase(getGroupsById.pending, (state) => {

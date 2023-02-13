@@ -10,6 +10,7 @@ import type {
   IGroups,
   IInRelation,
   ILogin,
+  IMembers,
   IReaction,
   IRelation,
   IUser,
@@ -226,5 +227,23 @@ export const editGroup = createAsyncThunk(
       ...(arg.payload as IGroups),
     });
     return res;
+  }
+);
+
+export const deleteGroup = createAsyncThunk(
+  'group/deleteGroup',
+  async (id: string) => {
+    const res = await api.delete(`/group/${id}`);
+    return res;
+  }
+);
+
+// Member
+
+export const getListMembers = createAsyncThunk(
+  'members/getListMembers',
+  async (params: IMembers) => {
+    const res = await api.get('/member', { params });
+    return res.data;
   }
 );
