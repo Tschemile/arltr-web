@@ -169,7 +169,7 @@ export default function DetailGroup() {
             className="bg-main mt-2 block !h-32 w-full resize-none rounded-lg pl-4 pt-2 outline-none placeholder:text-base"
             name="description"
             value={newGroups.description}
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-2">
@@ -178,7 +178,7 @@ export default function DetailGroup() {
             className="mt-2 block w-full"
             name="mode"
             options={optionsSelect}
-            handleChange={(e) => handleChange(e)}
+            handleChange={handleChange}
             defaultValue={newGroups.mode}
           />
         </div>
@@ -232,13 +232,16 @@ export default function DetailGroup() {
     } else {
       setCoverImg('');
     }
+  }, [coverImgProps]);
+
+  useEffect(() => {
     new FastAverageColor()
-      .getColorAsync(coverImgProps)
+      .getColorAsync(coverImg)
       .then((color) => setBackGround(color.hex))
       .catch((e) => {
         console.log(e);
       });
-  }, [coverImgProps]);
+  }, [coverImg]);
 
   useEffect(() => {
     if (avatarProps) {
@@ -255,9 +258,7 @@ export default function DetailGroup() {
   return (
     <Main
       className="!p-0 xl:!pl-[300px]"
-      meta={
-        <Meta title={`${newGroups.name}`} description={`${newGroups.name}`} />
-      }
+      meta={<Meta title={`${name}`} description={`${name}`} />}
     >
       <div
         className={`w-full`}
@@ -276,7 +277,7 @@ export default function DetailGroup() {
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center rounded-full bg-pink-400 text-white">
-                  {getFirstLetter(newGroups.name as string)}
+                  {getFirstLetter(name as string)}
                 </div>
               )}
 
@@ -311,7 +312,7 @@ export default function DetailGroup() {
 
           <div className="px-6 py-4">
             <h1 className="text-center sm:text-left">
-              <strong>{newGroups.name}</strong>
+              <strong>{name}</strong>
             </h1>
             <div className="sm:flex sm:items-center sm:justify-between">
               <div className="mt-2 flex items-center justify-center sm:justify-start">

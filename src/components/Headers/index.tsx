@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import Logo from '@/assets/Logo.svg';
+import { logOut } from '@/redux/features/auth/authSlice';
 import { onShowNavbar } from '@/redux/features/home/homeSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
@@ -88,6 +89,7 @@ export default function Headers() {
                 handleClick: () => {
                   localStorage.removeItem('token');
                   push('/login');
+                  dispatch(logOut());
                 },
               },
             ]}

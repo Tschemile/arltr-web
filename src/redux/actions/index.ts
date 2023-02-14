@@ -231,7 +231,7 @@ export const editGroup = createAsyncThunk(
 );
 
 export const deleteGroup = createAsyncThunk(
-  'group/deleteGroup',
+  'groups/deleteGroup',
   async (id: string) => {
     const res = await api.delete(`/group/${id}`);
     return res;
@@ -245,5 +245,12 @@ export const getListMembers = createAsyncThunk(
   async (params: IMembers) => {
     const res = await api.get('/member', { params });
     return res.data;
+  }
+);
+export const outOfGroup = createAsyncThunk(
+  'members/outOfGroup',
+  async (idMember: string) => {
+    const res = await api.delete(`/member/${idMember}`);
+    return res;
   }
 );

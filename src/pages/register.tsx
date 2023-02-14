@@ -1,8 +1,10 @@
+import { useFormik } from 'formik';
 import Link from 'next/link';
 import router from 'next/router';
-import type { ChangeEvent, FormEvent } from 'react';
+import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
@@ -17,51 +19,58 @@ import AuthLayout from '@/templates/AuthLayout';
 
 export default function Register() {
   const dispatch = useAppDispatch();
-  // const [dd, setDD] = useState('01');
-  // const [mm, setMM] = useState('01');
-  // const [yyyy, setYYYY] = useState('2000');
-  const [user, setUser] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    username: '',
-    password: '',
-    gender: '',
-    birth: '',
-  });
   const [birth, setBirth] = useState({
     dd: '01',
     mm: '01',
     yyyy: '1998',
   });
+
   const isLoading = useAppSelector(
     (state) => state.auth.isLoading.loadingRegister
   );
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
+  const formik = useFormik({
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      username: '',
+      password: '',
+      gender: 'male',
+      birth: '',
+    },
+    validationSchema: Yup.object({
+      firstName: Yup.string().required('First name is required'),
+      lastName: Yup.string().required('Last name is required'),
+      username: Yup.string().required('User name is required'),
+      password: Yup.string()
+        .required('Password is required')
+        .min(6, 'Password must have at least 6 characters')
+        .matches(
+          /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&(){}^<>|;'"-+=])[A-Za-z\d@$!%*#?&(){}^<>|;'"-+=]{0,}$/,
+          'Password too weak'
+        ),
+      email: Yup.string().email('Invalid email').required('Email is required'),
+    }),
+    onSubmit: (user) => {
+      Object.assign(user, {
+        birth: birth ? `${birth.yyyy}-${birth.mm}-${birth.dd}` : '',
+      });
+      if (user.email) {
+        dispatch(getEmailRegister(user.email));
+      }
 
-  const handleChangeBirth = (e: ChangeEvent<HTMLSelectElement>): void => {
-    setBirth({ ...birth, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    Object.assign(user, {
-      birth: birth ? `${birth.yyyy}-${birth.mm}-${birth.dd}` : '',
-    });
-    if (user.email) {
-      dispatch(getEmailRegister(user.email));
-    }
-    if (Object.values(user).every((x) => Boolean(x))) {
       dispatch(register(user)).then((result: any) => {
         if (result.payload?.status === 201) {
           router.push('/verify-email');
           toast.info(result.payload.data.message);
         }
       });
-    }
+    },
+  });
+
+  const handleChangeBirth = (e: ChangeEvent<HTMLSelectElement>): void => {
+    setBirth({ ...birth, [e.target.name]: e.target.value });
   };
 
   const optionsDD = [...Array(32).keys()]
@@ -92,9 +101,10 @@ export default function Register() {
     };
   });
 
+  const { errors = {}, submitCount = 0 } = formik;
   return (
     <AuthLayout>
-      <form onSubmit={handleSubmit} className="">
+      <form onSubmit={formik.handleSubmit} className="">
         <div className="text-center">
           <h2 className="mb-2 text-3xl font-medium">Welcome to Roma</h2>
           <i>Create an account</i>
@@ -107,9 +117,13 @@ export default function Register() {
                 placeholder="Enter first name"
                 width="100%"
                 name="firstName"
-                onChange={handleChange}
+                onChange={formik.handleChange}
                 icons={<User />}
+                value={formik.values.firstName}
               />
+              {errors.firstName && submitCount > 0 && (
+                <p className="mt-4 text-red-500">*{errors.firstName}</p>
+              )}
             </div>
             <div className="">
               <p className="mb-2 text-lg font-medium">Last Name</p>
@@ -117,9 +131,13 @@ export default function Register() {
                 placeholder="Enter last name"
                 width="100%"
                 name="lastName"
-                onChange={handleChange}
+                onChange={formik.handleChange}
                 icons={<User />}
+                value={formik.values.lastName}
               />
+              {errors.lastName && submitCount > 0 && (
+                <p className="mt-4 text-red-500">*{errors.lastName}</p>
+              )}
             </div>
           </div>
           <div className="my-2">
@@ -128,19 +146,27 @@ export default function Register() {
               placeholder="name@example.com"
               width="100%"
               name="email"
-              onChange={handleChange}
+              onChange={formik.handleChange}
               icons={<Envelope />}
+              value={formik.values.email}
             />
+            {errors.email && submitCount > 0 && (
+              <p className="mt-4 text-red-500">*{errors.email}</p>
+            )}
           </div>
           <div className="my-2">
             <p className="mb-2 text-lg font-medium">User name</p>
             <Input
               placeholder="Enter user name"
               width="100%"
-              onChange={handleChange}
+              onChange={formik.handleChange}
               name="username"
               icons={<User />}
+              value={formik.values.username}
             />
+            {errors.username && submitCount > 0 && (
+              <p className="mt-4 text-red-500">*{errors.username}</p>
+            )}
           </div>
           <div className="my-2">
             <p className="mb-2 text-lg font-medium">Password</p>
@@ -149,9 +175,13 @@ export default function Register() {
               width="100%"
               type="password"
               name="password"
-              onChange={handleChange}
+              onChange={formik.handleChange}
               icons={<Lock />}
+              value={formik.values.password}
             />
+            {errors.password && submitCount > 0 && (
+              <p className="mt-4 text-red-500">*{errors.password}</p>
+            )}
           </div>
           <div className="my-2">
             <p className="mb-2 text-lg font-medium">Birthdays</p>
@@ -178,14 +208,14 @@ export default function Register() {
           </div>
           <div className="my-2 flex items-center justify-between">
             <p className="text-lg font-medium">Gender</p>
-
             <div className="">
               <input
                 type="radio"
                 id="male"
                 name="gender"
                 value="male"
-                onChange={handleChange}
+                checked={formik.values.gender === 'male'}
+                onChange={formik.handleChange}
               />
               <label className="pl-2" htmlFor="male">
                 Male
@@ -197,7 +227,8 @@ export default function Register() {
                 id="female"
                 name="gender"
                 value="female"
-                onChange={handleChange}
+                checked={formik.values.gender === 'female'}
+                onChange={formik.handleChange}
               />
               <label className="pl-2" htmlFor="female">
                 Female
@@ -208,8 +239,9 @@ export default function Register() {
                 type="radio"
                 id="other"
                 name="gender"
+                checked={formik.values.gender === 'other'}
                 value="other"
-                onChange={handleChange}
+                onChange={formik.handleChange}
               />
               <label className="pl-2" htmlFor="other">
                 Other
@@ -220,7 +252,8 @@ export default function Register() {
         <Button
           className="my-4 !block w-full !rounded-full !bg-primary-backgroundColor py-2"
           loading={isLoading}
-          onSubmit={handleSubmit}
+          onSubmit={formik.handleSubmit}
+          type="submit"
         >
           Register
         </Button>
