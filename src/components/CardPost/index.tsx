@@ -13,6 +13,7 @@ import Cry from '@/assets/sad.png';
 import Wow from '@/assets/wow.png';
 import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
 import Like from '@/components/Icons/Like';
+import { REACTION } from '@/constants/enum';
 import {
   addComment,
   deletePost,
@@ -30,8 +31,11 @@ import Avatar from '../common/Avatar';
 import Divider from '../common/Divider';
 import Dropdown from '../common/Dropdown';
 import IconButton from '../common/IconButton';
+import Modal from '../common/Modal';
 import PreviewImage from '../common/PreviewImage';
 import ReactButton from '../common/ReactButton';
+import Tabs from '../common/Tabs';
+import TabsContent from '../common/Tabs/TabsContent';
 import Tooltip from '../common/Tooltip';
 import Comment from '../Icons/Comment';
 import CommentBox from './components/CommentBox';
@@ -54,6 +58,7 @@ interface ICardPost {
 export default function CardPost(props: ICardPost) {
   const dispatch = useAppDispatch();
   const refs = useRef<null>(null);
+  const { LIKE, HEART, LAUGH, CRY, WOW, ANGRY } = REACTION.TYPE;
   const {
     post = {},
     listComments = [],
@@ -89,6 +94,8 @@ export default function CardPost(props: ICardPost) {
     domain = '',
   } = author as Record<string, string>;
 
+  const listReaction = useAppSelector((state) => state.posts.listUserReaction);
+
   const [isClickedCmt, setIsClickedCmt] = useState(false);
   const [comments, setComments] = useState<any[]>([]);
   const [contentCmt, setContentCmt] = useState('');
@@ -101,6 +108,39 @@ export default function CardPost(props: ICardPost) {
   const [isDeletedCmtID, setIsDeletedCmtID] = useState('');
   const [image, setImage] = useState('');
   const [emoji, setEmoji] = useState('');
+  const [reactionModal, setReactionModal] = useState(false);
+  const [tabsKey, setTabsKey] = useState('ALL');
+
+  const getIconEmoji = (type: string) => {
+    switch (type) {
+      case LIKE:
+        return <Image width={20} src={LikeIcons} alt="like" />;
+      case HEART:
+        return <Image width={20} src={Heart} alt="love" />;
+      case LAUGH:
+        return <Image width={20} src={Haha} alt="laugh" />;
+      case WOW:
+        return <Image width={20} src={Wow} alt="wow" />;
+      case CRY:
+        return <Image width={20} src={Cry} alt="cry" />;
+      case ANGRY:
+        return <Image width={20} src={Angry} alt="angry" />;
+      default:
+        return 'All';
+    }
+  };
+
+  const options = listReaction?.total?.map((x: Record<string, string>) => {
+    return {
+      key: x.type,
+      title: (
+        <div className="flex items-center gap-1">
+          {getIconEmoji(String(x.type))} ({x.total})
+        </div>
+      ),
+      content: '',
+    };
+  });
 
   const datePosts = new Date(datePostProps);
   const dateFormated = `${datePosts.getDate()}/${
@@ -345,6 +385,25 @@ export default function CardPost(props: ICardPost) {
     }
   };
 
+  const getContentReactionModal = () => {
+    return (
+      <>
+        <Tabs
+          className="flex items-center text-base"
+          options={options}
+          defaultKey={tabsKey}
+          handleChange={setTabsKey}
+        />
+        <TabsContent active={tabsKey} options={options} />
+      </>
+    );
+  };
+
+  const handleGetListReaction = () => {
+    setReactionModal(true);
+    dispatch(getListReaction({ post: id, limit: 10 }));
+  };
+
   useEffect(() => {
     if (totalReactsProps) setTotalReacts(Number(totalReactsProps));
   }, [totalReactsProps]);
@@ -445,7 +504,10 @@ export default function CardPost(props: ICardPost) {
           <IconButton className="ml-0 mr-1 p-0">
             <Like width={22} color="blue" />
           </IconButton>
-          <span className="text-sm">
+          <span
+            className="cursor-pointer text-sm hover:underline"
+            onClick={handleGetListReaction}
+          >
             {isLiked
               ? `You ${
                   totalReacts - 1 < 1
@@ -522,6 +584,16 @@ export default function CardPost(props: ICardPost) {
           <img className="h-full w-full rounded" src={image} alt="img" />
         </div>
       )}
+      <Modal
+        showModal={reactionModal}
+        showFooter={false}
+        content={getContentReactionModal()}
+        onClose={() => setReactionModal(false)}
+        showTitle={false}
+        showHeader={false}
+        // onSubmit={onSubmit}
+        // loading={isUpdatePost}
+      />
     </div>
   );
 }

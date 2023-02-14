@@ -66,6 +66,7 @@ export default function CommentBox(props: IComment) {
     if (e.target.files && e.target.files.length > 0) {
       const formData = new FormData();
       formData.append('file', e.target.files[0] as string | Blob);
+      formData.append('scope', 'HIDDEN');
       dispatch(uploadFile(formData)).then((res: any) => {
         const { payload: { status = 0, data = '' } = {} } = res;
         if (status === 201) {

@@ -31,6 +31,9 @@ export const authSlice = createSlice({
     getEmailRegister: (state, { payload }) => {
       return { ...state, emailRegister: payload };
     },
+    logOut: (state) => {
+      return { ...state, currentUser: {} };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -88,6 +91,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { getEmailRegister } = authSlice.actions;
+export const { getEmailRegister, logOut } = authSlice.actions;
 
 export const { reducer: authReducer } = authSlice;

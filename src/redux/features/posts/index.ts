@@ -11,7 +11,7 @@ export interface ProfileState {
   totalRelation: Record<string, number>;
   listPosts: Record<string, string>[];
   loadingPosts: boolean;
-  listUserReaction: Record<'user' | 'total' | string, Record<string, string>[]>;
+  listUserReaction: Record<'users' | 'total' | string, any | undefined[]>;
   isUpdatePost: boolean;
   loadingListRelations: boolean;
 }

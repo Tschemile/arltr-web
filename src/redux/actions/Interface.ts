@@ -70,6 +70,7 @@ export interface ICreatePost {
   images?: string[];
   mode?: keyof typeof POSTS.MODE;
   tags: string[];
+  group?: string;
 }
 
 export interface IReaction {

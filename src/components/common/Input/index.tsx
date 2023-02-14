@@ -1,5 +1,5 @@
 import type { ChangeEvent, ReactNode } from 'react';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 interface InputProps {
   placeholder?: string;
@@ -11,6 +11,7 @@ interface InputProps {
   className?: string;
   value?: string;
   inpulClassName?: string;
+  defaultValue?: string;
 }
 
 export default function Input(props: InputProps) {
@@ -26,11 +27,6 @@ export default function Input(props: InputProps) {
     inpulClassName = '',
   } = props;
 
-  const [defaultValue, setDefaultValue] = useState('');
-  useEffect(() => {
-    if (value) setDefaultValue(value);
-  }, [value]);
-
   return (
     <div className={`relative ${className}`}>
       <div className="absolute top-[50%] left-2 translate-y-[-50%] text-[#929292]">
@@ -44,8 +40,8 @@ export default function Input(props: InputProps) {
         style={{ width }}
         type={type}
         name={name}
-        defaultValue={defaultValue}
-        onChange={(e) => onChange(e)}
+        value={value}
+        onChange={onChange}
       />
     </div>
   );
