@@ -197,7 +197,7 @@ export default function Navbar() {
     <div
       className={`fixed top-[60px] h-[calc(100vh-60px)] w-[300px] ${
         !isShow ? '-translate-x-full' : 'translate-x-0'
-      } z-50 overflow-y-auto overscroll-contain bg-[#f5c0d0] py-2 px-4 text-black transition-all duration-200 ease-in-out xl:block xl:translate-x-0`}
+      } z-10 overflow-y-auto overscroll-contain bg-[#f5c0d0] py-2 px-4 text-black transition-all duration-200 ease-in-out xl:block xl:translate-x-0`}
     >
       {loadingCurrentUser ? (
         <Sidebar />

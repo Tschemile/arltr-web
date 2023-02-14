@@ -2,12 +2,14 @@ import { useState } from 'react';
 
 import Card from '@/components/common/Card';
 import Carousels from '@/components/common/Carousels';
+import PreviewPost from '@/components/common/PreviewPost';
 import Tooltip from '@/components/common/Tooltip';
 import { Meta } from '@/layouts/Meta';
 import { Main } from '@/templates/Main';
 
 const Albums = () => {
   const [modal, setModal] = useState(false);
+
   return (
     <Main meta={<Meta title="Album" description="Album" />}>
       <p>Phồtố</p>
@@ -40,29 +42,7 @@ const Albums = () => {
           molestias officia placeat, accusamus aut saepe.
         </Tooltip>
       </div>
-      {modal && (
-        <div className="fixed top-0 left-0 z-10 w-full overflow-y-auto">
-          <div className="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0 ">
-            <div
-              className="fixed inset-0 transition-opacity"
-              onClick={() => setModal(false)}
-            >
-              <div className="absolute inset-0 bg-gray-900 opacity-75" />
-            </div>
-            <span className="hidden sm:inline-block sm:h-screen sm:align-middle">
-              &#8203;
-            </span>
-            <div
-              className={`absolute top-1/2 left-1/2 m-0 inline-block w-full -translate-x-1/2 -translate-y-1/2 items-center overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:w-full sm:max-w-lg sm:align-middle`}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="modal-headline"
-            >
-              hihi
-            </div>
-          </div>
-        </div>
-      )}
+      <PreviewPost open={modal} setOpen={() => setModal(false)} />
     </Main>
   );
 };

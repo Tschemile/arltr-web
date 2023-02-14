@@ -32,7 +32,7 @@ export default function Headers() {
   } = useAppSelector((state) => state.auth.currentUser);
 
   return (
-    <div className="fixed z-20 h-[60px] w-full bg-pink-400 py-2 px-4">
+    <div className="fixed z-10 h-[60px] w-full bg-pink-400 py-2 px-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           {pathname.split('/')[1] !== 'user' && (
