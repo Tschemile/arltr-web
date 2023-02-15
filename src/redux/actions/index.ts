@@ -5,6 +5,7 @@ import { api } from '@/api';
 import type {
   ICreatePost,
   IEditComment,
+  IFriend,
   IGetGroups,
   IGetListPosts,
   IGroups,
@@ -94,6 +95,14 @@ export const getListRelation = createAsyncThunk(
   'relation/getListRelation',
   async (params: IInRelation) => {
     const res = await api.get(`/relation`, { params });
+    return res.data;
+  }
+);
+
+export const setFriendship = createAsyncThunk(
+  'relation/setFriendship',
+  async (payload: IFriend) => {
+    const res = await api.post(`/relation/friend`, { ...payload });
     return res.data;
   }
 );

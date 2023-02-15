@@ -25,7 +25,9 @@ export default function Button(props: ButtonProps) {
       className={`flex items-center whitespace-nowrap rounded  bg-pink-400 py-1 px-2 text-white disabled:cursor-not-allowed disabled:bg-slate-400 ${className}`}
     >
       {loading && (
-        <span className="spinner mr-2 inline-block h-[20px] w-[20px]"></span>
+        <span className="mr-1 flex justify-center">
+          <span className="spinner m-0 inline-block h-[20px] w-[20px]" />
+        </span>
       )}
       {props.children}
     </button>

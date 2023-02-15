@@ -50,6 +50,11 @@ export interface IInRelation {
   type: 'FOLLOWING' | 'FOLLOWER' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';
 }
 
+export interface IFriendship {
+  user: string;
+  status?: keyof typeof RELATIONSHIPS.STATUS;
+}
+
 // POST
 export interface IGetListPosts {
   limit?: number;

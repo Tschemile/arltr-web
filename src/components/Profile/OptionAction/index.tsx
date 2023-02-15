@@ -10,7 +10,7 @@ import SolidHeart from '@/components/Icons/Heart/solid';
 import Lock from '@/components/Icons/Lock';
 import Message from '@/components/Icons/Message';
 import PlusIcon from '@/components/Icons/PlusIcon';
-import { changeRelation } from '@/redux/actions';
+import { changeRelation, setFriendship } from '@/redux/actions';
 import { useAppDispatch } from '@/redux/hooks';
 
 interface OptionProps {
@@ -33,11 +33,12 @@ function OptionAction(props: OptionProps) {
     isRequested = false,
   } = props;
 
-  const checkFriend = Object.keys(isFriend).length === 0;
-  const checkFollowing = Object.keys(isFollowing).length === 0;
-  const [friend, setFriend] = useState(!isRequest && checkFriend);
-  const [requested, setRequested] = useState(isRequested && !checkFriend);
-  const [following, setFollowing] = useState(checkFollowing);
+  const checkUnfriend = Object.keys(isFriend).length === 0;
+  const checkUnfollow = Object.keys(isFollowing).length === 0;
+  const [makeFriend, setMakeFriend] = useState(!isRequest && checkUnfriend);
+  const [requested, setRequested] = useState(isRequested && !checkUnfriend);
+  const [following, setFollowing] = useState(checkUnfollow);
+  const [friendRejected, setFriendRejected] = useState(true);
 
   const action = () => {
     if (requested)
@@ -49,16 +50,16 @@ function OptionAction(props: OptionProps) {
               title: 'Accept',
               handleClick: () => {
                 dispatch(
-                  changeRelation({
+                  setFriendship({
                     user: id,
-                    type: 'FRIEND',
                     status: 'ACCEPTED',
                   })
                 )
                   .unwrap()
                   .then(() => {
-                    setFriend(false);
+                    setMakeFriend(false);
                     setRequested(false);
+                    setFriendRejected(false);
                   });
               },
             },
@@ -67,15 +68,14 @@ function OptionAction(props: OptionProps) {
               title: 'Reject',
               handleClick: () => {
                 dispatch(
-                  changeRelation({
+                  setFriendship({
                     user: id,
-                    type: 'FRIEND',
                     status: 'REJECT',
                   })
                 )
                   .unwrap()
                   .then(() => {
-                    setFriend(true);
+                    setMakeFriend(true);
                     setRequested(false);
                   });
               },
@@ -88,20 +88,19 @@ function OptionAction(props: OptionProps) {
           </Button>
         </Dropdown>
       );
-    return friend ? (
+    return makeFriend ? (
       <Button
         className=" bg-gray-600"
         onSubmit={() => {
           dispatch(
-            changeRelation({
+            setFriendship({
               user: id,
-              type: 'FRIEND',
               status: 'REQUESTING',
             })
           )
             .unwrap()
             .then(() => {
-              setFriend(false);
+              setMakeFriend(false);
             });
         }}
       >
@@ -113,31 +112,36 @@ function OptionAction(props: OptionProps) {
         className=" bg-gray-600"
         onSubmit={() => {
           dispatch(
-            changeRelation({
+            setFriendship({
               user: id,
-              type: 'FRIEND',
               status: 'REJECT',
             })
-          );
-          setFriend(true);
+          )
+            .unwrap()
+            .then(() => {
+              setMakeFriend(true);
+              setFriendRejected(true);
+            });
         }}
       >
         <Lock />
-        {isRequest || !friend ? 'Cancel request' : 'Unfriend'}
+        {(isRequest || checkUnfriend) && friendRejected
+          ? 'Cancel request'
+          : 'Unfriend'}
       </Button>
     );
   };
 
   useEffect(() => {
-    if (!checkFollowing) setFollowing(false);
-    if (isRequest && checkFriend) setFriend(false);
-    if (isRequested && !checkFriend) setRequested(true);
+    if (!checkUnfollow) setFollowing(false);
+    if ((isRequest && checkUnfriend) || !checkUnfriend) setMakeFriend(false);
+    if (isRequested && checkUnfriend) setRequested(true);
     return () => {
       setFollowing(true);
-      setFriend(true);
-      setRequested(true);
+      setMakeFriend(true);
+      setRequested(false);
     };
-  }, [checkFollowing, checkFriend, isRequest, isRequested]);
+  }, [checkUnfollow, checkUnfriend, isRequest, isRequested]);
 
   return (
     <div className="flex">

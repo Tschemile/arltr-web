@@ -155,7 +155,7 @@ const User = () => {
             dispatch(
               getListRelation({
                 type: 'FRIEND',
-                status: ['REQUESTING', 'ACCEPTED'],
+                status: ['REQUESTING'],
               })
             );
         })

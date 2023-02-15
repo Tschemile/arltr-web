@@ -102,17 +102,23 @@ export default function Friends(props: TabsProps) {
     (state) => state.relation
   );
 
+  const currentRelation =
+    active === 'REQUESTER'
+      ? allRelation?.filter((x: any) => x.requester.id !== profileUser.id)
+      : allRelation;
+
   const listRelation = isCurrentUser
-    ? allRelation
+    ? currentRelation
     : profileUser[typeUser[active === 'REQUESTER' ? 'FRIEND' : active]];
 
   useEffect(() => {
-    if (isCurrentUser && active !== 'FRIEND' && active !== 'REQUESTER')
-      dispatch(getListRelation({ type: active as IInRelation['type'] }));
-    else if (active === 'FRIEND')
-      dispatch(getListRelation({ type: 'FRIEND', status: ['ACCEPTED'] }));
-    else if (active === 'REQUESTER')
-      dispatch(getListRelation({ type: 'FRIEND', status: ['REQUESTING'] }));
+    if (isCurrentUser)
+      if (active !== 'FRIEND' && active !== 'REQUESTER')
+        dispatch(getListRelation({ type: active as IInRelation['type'] }));
+      else if (active === 'FRIEND')
+        dispatch(getListRelation({ type: 'FRIEND', status: ['ACCEPTED'] }));
+      else if (active === 'REQUESTER')
+        dispatch(getListRelation({ type: 'FRIEND', status: ['REQUESTING'] }));
   }, [active]);
 
   const options = [
