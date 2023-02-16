@@ -11,7 +11,7 @@ export interface ProfileState {
   totalRelation: Record<string, number>;
   listPosts: Record<string, string>[];
   loadingPosts: boolean;
-  listUserReaction: Record<'users' | 'total' | string, any | undefined[]>;
+  listReaction: Record<'users' | 'total' | string, any | undefined[]>;
   isUpdatePost: boolean;
   loadingListRelations: boolean;
 }
@@ -21,7 +21,7 @@ const initialState: ProfileState = {
   totalRelation: {},
   listPosts: [],
   loadingPosts: false,
-  listUserReaction: {},
+  listReaction: {},
   isUpdatePost: false,
   loadingListRelations: false,
 };
@@ -50,7 +50,7 @@ export const postsSlice = createSlice({
       .addCase(getListReaction.fulfilled, (state, { payload }) => {
         return {
           ...state,
-          listUserReaction: payload,
+          listReaction: payload,
           loadingListRelations: false,
         };
       })

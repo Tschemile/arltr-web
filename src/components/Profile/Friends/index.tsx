@@ -155,6 +155,7 @@ export default function Friends(props: TabsProps) {
         options={isCurrentUser ? options : options.slice(0, -2)}
         defaultKey={active}
         handleChange={(key: any) => setIsActive(key)}
+        className="no-scrollbar overflow-y-scroll whitespace-nowrap"
       />
       <TabsContent
         options={isCurrentUser ? options : options.slice(0, -1)}

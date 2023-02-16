@@ -69,9 +69,11 @@ export default function ContentModal(props: IContentModal) {
             />
           </div>
         </div>
-        <div className="absolute bottom-0 right-0 rounded bg-[rgba(0,0,0,0.5)] p-4 text-white">
-          + {fileDataURL.length - 2}
-        </div>
+        {fileDataURL.length > 3 && (
+          <div className="absolute bottom-0 right-0 rounded bg-[rgba(0,0,0,0.5)] p-4 text-white">
+            + {fileDataURL.length - 3}
+          </div>
+        )}
       </div>
     );
   };

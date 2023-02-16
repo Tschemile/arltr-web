@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 
 import CardPost from '@/components/CardPost';
 import Block from '@/components/common/Block';
+import Button from '@/components/common/Button';
 import Divider from '@/components/common/Divider';
 import Modal from '@/components/common/Modal';
 import Tooltip from '@/components/common/Tooltip';
@@ -31,6 +32,7 @@ import type { ICreatePost } from '@/redux/actions/Interface';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getFirstLetter } from '@/utils/func';
 
+import EditInfoModal from './components/EditInfoModal';
 import InfoContent from './components/InfoContent';
 
 interface ITimeline {
@@ -54,6 +56,9 @@ export default function Timeline(props: ITimeline) {
   const loadingListPost = useAppSelector((state) => state.posts.loadingPosts);
   const loadingProfile = useAppSelector((state) => state.profile.loading);
   const isUpdatePost = useAppSelector((state) => state.posts.isUpdatePost);
+  const loadingCurrentUser = useAppSelector(
+    (state) => state.auth.isLoading.loadingCurrentUser
+  );
 
   const {
     gender = '',
@@ -69,6 +74,7 @@ export default function Timeline(props: ITimeline) {
     groups = [],
     followers = [],
     id: profileId = '',
+    status = '',
   } = profileUser;
 
   const [openModal, setOpenModal] = useState(false);
@@ -78,6 +84,7 @@ export default function Timeline(props: ITimeline) {
   const [postIdEdit, setPostIdEdit] = useState('');
   const [fileDataURL, setFileDataURL] = useState<string[]>([]);
   const [mode, setMode] = useState('PUBLIC');
+  const [openModalEditInfo, setOpenModalEditInfo] = useState(false);
 
   const onClose = () => {
     setOpenModal(false);
@@ -164,12 +171,12 @@ export default function Timeline(props: ITimeline) {
     <>
       <div className="flex w-full flex-col-reverse gap-2 sm:grid md:grid-cols-3 md:gap-8">
         <div className="md:col-span-2">
-          {loadingProfile ? (
+          {loadingProfile || loadingCurrentUser ? (
             <CreatePostSkeleton />
           ) : (
             isFriend && <CreatePost setOpenModal={setOpenModal} />
           )}
-          {loadingListPost || loadingProfile ? (
+          {loadingListPost || loadingProfile || loadingCurrentUser ? (
             <CardPostSkeleton />
           ) : listPosts.length <= 0 && !loadingListPost && !loadingProfile ? (
             <p className="text-center">Don&apos;t have any post! </p>
@@ -194,7 +201,7 @@ export default function Timeline(props: ITimeline) {
         </div>
 
         <div className="row-start-1 h-full md:row-start-auto">
-          {loadingProfile ? (
+          {loadingProfile || loadingCurrentUser ? (
             <InfoBlock />
           ) : (
             <Block title="Info" seeAll={false} showTotal={false}>
@@ -204,14 +211,18 @@ export default function Timeline(props: ITimeline) {
                 }
                 content={gender === 'male' ? 'Male' : 'Female'}
               />
-              {socialLinks && (
-                <InfoContent
-                  isLink
-                  content={socialLinks && socialLinks[0]}
-                  icon={<Chain width={30} />}
-                />
+              {socialLinks &&
+                socialLinks.map((x: string) => (
+                  <InfoContent
+                    key={x}
+                    isLink
+                    content={x}
+                    icon={<Chain width={30} />}
+                  />
+                ))}
+              {status !== 'NONE' && (
+                <InfoContent icon={<Heart width={30} />} content={status} />
               )}
-              <InfoContent icon={<Heart width={30} />} content="Single" />
               {hobbies && (
                 <InfoContent
                   icon={<Star width={30} />}
@@ -224,10 +235,18 @@ export default function Timeline(props: ITimeline) {
                   <InfoContent icon={<Briefcase width={30} />} content={work} />
                 </>
               )}
+              {isCurrentUser && (
+                <Button
+                  className="!block w-full bg-pink-400 text-center text-base"
+                  onSubmit={() => setOpenModalEditInfo(true)}
+                >
+                  Edit detail
+                </Button>
+              )}
             </Block>
           )}
 
-          {loadingProfile ? (
+          {loadingProfile || loadingCurrentUser ? (
             <PhotosBlock />
           ) : (
             <Block
@@ -249,7 +268,7 @@ export default function Timeline(props: ITimeline) {
             </Block>
           )}
 
-          {loadingProfile ? (
+          {loadingProfile || loadingCurrentUser ? (
             <RelationShip />
           ) : (
             <Block
@@ -278,7 +297,7 @@ export default function Timeline(props: ITimeline) {
             </Block>
           )}
 
-          {loadingProfile ? (
+          {loadingProfile || loadingCurrentUser ? (
             <RelationShip />
           ) : (
             <Block
@@ -307,7 +326,7 @@ export default function Timeline(props: ITimeline) {
             </Block>
           )}
 
-          {loadingProfile ? (
+          {loadingProfile || loadingCurrentUser ? (
             <RelationShip />
           ) : (
             <Block
@@ -364,6 +383,11 @@ export default function Timeline(props: ITimeline) {
         onClose={onClose}
         onSubmit={onSubmit}
         loading={isUpdatePost}
+      />
+
+      <EditInfoModal
+        open={openModalEditInfo}
+        onClose={() => setOpenModalEditInfo(false)}
       />
     </>
   );

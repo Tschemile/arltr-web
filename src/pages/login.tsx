@@ -52,8 +52,6 @@ export default function Login() {
     }
   }, []);
 
-  console.log(infoUser);
-
   return (
     <AuthLayout>
       <form onSubmit={handleSubmit} className="">

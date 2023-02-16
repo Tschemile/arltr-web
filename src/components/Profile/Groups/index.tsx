@@ -98,6 +98,7 @@ export default function Groups() {
         options={options}
         defaultKey={activeTab}
         handleChange={(key) => setActiveTab(key)}
+        className="no-scrollbar overflow-y-scroll whitespace-nowrap"
       />
       <TabsContent
         options={options}
