@@ -1,0 +1,199 @@
+import React, { createRef, useCallback, useEffect, useState } from 'react';
+
+import ArrowLeft from '@/components/Icons/ArrowLeft';
+import ArrowPointingOut from '@/components/Icons/ArrowPointingOut';
+import ArrowRight from '@/components/Icons/ArrowRight';
+import Rotate from '@/components/Icons/Rotate';
+import ZoomIn from '@/components/Icons/ZoomIn';
+import ZoomOut from '@/components/Icons/ZoomOut';
+
+interface PreviewProps {
+  visible: boolean;
+  onClose: () => void;
+  children?: React.ReactNode | any;
+  data: any[] | undefined | null;
+}
+
+export default function Preview(props: PreviewProps) {
+  const { visible = false, onClose = () => {}, data = [] } = props;
+
+  const [show, setShow] = useState(true);
+  const [scaleImg, setScaleImg] = useState<number>(0.75);
+  const [rotateImg, setRotateImg] = useState<number>(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const refs = data?.reduce((acc, _val, i) => {
+    acc[i] = createRef();
+    return acc;
+  }, {});
+
+  const scrollToSmooth = (i: number) => {
+    refs[i].current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'start',
+    });
+    setCurrentSlide(i);
+  };
+
+  const lem = data!.length || 0;
+
+  const nextSlide = () => {
+    if (currentSlide >= lem - 1) {
+      scrollToSmooth(0);
+    } else {
+      scrollToSmooth(currentSlide + 1);
+      setRotateImg(0);
+      if (!show) setScaleImg(1);
+      else setScaleImg(0.75);
+    }
+  };
+
+  const prevSlide = () => {
+    const newSlide = currentSlide === 0 ? lem - 1 : currentSlide - 1;
+    scrollToSmooth(newSlide);
+    setRotateImg(0);
+    if (!show) setScaleImg(1);
+    else setScaleImg(0.75);
+  };
+
+  const arrowStyle =
+    'absolute bg-white drop-shadow text-2xl z-10 h-8 w-8 sm:h-10 sm:w-10 rounded-full opacity-75 flex items-center justify-center';
+
+  const sliderControl = (isLeft: Boolean = false) => (
+    <button
+      type="button"
+      onClick={isLeft ? prevSlide : nextSlide}
+      className={`${arrowStyle} ${isLeft ? 'left-2' : 'right-2'}`}
+    >
+      {isLeft ? <ArrowLeft /> : <ArrowRight />}
+    </button>
+  );
+
+  const escFunction = useCallback((event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      onClose();
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      setShow(true);
+      setRotateImg(0);
+      setScaleImg(0.75);
+      setCurrentSlide(0);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('keydown', escFunction, false);
+
+    return () => {
+      document.removeEventListener('keydown', escFunction, false);
+    };
+  }, [escFunction]);
+
+  return visible ? (
+    <div className="fixed inset-0 z-40 w-full overflow-y-auto">
+      <div className="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center transition-all sm:block sm:p-0">
+        <span className="hidden sm:inline-block sm:h-screen sm:align-middle">
+          &#8203;
+        </span>
+        <div className="absolute left-1/2 top-1/2 flex w-full -translate-x-1/2 -translate-y-1/2 items-center justify-between overflow-hidden transition-all">
+          <div className="relative inline-flex h-full min-h-screen w-full items-center overflow-x-hidden">
+            <div
+              className={`fixed top-0 z-50 flex min-w-full ${
+                show ? 'sm:min-w-[calc(100%-300px)]' : 'sm:min-w-full'
+              } justify-between bg-pink-900 p-2 text-white transition-all`}
+            >
+              <div className="flex space-x-3">
+                <div
+                  onClick={onClose}
+                  className="cursor-pointer rounded-full px-2 "
+                >
+                  X
+                </div>
+                <span>
+                  {currentSlide + 1}/{data?.length || 1}
+                </span>
+              </div>
+
+              <div className="flex">
+                <button
+                  onClick={() => setScaleImg(scaleImg + 0.25)}
+                  className="disabled:opacity-50"
+                  disabled={scaleImg === 5}
+                >
+                  <ZoomIn />
+                </button>
+                <button
+                  onClick={() => setScaleImg(scaleImg - 0.25)}
+                  className="disabled:opacity-50"
+                  disabled={scaleImg === 0.25}
+                >
+                  <ZoomOut />
+                </button>
+                <button onClick={() => setRotateImg(rotateImg + 90)}>
+                  <Rotate />
+                </button>
+                <button
+                  className="hidden sm:block"
+                  onClick={() => {
+                    if (show) setScaleImg(1);
+                    else setScaleImg(0.75);
+                    setShow(!show);
+                  }}
+                >
+                  <ArrowPointingOut />
+                </button>
+              </div>
+            </div>
+            {currentSlide !== 0 && sliderControl(true)}
+            <div
+              className="relative h-full min-h-screen w-full"
+              key={currentSlide}
+              ref={refs[currentSlide]}
+            >
+              <div
+                className={`absolute top-1/2 left-1/2 m-auto inline-block h-screen w-screen ${
+                  show ? 'sm:w-[calc(100vw-300px)]' : 'sm:w-screen'
+                } -translate-x-1/2 -translate-y-1/2 items-center overflow-hidden text-left transition-all sm:align-middle`}
+              >
+                <div className="relative h-full min-h-[50vh] w-full min-w-fit">
+                  <div
+                    className="fixed inset-0 transition-opacity"
+                    onClick={onClose}
+                  >
+                    <div className="absolute inset-0 bg-gray-900 opacity-75" />
+                  </div>
+                  <img
+                    src={data![currentSlide]}
+                    className={`absolute top-1/2 right-0 left-1/2 bottom-0 h-auto max-w-full -translate-x-1/2 -translate-y-1/2 object-contain transition-all`}
+                    alt="image"
+                    style={{
+                      transform: `translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(${rotateImg}deg) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(${scaleImg}) scaleY(${scaleImg})`,
+                    }}
+                  />
+                  <div
+                    className={`absolute top-1/2 right-0 left-1/2 bottom-0 h-auto max-w-full -translate-x-1/2 -translate-y-1/2 object-contain transition-all`}
+                  >
+                    {currentSlide}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {currentSlide < lem - 1 && sliderControl()}
+          </div>
+
+          <div
+            className={`z-50 hidden min-h-screen w-full max-w-[300px] bg-white ${
+              show ? 'sm:block' : 'sm:hidden'
+            }`}
+          >
+            haha
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : null;
+}

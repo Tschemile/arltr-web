@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import Card from '@/components/common/Card';
 import Carousels from '@/components/common/Carousels';
 import PreviewPost from '@/components/common/PreviewPost';
@@ -8,8 +6,6 @@ import { Meta } from '@/layouts/Meta';
 import { Main } from '@/templates/Main';
 
 const Albums = () => {
-  const [modal, setModal] = useState(false);
-
   return (
     <Main meta={<Meta title="Album" description="Album" />}>
       <p>Phồtố</p>
@@ -34,7 +30,7 @@ const Albums = () => {
           </Card>
         ))}
       </Carousels>
-      <div onClick={() => setModal(true)}>
+      <div>
         <Tooltip description="hihi">
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione fuga
           recusandae quidem. Quaerat molestiae blanditiis doloremque possimus
@@ -42,7 +38,33 @@ const Albums = () => {
           molestias officia placeat, accusamus aut saepe.
         </Tooltip>
       </div>
-      <PreviewPost open={modal} setOpen={() => setModal(false)} />
+
+      <PreviewPost>
+        <img
+          src="https://i.pinimg.com/originals/99/fa/39/99fa392c68b57c46d579a977413b2925.jpg"
+          alt="image"
+        />
+        <img
+          src="https://i.pinimg.com/originals/e7/d9/5c/e7d95c382775ecdb5eca6fa9faa05d3e.jpg"
+          alt="image"
+        />
+        <img
+          src="https://i.pinimg.com/originals/99/fa/39/99fa392c68b57c46d579a977413b2925.jpg"
+          alt="image"
+          onClick={() => {
+            console.log('first');
+          }}
+        />
+        {/* <Image
+          src={
+            'https://i.pinimg.com/originals/e7/d9/5c/e7d95c382775ecdb5eca6fa9faa05d3e.jpg'
+          }
+          alt="image"
+          width={300}
+          height={300}
+          objectFit="cover"
+        /> */}
+      </PreviewPost>
     </Main>
   );
 };

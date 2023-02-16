@@ -8,6 +8,7 @@ import {
 
 export interface RelationState {
   listRelation: Record<string, string>[];
+  friendship: Record<string, string>[];
   isLoading: Record<
     'loadingChangeRelation' | 'loadingListRelation' | 'loadingFriend',
     boolean
@@ -17,6 +18,7 @@ export interface RelationState {
 // Initial state
 const initialState: RelationState = {
   listRelation: [],
+  friendship: [],
   isLoading: {
     loadingChangeRelation: false,
     loadingListRelation: false,
@@ -76,7 +78,7 @@ export const relationSlice = createSlice({
       .addCase(setFriendship.fulfilled, (state, action) => {
         return {
           ...state,
-          listRelation: action.payload.relations,
+          friendship: action.payload,
           isLoading: { ...state.isLoading, loadingFriend: false },
         };
       })
