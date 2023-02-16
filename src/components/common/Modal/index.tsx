@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Close from '@/components/Icons/Close';
 
@@ -38,6 +38,18 @@ export default function Modal(props: ModalProps) {
     onSubmit,
     onClose,
   } = props;
+
+  const handleEsc = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      onClose();
+    }
+  };
+  useEffect(() => {
+    window.addEventListener('keydown', handleEsc);
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+    };
+  }, []);
   return (
     <div
       className={`fixed top-0 left-0 z-10 ${

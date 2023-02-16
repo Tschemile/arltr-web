@@ -75,7 +75,7 @@ export const getProfileListPosts = createAsyncThunk(
 
 export const editProfile = createAsyncThunk(
   'profile/editProfile',
-  async (payload: Record<string, string>) => {
+  async (payload: Record<string, string | string[]>) => {
     const res = await api.patch(`/profile`, { ...payload });
     return res;
   }
@@ -95,7 +95,7 @@ export const getListRelation = createAsyncThunk(
   'relation/getListRelation',
   async (params: IInRelation) => {
     const res = await api.get(`/relation`, { params });
-    return res.data;
+    return res;
   }
 );
 

@@ -22,7 +22,7 @@ import {
   makeReaction,
   uploadFile,
 } from '@/redux/actions';
-import type { IReaction } from '@/redux/actions/Interface';
+import type { IInfoUser, IReaction } from '@/redux/actions/Interface';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { timeSince } from '@/utils/func';
 
@@ -38,6 +38,9 @@ import Tabs from '../common/Tabs';
 import TabsContent from '../common/Tabs/TabsContent';
 import Tooltip from '../common/Tooltip';
 import Comment from '../Icons/Comment';
+import PencilSquare from '../Icons/PenciSquare';
+import Trash from '../Icons/Trash';
+import { ReactionSkeleton } from '../Skeleton/Reaction';
 import CommentBox from './components/CommentBox';
 import CommentForm from './components/CommentForm';
 
@@ -54,6 +57,57 @@ interface ICardPost {
   setMode?: (value: string) => void;
   isPersonPage?: boolean;
 }
+
+interface IUsers {
+  data?: IInfoUser[];
+  total?: number;
+}
+
+const Users = (props: IUsers) => {
+  const { data = [], total = 0 } = props;
+  const isLoadingListReaction = useAppSelector(
+    (state) => state.posts.loadingListRelations
+  );
+  if (isLoadingListReaction) return <ReactionSkeleton total={total} />;
+  return (
+    <>
+      {data &&
+        data.map((x) => {
+          const {
+            id = '',
+            avatar = '',
+            name = '',
+            domain = '',
+            gender = '',
+          } = x;
+          return (
+            <div key={id} className="flex items-center py-2">
+              <div
+                className="mr-4 h-[45px] w-[45px] cursor-pointer"
+                onClick={() => router.push(`/user/${domain}`)}
+              >
+                <Avatar
+                  src={avatar}
+                  alt="avatar"
+                  width={50}
+                  className="m-auto h-full w-full rounded-full"
+                  gender={gender}
+                />
+              </div>
+              <div className="">
+                <h3
+                  className="cursor-pointer text-lg font-medium"
+                  onClick={() => router.push(`/user/${domain}`)}
+                >
+                  {name}
+                </h3>
+              </div>
+            </div>
+          );
+        })}
+    </>
+  );
+};
 
 export default function CardPost(props: ICardPost) {
   const dispatch = useAppDispatch();
@@ -94,7 +148,17 @@ export default function CardPost(props: ICardPost) {
     domain = '',
   } = author as Record<string, string>;
 
-  const listReaction = useAppSelector((state) => state.posts.listUserReaction);
+  const listTotalReaction = useAppSelector(
+    (state) => state.posts.listReaction?.total
+  );
+
+  const listUsersReation = useAppSelector(
+    (state) => state.posts.listReaction.users
+  );
+
+  // const isLoadingListReaction = useAppSelector(
+  //   (state) => state.posts.loadingListRelations
+  // );
 
   const [isClickedCmt, setIsClickedCmt] = useState(false);
   const [comments, setComments] = useState<any[]>([]);
@@ -130,17 +194,20 @@ export default function CardPost(props: ICardPost) {
     }
   };
 
-  const options = listReaction?.total?.map((x: Record<string, string>) => {
-    return {
-      key: x.type,
-      title: (
-        <div className="flex items-center gap-1">
-          {getIconEmoji(String(x.type))} ({x.total})
-        </div>
-      ),
-      content: '',
-    };
-  });
+  const options = listTotalReaction
+    ?.slice()
+    .reverse()
+    .map((x: Record<string, string>) => {
+      return {
+        key: x.type,
+        title: (
+          <div className="flex items-center gap-1">
+            {getIconEmoji(String(x.type))} ({x.total})
+          </div>
+        ),
+        content: <Users total={Number(x.total)} data={listUsersReation} />,
+      };
+    });
 
   const datePosts = new Date(datePostProps);
   const dateFormated = `${datePosts.getDate()}/${
@@ -281,19 +348,24 @@ export default function CardPost(props: ICardPost) {
                 alt="post-img"
               />
             </PhotoView>
-            {(images.slice(0, 2) as []).map((x: string) => (
-              <PhotoView key={x} src={x}>
-                <img
-                  className="hidden h-full w-full cursor-pointer rounded object-cover"
-                  src={x as string | undefined}
-                  alt="post-img"
-                />
-              </PhotoView>
-            ))}
+            {images.length > 3 &&
+              (images as [])
+                .filter((_, index) => index > 2)
+                .map((x: string) => (
+                  <PhotoView key={x} src={x}>
+                    <img
+                      className="hidden h-full w-full cursor-pointer rounded object-cover"
+                      src={x as string | undefined}
+                      alt="post-img"
+                    />
+                  </PhotoView>
+                ))}
           </div>
-          <div className="absolute bottom-0 right-0 rounded bg-[rgba(0,0,0,0.5)] p-4 text-white">
-            + {images.length - 2}
-          </div>
+          {images.length > 3 && (
+            <div className="absolute bottom-0 right-0 rounded bg-[rgba(0,0,0,0.5)] p-4 text-white">
+              + {images.length - 3}
+            </div>
+          )}
         </div>
       </PreviewImage>
     );
@@ -401,7 +473,13 @@ export default function CardPost(props: ICardPost) {
 
   const handleGetListReaction = () => {
     setReactionModal(true);
-    dispatch(getListReaction({ post: id, limit: 10 }));
+
+    dispatch(getListReaction({ post: id, limit: 10 })).then((res) => {
+      console.log(res);
+      if (res.payload.status === 200) {
+        setReactionModal(true);
+      }
+    });
   };
 
   useEffect(() => {
@@ -440,6 +518,16 @@ export default function CardPost(props: ICardPost) {
     if (typeProps) setEmoji(typeProps);
   }, [typeProps]);
 
+  useEffect(() => {
+    if (reactionModal) {
+      if (tabsKey !== 'ALL') {
+        dispatch(getListReaction({ post: id, limit: 10, type: tabsKey }));
+      } else {
+        dispatch(getListReaction({ post: id, limit: 10 }));
+      }
+    }
+  }, [tabsKey]);
+
   return (
     <div className={`mb-4 rounded-lg bg-white px-4 shadow-lg`}>
       <div className="flex items-center justify-between">
@@ -474,12 +562,22 @@ export default function CardPost(props: ICardPost) {
               ? [
                   {
                     id: '1',
-                    title: 'Edit Post',
+                    title: (
+                      <div className="flex items-center gap-2">
+                        <PencilSquare />
+                        <span>Edit post</span>
+                      </div>
+                    ),
                     handleClick: () => handleEditPost(),
                   },
                   {
                     id: '2',
-                    title: 'Delete Post',
+                    title: (
+                      <div className="flex items-center gap-2">
+                        <Trash />
+                        <span>Delete this post</span>
+                      </div>
+                    ),
                     handleClick: () => handleDeletePost(),
                   },
                 ]
@@ -500,32 +598,36 @@ export default function CardPost(props: ICardPost) {
       <div className="whitespace-pre-line py-2 ">{content}</div>
       {images && images.length > 0 && getLayout()}
       <div className="mt-4 flex items-center justify-between text-sm">
-        <div className="flex items-center">
-          <IconButton className="ml-0 mr-1 p-0">
-            <Like width={22} color="blue" />
-          </IconButton>
-          <span
-            className="cursor-pointer text-sm hover:underline"
-            onClick={handleGetListReaction}
+        {totalReacts > 0 && (
+          <div className="flex items-center">
+            <IconButton className="ml-0 mr-1 p-0">
+              <Like width={22} color="blue" />
+            </IconButton>
+            <span
+              className="cursor-pointer text-sm hover:underline"
+              onClick={handleGetListReaction}
+            >
+              {isLiked
+                ? `You ${
+                    totalReacts - 1 < 1
+                      ? ''
+                      : `and ${totalReacts - 1} other${
+                          totalReacts - 1 > 1 ? 's' : ''
+                        }`
+                  }`
+                : totalReacts}
+            </span>
+          </div>
+        )}
+        {totalComments > 0 && (
+          <div
+            className="cursor-pointer"
+            onClick={() => getAllCommentsOfPost(id)}
           >
-            {isLiked
-              ? `You ${
-                  totalReacts - 1 < 1
-                    ? ''
-                    : `and ${totalReacts - 1} other${
-                        totalReacts - 1 > 1 ? 's' : ''
-                      }`
-                }`
-              : totalReacts}
-          </span>
-        </div>
-        <div
-          className="cursor-pointer"
-          onClick={() => getAllCommentsOfPost(id)}
-        >
-          <span className="pr-1">{totalComments}</span>
-          <span>Comment</span>
-        </div>
+            <span className="pr-1">{totalComments}</span>
+            <span>Comment</span>
+          </div>
+        )}
       </div>
       <Divider />
       <div className="-my-3 flex">
@@ -591,8 +693,6 @@ export default function CardPost(props: ICardPost) {
         onClose={() => setReactionModal(false)}
         showTitle={false}
         showHeader={false}
-        // onSubmit={onSubmit}
-        // loading={isUpdatePost}
       />
     </div>
   );

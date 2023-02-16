@@ -286,7 +286,7 @@ const User = () => {
         )}
       </div>
       <TabsContent
-        className="py-4 lg:mx-[10%] xl:mx-[15%]"
+        className="overflow-hidden py-4 lg:mx-[10%] xl:mx-[15%]"
         options={options}
         active={active}
       />
