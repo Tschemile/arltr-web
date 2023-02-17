@@ -33,6 +33,7 @@ const Groups = () => {
   });
 
   const [limit, setLimit] = useState(9);
+  setLimit(9);
 
   const { id: userId = '' } = useAppSelector((state) => state.auth.currentUser);
   const isUpdated = useAppSelector((state) => state.groups.isUpdated);
