@@ -56,10 +56,10 @@ export const relationSlice = createSlice({
           isLoading: { ...state.isLoading, loadingListRelation: true },
         };
       })
-      .addCase(getListRelation.fulfilled, (state, action) => {
+      .addCase(getListRelation.fulfilled, (state, { payload }) => {
         return {
           ...state,
-          listRelation: action.payload.relations,
+          listRelation: payload.relations,
           isLoading: { ...state.isLoading, loadingListRelation: false },
         };
       })

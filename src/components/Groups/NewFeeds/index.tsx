@@ -2,12 +2,11 @@
 import { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { PhotoView } from 'react-photo-view';
 
 import CardPost from '@/components/CardPost';
 import Block from '@/components/common/Block';
 import Modal from '@/components/common/Modal';
-import PreviewImage from '@/components/common/PreviewImage';
+import PreviewPost from '@/components/common/PreviewPost';
 import CreatePost from '@/components/CreatePost';
 import ContentModal from '@/components/CreatePost/ContentModal';
 import Earth from '@/components/Icons/Earth';
@@ -229,22 +228,19 @@ export default function NewFeeds() {
           total={0}
         >
           <div className="grid grid-cols-2 gap-2">
-            <PreviewImage>
-              {[...Array(4)].map((_, index) => (
-                <div
-                  key={index}
-                  className="h-full w-full overflow-hidden rounded"
-                >
-                  <PhotoView src="https://ss-images.saostar.vn/2017/06/04/1325225/tuhat-e1496585469861.jpg">
-                    <img
-                      className="h-full w-full cursor-pointer object-cover transition-all hover:scale-125"
-                      src="https://ss-images.saostar.vn/2017/06/04/1325225/tuhat-e1496585469861.jpg"
-                      alt="newFileShared"
-                    />
-                  </PhotoView>
-                </div>
-              ))}
-            </PreviewImage>
+            {[...Array(4)].map((_, index) => (
+              <div
+                key={index}
+                className="h-full w-full overflow-hidden rounded"
+              >
+                <PreviewPost
+                  data={
+                    'https://ss-images.saostar.vn/2017/06/04/1325225/tuhat-e1496585469861.jpg'
+                  }
+                  classNameImg="transition-all hover:scale-125"
+                />
+              </div>
+            ))}
           </div>
         </Block>
       </div>

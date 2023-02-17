@@ -2,7 +2,6 @@ import Image from 'next/image';
 import router from 'next/router';
 import type { ChangeEvent, FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import { PhotoView } from 'react-photo-view';
 import { toast } from 'react-toastify';
 
 import Angry from '@/assets/angry.png';
@@ -32,7 +31,7 @@ import Divider from '../common/Divider';
 import Dropdown from '../common/Dropdown';
 import IconButton from '../common/IconButton';
 import Modal from '../common/Modal';
-import PreviewImage from '../common/PreviewImage';
+import PreviewPost from '../common/PreviewPost';
 import ReactButton from '../common/ReactButton';
 import Tabs from '../common/Tabs';
 import TabsContent from '../common/Tabs/TabsContent';
@@ -300,77 +299,6 @@ export default function CardPost(props: ICardPost) {
     });
   };
 
-  const getLayout = () => {
-    if (images.length <= 2) {
-      return (
-        <PreviewImage>
-          {(images as []).map((x: string) => (
-            <div
-              key={x}
-              className="mb-2 h-[150px] max-h-[185px] min-h-[300px] cursor-pointer overflow-hidden rounded"
-            >
-              <PhotoView src={x}>
-                <img
-                  className="h-full w-full object-cover"
-                  src={x}
-                  alt="post-img"
-                />
-              </PhotoView>
-            </div>
-          ))}
-        </PreviewImage>
-      );
-    }
-    return (
-      <PreviewImage>
-        <div className="relative">
-          <div className="relative max-h-[185px] min-h-[300px] overflow-hidden rounded">
-            <PhotoView src={images[0]}>
-              <img
-                className="h-full w-full cursor-pointer rounded object-cover"
-                src={images[0] as string | undefined}
-                alt="post-img"
-              />
-            </PhotoView>
-          </div>
-          <div className="mt-2 grid grid-cols-2 gap-2">
-            <PhotoView src={images[1]}>
-              <img
-                className="h-full w-full cursor-pointer rounded object-cover"
-                src={images[1] as string | undefined}
-                alt="post-img"
-              />
-            </PhotoView>
-            <PhotoView src={images[2]}>
-              <img
-                className="h-full w-full cursor-pointer rounded object-cover"
-                src={images[2] as string | undefined}
-                alt="post-img"
-              />
-            </PhotoView>
-            {images.length > 3 &&
-              (images as [])
-                .filter((_, index) => index > 2)
-                .map((x: string) => (
-                  <PhotoView key={x} src={x}>
-                    <img
-                      className="hidden h-full w-full cursor-pointer rounded object-cover"
-                      src={x as string | undefined}
-                      alt="post-img"
-                    />
-                  </PhotoView>
-                ))}
-          </div>
-          {images.length > 3 && (
-            <div className="absolute bottom-0 right-0 rounded bg-[rgba(0,0,0,0.5)] p-4 text-white">
-              + {images.length - 3}
-            </div>
-          )}
-        </div>
-      </PreviewImage>
-    );
-  };
-
   const getEmoji = () => {
     switch (emoji) {
       case 'LIKE':
@@ -475,7 +403,6 @@ export default function CardPost(props: ICardPost) {
     setReactionModal(true);
 
     dispatch(getListReaction({ post: id, limit: 10 })).then((res) => {
-      console.log(res);
       if (res.payload.status === 200) {
         setReactionModal(true);
       }
@@ -596,7 +523,7 @@ export default function CardPost(props: ICardPost) {
         </Dropdown>
       </div>
       <div className="whitespace-pre-line py-2 ">{content}</div>
-      {images && images.length > 0 && getLayout()}
+      {images && images.length > 0 && <PreviewPost data={images} isPost />}
       <div className="mt-4 flex items-center justify-between text-sm">
         {totalReacts > 0 && (
           <div className="flex items-center">

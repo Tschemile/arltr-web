@@ -8,6 +8,7 @@ import Block from '@/components/common/Block';
 import Button from '@/components/common/Button';
 import Divider from '@/components/common/Divider';
 import Modal from '@/components/common/Modal';
+import PreviewPost from '@/components/common/PreviewPost';
 import Tooltip from '@/components/common/Tooltip';
 import CreatePost from '@/components/CreatePost';
 import ContentModal from '@/components/CreatePost/ContentModal';
@@ -257,11 +258,7 @@ export default function Timeline(props: ITimeline) {
               <div className="grid grid-cols-3 gap-4">
                 {(albums as []).slice(0, 9).map((x: Record<string, string>) => (
                   <div key={x.id} className="col-span-1 h-[100px] w-full">
-                    <img
-                      alt="photo"
-                      src={x.url}
-                      className="h-full w-full rounded-lg object-cover"
-                    />
+                    <PreviewPost data={x.url} classNameImg="rounded-lg" />
                   </div>
                 ))}
               </div>

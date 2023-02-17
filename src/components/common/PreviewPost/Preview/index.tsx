@@ -10,17 +10,24 @@ import ZoomOut from '@/components/Icons/ZoomOut';
 interface PreviewProps {
   visible: boolean;
   onClose: () => void;
-  children?: React.ReactNode | any;
   data: any[] | undefined | null;
+  indexSelected: number;
+  showTotal?: boolean;
 }
 
 export default function Preview(props: PreviewProps) {
-  const { visible = false, onClose = () => {}, data = [] } = props;
+  const {
+    visible = false,
+    onClose = () => {},
+    data = [],
+    indexSelected = 0,
+    showTotal = true,
+  } = props;
 
   const [show, setShow] = useState(true);
   const [scaleImg, setScaleImg] = useState<number>(0.75);
   const [rotateImg, setRotateImg] = useState<number>(0);
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(indexSelected);
 
   const refs = data?.reduce((acc, _val, i) => {
     acc[i] = createRef();
@@ -36,10 +43,10 @@ export default function Preview(props: PreviewProps) {
     setCurrentSlide(i);
   };
 
-  const lem = data!.length || 0;
+  const dataLength = data!.length || 0;
 
   const nextSlide = () => {
-    if (currentSlide >= lem - 1) {
+    if (currentSlide >= dataLength - 1) {
       scrollToSmooth(0);
     } else {
       scrollToSmooth(currentSlide + 1);
@@ -50,7 +57,7 @@ export default function Preview(props: PreviewProps) {
   };
 
   const prevSlide = () => {
-    const newSlide = currentSlide === 0 ? lem - 1 : currentSlide - 1;
+    const newSlide = currentSlide === 0 ? dataLength - 1 : currentSlide - 1;
     scrollToSmooth(newSlide);
     setRotateImg(0);
     if (!show) setScaleImg(1);
@@ -77,13 +84,16 @@ export default function Preview(props: PreviewProps) {
   }, []);
 
   useEffect(() => {
+    if (visible) {
+      if (indexSelected) setCurrentSlide(indexSelected);
+    }
     return () => {
       setShow(true);
       setRotateImg(0);
       setScaleImg(0.75);
       setCurrentSlide(0);
     };
-  }, []);
+  }, [visible]);
 
   useEffect(() => {
     document.addEventListener('keydown', escFunction, false);
@@ -113,9 +123,11 @@ export default function Preview(props: PreviewProps) {
                 >
                   X
                 </div>
-                <span>
-                  {currentSlide + 1}/{data?.length || 1}
-                </span>
+                {showTotal && (
+                  <span>
+                    {currentSlide + 1}/{data?.length || 1}
+                  </span>
+                )}
               </div>
 
               <div className="flex">
@@ -182,7 +194,7 @@ export default function Preview(props: PreviewProps) {
                 </div>
               </div>
             </div>
-            {currentSlide < lem - 1 && sliderControl()}
+            {currentSlide < dataLength - 1 && sliderControl()}
           </div>
 
           <div

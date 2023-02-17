@@ -39,32 +39,13 @@ const Albums = () => {
         </Tooltip>
       </div>
 
-      <PreviewPost>
-        <img
-          src="https://i.pinimg.com/originals/99/fa/39/99fa392c68b57c46d579a977413b2925.jpg"
-          alt="image"
-        />
-        <img
-          src="https://i.pinimg.com/originals/e7/d9/5c/e7d95c382775ecdb5eca6fa9faa05d3e.jpg"
-          alt="image"
-        />
-        <img
-          src="https://i.pinimg.com/originals/99/fa/39/99fa392c68b57c46d579a977413b2925.jpg"
-          alt="image"
-          onClick={() => {
-            console.log('first');
-          }}
-        />
-        {/* <Image
-          src={
-            'https://i.pinimg.com/originals/e7/d9/5c/e7d95c382775ecdb5eca6fa9faa05d3e.jpg'
-          }
-          alt="image"
-          width={300}
-          height={300}
-          objectFit="cover"
-        /> */}
-      </PreviewPost>
+      <PreviewPost
+        data={[
+          'https://i.pinimg.com/originals/99/fa/39/99fa392c68b57c46d579a977413b2925.jpg',
+          // 'https://i.pinimg.com/originals/e7/d9/5c/e7d95c382775ecdb5eca6fa9faa05d3e.jpg',
+          // 'https://i.pinimg.com/originals/99/fa/39/99fa392c68b57c46d579a977413b2925.jpg',
+        ]}
+      />
     </Main>
   );
 };

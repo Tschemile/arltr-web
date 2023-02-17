@@ -28,7 +28,10 @@ export const timeSince = (date: number, dateFormated: string) => {
   if (interval > 1) {
     return `${Math.floor(interval)} min ago`;
   }
-  return `${Math.floor(seconds)} sec ago`;
+  if (seconds > 0) {
+    return `${Math.floor(seconds)} sec ago`;
+  }
+  return 'Just now';
 };
 
 export const getFirstLetter = (keyword: string) => {

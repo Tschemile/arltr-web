@@ -1,8 +1,7 @@
 import type { ChangeEvent, FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import { PhotoView } from 'react-photo-view';
 
-import PreviewImage from '@/components/common/PreviewImage';
+import PreviewPost from '@/components/common/PreviewPost';
 import { deleteComment, editComment, uploadFile } from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
@@ -119,17 +118,9 @@ export default function CommentBox(props: IComment) {
         <h3 className="text-lg font-medium">{name}</h3>
         <p className="whitespace-pre-line text-sm">{contentCmt}</p>
         {imageProps && (
-          <PreviewImage>
-            <div className="mt-2 h-[200px] w-full">
-              <PhotoView src={imageProps}>
-                <img
-                  className="h-full w-full cursor-pointer rounded"
-                  src={imageProps}
-                  alt="img-cmt"
-                />
-              </PhotoView>
-            </div>
-          </PreviewImage>
+          <div className="mt-2 h-[200px] w-full">
+            <PreviewPost data={imageProps} classNameImg="rounded" />
+          </div>
         )}
       </div>
       {currentUser.id === authorId && (
