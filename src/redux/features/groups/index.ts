@@ -32,6 +32,9 @@ export const groupsSlice = createSlice({
     hasEdited: (state, { payload }) => {
       return { ...state, currentGroup: payload };
     },
+    hasCreatedNewGroup: (state, { payload }) => {
+      return { ...state, listGroups: [...state.listGroups, payload] };
+    },
   },
   extraReducers: (builer) => {
     builer
@@ -78,6 +81,6 @@ export const groupsSlice = createSlice({
   },
 });
 
-export const { hasEdited } = groupsSlice.actions;
+export const { hasEdited, hasCreatedNewGroup } = groupsSlice.actions;
 
 export const { reducer: groupsReducer } = groupsSlice;
