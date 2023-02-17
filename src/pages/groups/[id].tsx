@@ -22,6 +22,7 @@ import Camera from '@/components/Icons/Camera';
 import PencilSquare from '@/components/Icons/PenciSquare';
 import PlusIcon from '@/components/Icons/PlusIcon';
 import Trash from '@/components/Icons/Trash';
+import { MEMBERS } from '@/constants/enum';
 import { Meta } from '@/layouts/Meta';
 import {
   deleteGroup,
@@ -50,7 +51,10 @@ export default function DetailGroup() {
     id = '',
     mode = 'PUBLIC',
     description = '',
+    member = {},
   } = currentGroup;
+
+  const isAdmin = member.role === MEMBERS.ROLE.ADMIN;
 
   const [active, setActive] = useState('1');
   const [coverImg, setCoverImg] = useState('');
@@ -235,12 +239,13 @@ export default function DetailGroup() {
   }, [coverImgProps]);
 
   useEffect(() => {
-    new FastAverageColor()
-      .getColorAsync(coverImg)
-      .then((color) => setBackGround(color.hex))
-      .catch((e) => {
-        console.log(e);
-      });
+    if (coverImg)
+      new FastAverageColor()
+        .getColorAsync(coverImg)
+        .then((color) => setBackGround(color.hex))
+        .catch((e) => {
+          console.log(e);
+        });
   }, [coverImg]);
 
   useEffect(() => {
@@ -281,13 +286,15 @@ export default function DetailGroup() {
                 </div>
               )}
 
-              <UploadButton
-                id="upload-avatar"
-                handleChange={handleUploadAvatar}
-                className="absolute bottom-0 right-0  cursor-pointer rounded-full border-2 border-white bg-primary-color p-1 "
-              >
-                <Camera />
-              </UploadButton>
+              {isAdmin && (
+                <UploadButton
+                  id="upload-avatar"
+                  handleChange={handleUploadAvatar}
+                  className="absolute bottom-0 right-0  cursor-pointer rounded-full border-2 border-white bg-primary-color p-1 "
+                >
+                  <Camera />
+                </UploadButton>
+              )}
             </div>
             <img
               src={
@@ -298,16 +305,18 @@ export default function DetailGroup() {
               id="cover"
               className="absolute top-1/2 right-0 bottom-0 left-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
             />
-            <div className="absolute bottom-2 right-3 z-[3]">
-              <UploadButton
-                handleChange={handleUploadCover}
-                id="upload-cover"
-                className="flex cursor-pointer items-center rounded-md bg-primary-color px-2 py-1"
-              >
-                <Camera width={24} />
-                <span className="p-1 text-sm">Edit</span>
-              </UploadButton>
-            </div>
+            {isAdmin && (
+              <div className="absolute bottom-2 right-3 z-[3]">
+                <UploadButton
+                  handleChange={handleUploadCover}
+                  id="upload-cover"
+                  className="flex cursor-pointer items-center rounded-md bg-primary-color px-2 py-1"
+                >
+                  <Camera width={24} />
+                  <span className="p-1 text-sm">Edit</span>
+                </UploadButton>
+              </div>
+            )}
           </div>
 
           <div className="px-6 py-4">
@@ -338,37 +347,39 @@ export default function DetailGroup() {
                 <Button className="bg-pink-400 text-base">
                   <PlusIcon /> Invite
                 </Button>
-                <Dropdown
-                  content={[
-                    {
-                      id: '1',
-                      title: (
-                        <div className="flex items-center gap-2">
-                          <PencilSquare />
-                          <span>Edit group</span>
-                        </div>
-                      ),
-                      handleClick: () => setOpenModal(true),
-                    },
-                    {
-                      id: '2',
-                      title: (
-                        <div className="flex items-center gap-2">
-                          <Trash />
-                          <span>Delete this group</span>
-                        </div>
-                      ),
-                      handleClick: () => {
-                        setIsDelete(true);
-                        setOpenModal(true);
+                {isAdmin && (
+                  <Dropdown
+                    content={[
+                      {
+                        id: '1',
+                        title: (
+                          <div className="flex items-center gap-2">
+                            <PencilSquare />
+                            <span>Edit group</span>
+                          </div>
+                        ),
+                        handleClick: () => setOpenModal(true),
                       },
-                    },
-                  ]}
-                >
-                  <Button className="ml-2 bg-gray-600">
-                    <BulletList />
-                  </Button>
-                </Dropdown>
+                      {
+                        id: '2',
+                        title: (
+                          <div className="flex items-center gap-2">
+                            <Trash />
+                            <span>Delete this group</span>
+                          </div>
+                        ),
+                        handleClick: () => {
+                          setIsDelete(true);
+                          setOpenModal(true);
+                        },
+                      },
+                    ]}
+                  >
+                    <Button className="ml-2 bg-gray-600">
+                      <BulletList />
+                    </Button>
+                  </Dropdown>
+                )}
               </div>
             </div>
 

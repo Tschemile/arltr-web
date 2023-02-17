@@ -1,20 +1,26 @@
+import router from 'next/router';
 import type { ChangeEvent } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import Button from '@/components/common/Button';
-import Card from '@/components/common/Card';
-import Carousels from '@/components/common/Carousels';
 import Divider from '@/components/common/Divider';
 import Input from '@/components/common/Input';
 import Modal from '@/components/common/Modal';
 import Select from '@/components/common/Select';
 import Tabs from '@/components/common/Tabs';
+import TabsContent from '@/components/common/Tabs/TabsContent';
+import Tooltip from '@/components/common/Tooltip';
+import MyGroups from '@/components/Groups/MyGroups';
+import SuggestedGroups from '@/components/Groups/SuggestedGroups';
+import { GROUPS } from '@/constants/enum';
 import { Meta } from '@/layouts/Meta';
-import { createNewGroups } from '@/redux/actions';
+import { createNewGroups, getListGroups } from '@/redux/actions';
 import type { IGroups } from '@/redux/actions/Interface';
+import { hasCreatedNewGroup } from '@/redux/features/groups';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Main } from '@/templates/Main';
+import { getFirstLetter } from '@/utils/func';
 
 const Groups = () => {
   const dispatch = useAppDispatch();
@@ -26,18 +32,22 @@ const Groups = () => {
     mode: 'PUBLIC',
   });
 
+  const [limit, setLimit] = useState(9);
+
+  const { id: userId = '' } = useAppSelector((state) => state.auth.currentUser);
   const isUpdated = useAppSelector((state) => state.groups.isUpdated);
+  const listGroups = useAppSelector((state) => state.groups.listGroups);
 
   const options = [
     {
       key: 'suggestedGroups',
       title: 'Suggested Groups',
-      content: '',
+      content: <SuggestedGroups />,
     },
     {
       key: 'myGroups',
       title: 'My Groups',
-      content: '',
+      content: <MyGroups />,
     },
     {
       key: 'joinedGroups',
@@ -87,6 +97,7 @@ const Groups = () => {
             placeholder="Groups name"
             name="name"
             onChange={handleChange}
+            value={newGroups.name}
           />
         </div>
         <div className="mb-4">
@@ -95,6 +106,7 @@ const Groups = () => {
             className="bg-main mt-2 block !h-32 w-full resize-none rounded-lg pl-4 pt-2 outline-none placeholder:text-base"
             name="description"
             onChange={(e) => handleChange(e)}
+            value={newGroups.description}
           />
         </div>
         <div className="mb-2">
@@ -114,6 +126,11 @@ const Groups = () => {
 
   const onClose = () => {
     setOpenModal(false);
+    setNewGroups({
+      name: '',
+      description: '',
+      mode: 'PUBLIC',
+    });
   };
 
   const onSubmit = () => {
@@ -121,6 +138,7 @@ const Groups = () => {
       dispatch(createNewGroups(newGroups)).then((res: any) => {
         if (res.payload.status === 201) {
           toast.success('Your group has created!');
+          dispatch(hasCreatedNewGroup(res.payload.data.group));
           setNewGroups({
             name: '',
             description: '',
@@ -132,90 +150,22 @@ const Groups = () => {
     }
   };
 
+  useEffect(() => {
+    if (userId)
+      dispatch(getListGroups({ type: GROUPS.TYPE.USER, limit, user: userId }));
+  }, [userId]);
+
   return (
     <Main meta={<Meta title="Fall in luv ❤️" description="Fall in luv ❤️" />}>
       <div className="grid grid-cols-8 gap-4">
-        <div className="col-span-8 lg:col-span-6 xl:ml-[20%]">
-          <p className="my-4">Popular Groups</p>
-          <Carousels childClassName="w-1/2 lg:w-1/3">
-            {[...Array(10)].map((_, index) => (
-              <Card
-                key={index}
-                img="https://i.pinimg.com/originals/ad/39/ea/ad39ea262d0bd449e8a855c5c63bf2cc.jpg"
-                className="mx-1 text-left"
-                imgClassName="!min-h-[100px] cursor-pointer"
-              >
-                <h1>Group {index}</h1>
-                <p className="text-sm">1 Members 50posts</p>
-                <div className="my-1 flex items-center text-sm">
-                  <div className="mr-1 flex cursor-pointer -space-x-2 overflow-hidden">
-                    <span className="m-auto inline-block rounded-full bg-pink-400 p-3 ring-2 ring-white hover:z-10" />
-                    <span className="m-auto inline-block rounded-full bg-pink-400 p-3 ring-2 ring-white hover:z-10" />
-                  </div>
-                  See all Members
-                </div>
-                <div className="flex justify-between">
-                  <Button className="mr-1 h-8 w-full justify-center text-sm">
-                    Join
-                  </Button>
-                  <Button className="ml-1 h-8 w-full justify-center bg-gray-400 text-sm text-black">
-                    View
-                  </Button>
-                </div>
-              </Card>
-            ))}
-          </Carousels>
-          <p className="mt-4">Categories</p>
-          <p className="mb-4 text-sm">
-            Find A Group By Browsing Top Categories
-          </p>
-          <Carousels childClassName="w-1/3 sm:w-1/4">
-            {[...Array(10)].map((_, index) => (
-              <div
-                key={index}
-                className="relative m-1 min-h-[120px] cursor-pointer overflow-hidden rounded-lg shadow-lg"
-              >
-                <img
-                  src="https://i.pinimg.com/originals/99/fa/39/99fa392c68b57c46d579a977413b2925.jpg"
-                  className={`absolute top-1/2 right-0 left-1/2 bottom-0 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover hover:scale-125`}
-                  alt="image"
-                />
-                <p className="absolute left-2 bottom-1 text-white">Animals</p>
-              </div>
-            ))}
-          </Carousels>
-          <p className="mt-4">Suggested Groups</p>
-          <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {[...Array(10)].map((_, index) => (
-              <Card
-                key={index}
-                img="https://i.pinimg.com/originals/ad/39/ea/ad39ea262d0bd449e8a855c5c63bf2cc.jpg"
-                className="text-left hover:-translate-y-1"
-                imgClassName="!min-h-[100px] cursor-pointer"
-              >
-                <h1>Group {index}</h1>
-                <p className="text-sm">1 Members 50posts</p>
-                <div className="my-1 flex items-center text-sm">
-                  <div className="mr-1 flex cursor-pointer -space-x-2 overflow-hidden">
-                    <span className="m-auto inline-block rounded-full bg-pink-400 p-3 ring-2 ring-white hover:z-10" />
-                    <span className="m-auto inline-block rounded-full bg-pink-400 p-3 ring-2 ring-white hover:z-10" />
-                  </div>
-                  See all Members
-                </div>
-                <div className="flex justify-between">
-                  <Button className="mr-1 h-8 w-full justify-center text-sm">
-                    Join
-                  </Button>
-                  <Button className="ml-1 h-8 w-full justify-center bg-gray-400 text-sm text-black">
-                    View
-                  </Button>
-                </div>
-              </Card>
-            ))}
-          </div>
+        <div className="col-span-8 lg:col-span-6 xl:mx-[10%]">
+          <TabsContent active={active} options={options} />
         </div>
+
         <div className="col-span-2 hidden h-fit p-2 shadow-lg lg:block">
-          <h1 className="mb-2 text-xl">Groups</h1>
+          <h1 className="mb-2 text-xl">
+            <strong>Groups</strong>
+          </h1>
           <Tabs
             options={options}
             optionClassName="!block text-base hover:bg-pink-200 rounded"
@@ -231,7 +181,7 @@ const Groups = () => {
           </Button>
           <Divider />
           <div className="flex justify-between text-base">
-            Suggested Groups <a>See all</a>
+            <strong> Suggested Groups</strong> <a>See all</a>
           </div>
           <div className="flex h-16 w-full items-center rounded px-3 py-2 hover:bg-pink-200">
             <div className="relative mr-2 min-h-full w-1/4 overflow-hidden rounded-lg shadow-lg">
@@ -247,22 +197,48 @@ const Groups = () => {
             </div>
           </div>
           <Divider />
-          <div className="flex justify-between text-base">My Groups</div>
-          {[...Array(3)].map((_, index) => (
-            <div
-              className="flex h-16 w-full items-center rounded px-3 py-2 hover:bg-pink-200"
-              key={index}
+          <div className="flex justify-between text-base">
+            <strong>My Groups</strong>{' '}
+            <span
+              className="cursor-pointer text-blue-700 hover:opacity-75"
+              onClick={() => setActive('myGroups')}
             >
-              <div className="relative mr-2 min-h-full w-1/4 overflow-hidden rounded-lg shadow-lg">
-                <img
-                  src="https://i.pinimg.com/originals/34/72/b4/3472b42c7167bb8bea4ff833e83708fa.jpg"
-                  className={`absolute top-1/2 right-0 left-1/2 bottom-0 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover`}
-                  alt="image"
-                />
+              See all
+            </span>
+          </div>
+          {listGroups.slice(0, 3).map((x) => (
+            <div
+              className="grid h-16 w-full grid-cols-4 gap-2 rounded px-3 py-2 hover:bg-pink-200"
+              key={x.id}
+            >
+              <div
+                className="relative mr-2 min-h-full w-full cursor-pointer overflow-hidden rounded-lg shadow-lg"
+                onClick={() => router.push(`/groups/${x.id}`)}
+              >
+                {x.avatar ? (
+                  <img
+                    src={x.avatar}
+                    className={`absolute top-1/2 right-0 left-1/2 bottom-0 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover`}
+                    alt="image"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center  bg-pink-400 text-white">
+                    {getFirstLetter(x.name as string)}
+                  </div>
+                )}
               </div>
-              <div>
-                <p className="text-base">Rabbit</p>
-                <p className="text-sm">Animals</p>
+              <div className="col-span-3">
+                <Tooltip direction="top" description={x.name}>
+                  <p
+                    className="w-3/4 cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-base"
+                    onClick={() => router.push(`/groups/${x.id}`)}
+                  >
+                    {x.name}
+                  </p>
+                </Tooltip>
+                <p className="text-sm">
+                  {new Date(x.createdAt as string).toDateString()}
+                </p>
               </div>
             </div>
           ))}

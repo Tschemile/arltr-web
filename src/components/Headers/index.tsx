@@ -37,7 +37,7 @@ export default function Headers() {
         <div className="flex items-center">
           {pathname.split('/')[1] !== 'user' && (
             <div
-              className="mr-2 xl:hidden"
+              className="mr-2 cursor-pointer xl:hidden"
               onClick={() => dispatch(onShowNavbar())}
             >
               <div className="peer transition duration-200 hover:hidden">

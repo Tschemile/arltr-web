@@ -31,6 +31,7 @@ export default function ContentModal(props: IContentModal) {
     gender: genderCurrent = '',
     avatar = '',
   } = useAppSelector((state) => state.auth.currentUser);
+
   const getLayout = () => {
     if (fileDataURL.length <= 2) {
       return fileDataURL.map((x: any) => (
@@ -77,6 +78,7 @@ export default function ContentModal(props: IContentModal) {
       </div>
     );
   };
+
   return (
     <div>
       <>
@@ -110,7 +112,7 @@ export default function ContentModal(props: IContentModal) {
         </div>
         <div className="my-4">
           <textarea
-            className="h-[200px] w-full resize-none py-1 outline-none placeholder:text-base placeholder:text-gray-500"
+            className="no-scrollbar h-fit w-full resize-none  py-1 outline-none placeholder:text-base placeholder:text-gray-500"
             placeholder={`What is your mind? ${name} !`}
             onChange={(e) => setContent(e.target.value)}
             value={content}

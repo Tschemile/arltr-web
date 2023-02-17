@@ -9,7 +9,6 @@ import Button from '@/components/common/Button';
 import Divider from '@/components/common/Divider';
 import Modal from '@/components/common/Modal';
 import PreviewPost from '@/components/common/PreviewPost';
-import Tooltip from '@/components/common/Tooltip';
 import CreatePost from '@/components/CreatePost';
 import ContentModal from '@/components/CreatePost/ContentModal';
 import Briefcase from '@/components/Icons/Briefcase';
@@ -140,8 +139,8 @@ export default function Timeline(props: ITimeline) {
       const formData = new FormData();
       formData.append('file', e.target.files[0] as string | Blob);
       dispatch(uploadFile(formData)).then((res: any) => {
-        const { payload: { status = 0, data = '' } = {} } = res;
-        if (status === 201) {
+        const { payload: { status: statusCode = 200, data = '' } = {} } = res;
+        if (statusCode === 201) {
           setFileDataURL([...fileDataURL, data.url]);
         }
       });
@@ -351,11 +350,7 @@ export default function Timeline(props: ITimeline) {
                         </div>
                       )}
                     </div>
-                    <Tooltip description={x.name}>
-                      <p className="mt-2 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium">
-                        {x.name}
-                      </p>
-                    </Tooltip>
+                    <p className="mt-2 text-sm font-medium">{x.name}</p>
                   </div>
                 ))}
               </div>

@@ -88,10 +88,10 @@ export interface IReaction {
 
 export interface IGetGroups {
   limit?: number;
-  type?: GROUPS.TYPE;
+  type: GROUPS.TYPE;
   search?: string;
   mode?: keyof typeof GROUPS.MODE;
-  user: string;
+  user?: string;
 }
 
 export interface IGroups {
@@ -101,6 +101,7 @@ export interface IGroups {
   avatar?: string;
   cover?: string;
   mode?: keyof typeof GROUPS.MODE;
+  total?: number;
 }
 
 // Members
