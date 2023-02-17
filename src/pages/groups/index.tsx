@@ -32,8 +32,7 @@ const Groups = () => {
     mode: 'PUBLIC',
   });
 
-  const [limit, setLimit] = useState(9);
-  setLimit(9);
+  // const [limit, setLimit] = useState(9);
 
   const { id: userId = '' } = useAppSelector((state) => state.auth.currentUser);
   const isUpdated = useAppSelector((state) => state.groups.isUpdated);
@@ -153,7 +152,9 @@ const Groups = () => {
 
   useEffect(() => {
     if (userId)
-      dispatch(getListGroups({ type: GROUPS.TYPE.USER, limit, user: userId }));
+      dispatch(
+        getListGroups({ type: GROUPS.TYPE.USER, limit: 9, user: userId })
+      );
   }, [userId]);
 
   return (
