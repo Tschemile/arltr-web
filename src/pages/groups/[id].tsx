@@ -170,7 +170,7 @@ export default function DetailGroup() {
         <div className="mb-4">
           <label htmlFor="">Description:</label>
           <textarea
-            className="bg-main mt-2 block !h-32 w-full resize-none rounded-lg pl-4 pt-2 outline-none placeholder:text-base"
+            className="mt-2 block !h-32 w-full resize-none rounded-lg bg-primary-color pl-4 pt-2 outline-none placeholder:text-base"
             name="description"
             value={newGroups.description}
             onChange={handleChange}
@@ -281,7 +281,7 @@ export default function DetailGroup() {
                   className="h-full w-full rounded-full border-[3px] border-solid border-white object-cover"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center rounded-full bg-pink-400 text-white">
+                <div className="flex h-full w-full items-center justify-center rounded-full bg-primary-backgroundColor text-white">
                   {getFirstLetter(name as string)}
                 </div>
               )}
@@ -344,7 +344,7 @@ export default function DetailGroup() {
                 ))}
               </div>
               <div className="mt-2 flex items-center justify-center sm:mt-0">
-                <Button className="bg-pink-400 text-base">
+                <Button className="text-base">
                   <PlusIcon /> Invite
                 </Button>
                 {isAdmin && (
@@ -375,7 +375,7 @@ export default function DetailGroup() {
                       },
                     ]}
                   >
-                    <Button className="ml-2 bg-gray-600">
+                    <Button className="ml-2 !bg-gray-600">
                       <BulletList />
                     </Button>
                   </Dropdown>

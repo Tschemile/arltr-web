@@ -12,7 +12,7 @@ interface AuthLayoutProps {
 
 export default function AuthLayout(props: AuthLayoutProps) {
   return (
-    <div className="relative flex h-[100vh] w-full items-center justify-center bg-gradient-to-b from-emerald-300 to-pink-300 shadow-2xl">
+    <div className="relative flex h-[100vh] w-full items-center justify-center bg-primary-color shadow-2xl">
       <div className="z-10 w-full overflow-hidden rounded-lg border border-solid shadow-lg sm:w-[65%] lg:h-[80vh]">
         <div className="lg:flex lg:h-full lg:items-center lg:justify-center">
           <div className=" hidden h-full w-full flex-col justify-between bg-primary-backgroundColor py-4 px-12 text-white lg:flex">

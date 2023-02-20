@@ -32,11 +32,8 @@ a:hover {
     .icon-header {
       @apply ml-4 border-2 rounded-full p-1 bg-primary-color 
     } 
-    .bg-main {
-      @apply bg-primary-color
-    }
     .nav-item {
-      @apply flex w-full items-center rounded py-1 px-4 text-center hover:bg-pink-200  cursor-pointer
+      @apply flex w-full items-center rounded py-1 px-4 text-center hover:bg-gray-400  cursor-pointer
     }
     .spinner {
       @apply animate-spin border-solid border-[5px] border-t-[5px] border-primary-border border-t-gray-500 w-[40px] h-[40px] rounded-[50%] mx-auto;

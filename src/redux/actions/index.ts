@@ -3,6 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '@/api';
 
 import type {
+  IAlbum,
   ICreatePost,
   IEditComment,
   IFriendship,
@@ -182,7 +183,7 @@ export const getListReaction = createAsyncThunk(
   'post/getListReaction',
   async (params: any) => {
     const res = await api.get('/react', { params });
-    return res.data;
+    return res;
   }
 );
 
@@ -260,6 +261,32 @@ export const outOfGroup = createAsyncThunk(
   'members/outOfGroup',
   async (idMember: string) => {
     const res = await api.delete(`/member/${idMember}`);
+    return res;
+  }
+);
+
+// Albums
+
+export const createNewAlbum = createAsyncThunk(
+  'albums/createNewAlbum',
+  async (payload: IAlbum) => {
+    const res = await api.post('/album', { ...payload });
+    return res;
+  }
+);
+
+export const getListAlbums = createAsyncThunk(
+  'albums/getListAlbums',
+  async (params: Record<'user', string>) => {
+    const res = await api.get('/album', { params });
+    return res.data;
+  }
+);
+
+export const deleteAlbum = createAsyncThunk(
+  'albums/deleteAlbum',
+  async (id: string) => {
+    const res = await api.delete(`/album/${id}`);
     return res;
   }
 );

@@ -58,9 +58,9 @@ const Index = () => {
   };
 
   return (
-    <Main meta={<Meta title="I ♥ U" description="I ♥ U" />}>
+    <Main meta={<Meta title="Home | Roma" description="Home | Roma" />}>
       <div className="grid grid-cols-8 gap-4">
-        <div className="col-span-8 md:col-span-6 lg:mx-[15%] ">
+        <div className="col-span-8 md:col-span-6 lg:mx-[15%]">
           <StoryCarousels />
           <div className="mt-2 lg:mx-[5%]">
             <CreatePost setOpenModal={setOpenModal} />

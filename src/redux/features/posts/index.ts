@@ -50,7 +50,7 @@ export const postsSlice = createSlice({
       .addCase(getListReaction.fulfilled, (state, { payload }) => {
         return {
           ...state,
-          listReaction: payload,
+          listReaction: payload.data,
           loadingListRelations: false,
         };
       })

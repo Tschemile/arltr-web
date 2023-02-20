@@ -345,7 +345,7 @@ export default function Timeline(props: ITimeline) {
                           className="h-full w-full rounded-lg object-cover"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center rounded-lg bg-pink-400 text-white">
+                        <div className="flex h-full w-full items-center justify-center rounded-lg bg-primary-backgroundColor text-white">
                           {getFirstLetter(x.name as string)}
                         </div>
                       )}
