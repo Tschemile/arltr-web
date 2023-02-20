@@ -14,6 +14,7 @@ interface ICommentForm {
   contentCmt?: string;
   refs?: any;
   handleChangeFile: (e: ChangeEvent<HTMLInputElement>) => void;
+  id?: string;
 }
 
 export default function CommentForm(props: ICommentForm) {
@@ -23,6 +24,7 @@ export default function CommentForm(props: ICommentForm) {
     contentCmt = '',
     refs = {},
     handleChangeFile = () => {},
+    id = '',
   } = props;
 
   const currentUser = useAppSelector((state) => state.auth.currentUser);
@@ -51,7 +53,7 @@ export default function CommentForm(props: ICommentForm) {
           <li className="cursor-pointer">
             <UploadButton
               className="cursor-pointer"
-              id="upload-file-cmt"
+              id={id}
               handleChange={handleChangeFile}
             >
               <Chain />

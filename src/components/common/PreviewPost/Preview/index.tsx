@@ -86,12 +86,14 @@ export default function Preview(props: PreviewProps) {
   useEffect(() => {
     if (visible) {
       if (indexSelected) setCurrentSlide(indexSelected);
+      document.body.className = 'overflow-hidden';
     }
     return () => {
       setShow(true);
       setRotateImg(0);
       setScaleImg(0.75);
       setCurrentSlide(0);
+      document.body.className = '';
     };
   }, [visible]);
 
@@ -114,9 +116,9 @@ export default function Preview(props: PreviewProps) {
             <div
               className={`fixed top-0 z-50 flex min-w-full ${
                 show ? 'sm:min-w-[calc(100%-300px)]' : 'sm:min-w-full'
-              } justify-between bg-pink-900 p-2 text-white transition-all`}
+              } justify-between text-white transition-all`}
             >
-              <div className="flex space-x-3">
+              <div className="flex space-x-3 p-1">
                 <div
                   onClick={onClose}
                   className="cursor-pointer rounded-full px-2 "
@@ -129,8 +131,11 @@ export default function Preview(props: PreviewProps) {
                   </span>
                 )}
               </div>
-
-              <div className="flex">
+              <div
+                className="w-full opacity-0 transition-opacity"
+                onClick={onClose}
+              />
+              <div className="flex p-1">
                 <button
                   onClick={() => setScaleImg(scaleImg + 0.25)}
                   className="disabled:opacity-50"
@@ -176,7 +181,7 @@ export default function Preview(props: PreviewProps) {
                     className="fixed inset-0 transition-opacity"
                     onClick={onClose}
                   >
-                    <div className="absolute inset-0 bg-gray-900 opacity-75" />
+                    <div className="absolute inset-0 bg-gray-900 opacity-95" />
                   </div>
                   <img
                     src={data![currentSlide]}
@@ -186,11 +191,6 @@ export default function Preview(props: PreviewProps) {
                       transform: `translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(${rotateImg}deg) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(${scaleImg}) scaleY(${scaleImg})`,
                     }}
                   />
-                  <div
-                    className={`absolute top-1/2 right-0 left-1/2 bottom-0 h-auto max-w-full -translate-x-1/2 -translate-y-1/2 object-contain transition-all`}
-                  >
-                    {currentSlide}
-                  </div>
                 </div>
               </div>
             </div>
@@ -198,7 +198,7 @@ export default function Preview(props: PreviewProps) {
           </div>
 
           <div
-            className={`z-50 hidden min-h-screen w-full max-w-[300px] bg-white ${
+            className={`z-50 hidden min-h-screen w-full max-w-[300px] bg-green-400 ${
               show ? 'sm:block' : 'sm:hidden'
             }`}
           >

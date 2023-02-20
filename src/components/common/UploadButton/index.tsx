@@ -18,7 +18,7 @@ export default function UploadButton(props: IUploadButton) {
     multiple = false,
   } = props;
   return (
-    <form>
+    <div>
       <label htmlFor={id} className={className}>
         {children}
       </label>
@@ -26,10 +26,10 @@ export default function UploadButton(props: IUploadButton) {
         id={id}
         type="file"
         accept=".jpg, .png, .jpeg"
-        className="hidden"
+        hidden
         onChange={handleChange}
         multiple={multiple}
       />
-    </form>
+    </div>
   );
 }

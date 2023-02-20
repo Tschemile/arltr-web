@@ -525,27 +525,29 @@ export default function CardPost(props: ICardPost) {
       <div className="whitespace-pre-line py-2 ">{content}</div>
       {images && images.length > 0 && <PreviewPost data={images} isPost />}
       <div className="mt-4 flex items-center justify-between text-sm">
-        {totalReacts > 0 && (
-          <div className="flex items-center">
-            <IconButton className="ml-0 mr-1 p-0">
-              <Like width={22} color="blue" />
-            </IconButton>
-            <span
-              className="cursor-pointer text-sm hover:underline"
-              onClick={handleGetListReaction}
-            >
-              {isLiked
-                ? `You ${
-                    totalReacts - 1 < 1
-                      ? ''
-                      : `and ${totalReacts - 1} other${
-                          totalReacts - 1 > 1 ? 's' : ''
-                        }`
-                  }`
-                : totalReacts}
-            </span>
-          </div>
-        )}
+        <div>
+          {totalReacts > 0 && (
+            <div className="flex items-center">
+              <IconButton className="ml-0 mr-1 p-0">
+                <Like width={22} color="blue" />
+              </IconButton>
+              <span
+                className="cursor-pointer text-sm hover:underline"
+                onClick={handleGetListReaction}
+              >
+                {isLiked
+                  ? `You ${
+                      totalReacts - 1 < 1
+                        ? ''
+                        : `and ${totalReacts - 1} other${
+                            totalReacts - 1 > 1 ? 's' : ''
+                          }`
+                    }`
+                  : totalReacts}
+              </span>
+            </div>
+          )}
+        </div>
         {totalComments > 0 && (
           <div
             className="cursor-pointer"
@@ -607,6 +609,7 @@ export default function CardPost(props: ICardPost) {
         contentCmt={contentCmt}
         handleChangeFile={handleChangeFile}
         refs={refs}
+        id={id}
       />
       {image && (
         <div className="ml-14 h-20 w-20 pb-4">

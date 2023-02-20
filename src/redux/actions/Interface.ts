@@ -41,8 +41,9 @@ export interface IInfoUser {
 
 export interface IRelation {
   user?: string;
-  type: 'FOLLOW' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';
+  type: 'FOLLOW' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED' | 'SNOOZE';
   status?: keyof typeof RELATIONSHIPS.STATUS;
+  expiredAt?: string;
 }
 
 export interface IInRelation {
@@ -102,6 +103,7 @@ export interface IGroups {
   cover?: string;
   mode?: keyof typeof GROUPS.MODE;
   total?: number;
+  member?: Record<string, string>;
 }
 
 // Members

@@ -11,7 +11,7 @@ import Lock from '@/components/Icons/Lock';
 import Message from '@/components/Icons/Message';
 import PlusIcon from '@/components/Icons/PlusIcon';
 import { changeRelation, setFriendship } from '@/redux/actions';
-import { useAppDispatch } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 interface OptionProps {
   isFollowing: Record<string, string>;
@@ -33,6 +33,9 @@ function OptionAction(props: OptionProps) {
     isRequested = false,
   } = props;
 
+  const {
+    isLoading: { loadingChangeRelation },
+  } = useAppSelector((state) => state.relation);
   const checkUnfriend = Object.keys(isFriend).length === 0;
   const checkUnfollow = Object.keys(isFollowing).length === 0;
   const [makeFriend, setMakeFriend] = useState(!isRequest && checkUnfriend);
@@ -82,7 +85,7 @@ function OptionAction(props: OptionProps) {
             },
           ]}
         >
-          <Button>
+          <Button loading={loadingChangeRelation}>
             <Earth className="fill-sky-600" />
             Respond
           </Button>
@@ -91,6 +94,7 @@ function OptionAction(props: OptionProps) {
     return makeFriend ? (
       <Button
         className=" bg-gray-600"
+        loading={loadingChangeRelation}
         onSubmit={() => {
           dispatch(
             setFriendship({
@@ -110,6 +114,7 @@ function OptionAction(props: OptionProps) {
     ) : (
       <Button
         className=" bg-gray-600"
+        loading={loadingChangeRelation}
         onSubmit={() => {
           dispatch(
             setFriendship({
@@ -143,6 +148,11 @@ function OptionAction(props: OptionProps) {
     };
   }, [checkUnfollow, checkUnfriend, isRequest, isRequested]);
 
+  // Snozze 30 days from now
+  const today = new Date();
+  const snozzeToDay = new Date();
+  snozzeToDay.setDate(today.getDate() + 30);
+
   return (
     <div className="flex">
       {isCurrentUser ? (
@@ -165,6 +175,7 @@ function OptionAction(props: OptionProps) {
 
           {following ? (
             <Button
+              loading={loadingChangeRelation}
               onSubmit={() => {
                 dispatch(
                   changeRelation({
@@ -181,6 +192,7 @@ function OptionAction(props: OptionProps) {
           ) : (
             <Button
               className="text-pink-200"
+              loading={loadingChangeRelation}
               onSubmit={() => {
                 dispatch(
                   changeRelation({
@@ -226,6 +238,21 @@ function OptionAction(props: OptionProps) {
                     }
                   >
                     Block this person
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() =>
+                      dispatch(
+                        changeRelation({
+                          user: id,
+                          type: 'SNOOZE',
+                          expiredAt: snozzeToDay.toISOString(),
+                        })
+                      )
+                    }
+                  >
+                    Snooze 30 days
                   </button>
                 </li>
                 <li>
