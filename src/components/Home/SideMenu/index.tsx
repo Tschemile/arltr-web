@@ -51,7 +51,7 @@ function SideMenu() {
       </div>
       {[...Array(5)].map((_, index) => (
         <div
-          className="flex h-16 w-full items-center justify-between rounded px-3 py-2 hover:bg-pink-200"
+          className="flex h-16 w-full items-center justify-between rounded px-3 py-2 hover:bg-gray-400"
           key={index}
         >
           <div className="inline-flex items-center space-x-2">
@@ -66,7 +66,7 @@ function SideMenu() {
             <p className="text-base">Rabbit</p>
           </div>
 
-          <Button className="text-base">follow</Button>
+          <Button className="text-base">Follow</Button>
         </div>
       ))}
       <Divider />
@@ -76,7 +76,7 @@ function SideMenu() {
       </div>
       {[...Array(5)].map((_, index) => (
         <div
-          className="flex h-16 w-full items-center justify-between rounded px-3 py-2 hover:bg-pink-200"
+          className="flex h-16 w-full items-center justify-between rounded px-3 py-2 hover:bg-gray-400"
           key={index}
         >
           <div className="inline-flex items-center space-x-2">
@@ -91,7 +91,7 @@ function SideMenu() {
             <p className="text-base">Rabbit</p>
           </div>
 
-          <Button className="text-base">follow</Button>
+          <Button className="text-base">Follow</Button>
         </div>
       ))}
     </div>

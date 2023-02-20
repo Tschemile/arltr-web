@@ -1,4 +1,5 @@
 import type {
+  ALBUMS,
   GROUPS,
   MEMBERS,
   POSTS,
@@ -113,4 +114,22 @@ export interface IMembers {
   group?: string;
   status: string[];
   type: keyof typeof MEMBERS.TYPE;
+}
+
+// Album
+
+export interface IAlbum {
+  name: string;
+  mode: keyof typeof ALBUMS.MODE;
+}
+
+export interface IGetAlbums {
+  id: string;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string;
+  name: string;
+  mode: keyof typeof ALBUMS.MODE;
+  presentation?: null;
+  user: IInfoUser;
 }

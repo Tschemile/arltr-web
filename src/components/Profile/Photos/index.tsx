@@ -17,7 +17,7 @@ export default function Photos() {
     {
       key: 'ALBUMS',
       title: 'Albums',
-      content: <ContentAlbums data={[]} />,
+      content: <ContentAlbums />,
     },
     {
       key: 'PHOTOS',
@@ -33,7 +33,11 @@ export default function Photos() {
         defaultKey={activeTab}
         handleChange={(key) => setActiveTab(key)}
       />
-      <TabsContent options={options} active={activeTab} />
+      <TabsContent
+        options={options}
+        active={activeTab}
+        className="min-h-[40vh]"
+      />
     </Card>
   );
 }

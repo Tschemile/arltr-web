@@ -197,7 +197,7 @@ export default function Navbar() {
     <div
       className={`fixed top-[60px] h-[calc(100vh-60px)] w-[300px] ${
         !isShow ? '-translate-x-full' : 'translate-x-0'
-      } no-scrollbar z-10 overflow-y-auto overscroll-contain bg-[#f5c0d0] py-2 px-4 text-black transition-all duration-200 ease-in-out xl:block xl:translate-x-0`}
+      } no-scrollbar z-10 overflow-y-auto overscroll-contain bg-primary-color py-2 px-4 text-black transition-all duration-200 ease-in-out xl:block xl:translate-x-0`}
     >
       {loadingCurrentUser ? (
         <Sidebar />
@@ -274,7 +274,7 @@ export default function Navbar() {
               <p>Temp - Conditions</p>
             </div>
             <p>
-              © 2023 <strong>Iu be ❤</strong>. All Rights Reserved.
+              © 2023 <strong>Roma</strong>. All Rights Reserved.
             </p>
           </div>
         </>

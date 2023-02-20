@@ -103,7 +103,7 @@ const Groups = () => {
         <div className="mb-4">
           <label htmlFor="">Description:</label>
           <textarea
-            className="bg-main mt-2 block !h-32 w-full resize-none rounded-lg pl-4 pt-2 outline-none placeholder:text-base"
+            className="mt-2 block !h-32 w-full resize-none rounded-lg bg-primary-color pl-4 pt-2 outline-none placeholder:text-base"
             name="description"
             onChange={(e) => handleChange(e)}
             value={newGroups.description}
@@ -158,7 +158,7 @@ const Groups = () => {
   }, [userId]);
 
   return (
-    <Main meta={<Meta title="Fall in luv ❤️" description="Fall in luv ❤️" />}>
+    <Main meta={<Meta title="Groups | Roma" description="Groups | Roma" />}>
       <div className="grid grid-cols-8 gap-4">
         <div className="col-span-8 lg:col-span-6 xl:mx-[10%]">
           <TabsContent active={active} options={options} />
@@ -170,13 +170,13 @@ const Groups = () => {
           </h1>
           <Tabs
             options={options}
-            optionClassName="!block text-base hover:bg-pink-200 rounded"
+            optionClassName="!block text-base hover:bg-gray-400 rounded"
             defaultKey={active}
             handleChange={setActive}
-            activeClassName="bg-pink-400 rounded text-white"
+            activeClassName="bg-primary-backgroundColor rounded text-white"
           />
           <Button
-            className="mt-2 w-full justify-center bg-pink-400 text-base text-white"
+            className="mt-2 w-full justify-center bg-primary-backgroundColor text-base text-white"
             onSubmit={() => setOpenModal(!openModal)}
           >
             + Create
@@ -185,7 +185,7 @@ const Groups = () => {
           <div className="flex justify-between text-base">
             <strong> Suggested Groups</strong> <a>See all</a>
           </div>
-          <div className="flex h-16 w-full items-center rounded px-3 py-2 hover:bg-pink-200">
+          <div className="flex h-16 w-full items-center rounded px-3 py-2 hover:bg-gray-400">
             <div className="relative mr-2 min-h-full w-1/4 overflow-hidden rounded-lg shadow-lg">
               <img
                 src="https://i.pinimg.com/originals/34/72/b4/3472b42c7167bb8bea4ff833e83708fa.jpg"
@@ -210,7 +210,7 @@ const Groups = () => {
           </div>
           {listGroups.slice(0, 3).map((x) => (
             <div
-              className="grid h-16 w-full grid-cols-4 gap-2 rounded px-3 py-2 hover:bg-pink-200"
+              className="grid h-16 w-full grid-cols-4 gap-2 rounded px-3 py-2 hover:bg-gray-400"
               key={x.id}
             >
               <div
@@ -224,7 +224,7 @@ const Groups = () => {
                     alt="image"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center  bg-pink-400 text-white">
+                  <div className="flex h-full w-full items-center justify-center bg-primary-backgroundColor text-white">
                     {getFirstLetter(x.name as string)}
                   </div>
                 )}

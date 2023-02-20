@@ -32,13 +32,17 @@ export default function Tooltip(props: TooltipProps) {
         className={`absolute hidden w-max items-center opacity-75 group-hover:flex ${customClass}`}
       >
         {showArrow && ['bottom', 'right'].includes(direction) && (
-          <div className={`${customArrow} h-3 w-3 rotate-45 bg-black`} />
+          <div
+            className={`${customArrow} h-3 w-3 rotate-45 bg-primary-backgroundColor`}
+          />
         )}
-        <span className="relative z-10 bg-black p-2 text-xs leading-none text-white shadow-lg">
+        <span className="relative z-10 bg-primary-backgroundColor p-2 text-xs leading-none text-white shadow-lg">
           {description}
         </span>
         {showArrow && ['top', 'left'].includes(direction) && (
-          <div className={`${customArrow} h-3 w-3 rotate-45 bg-black`} />
+          <div
+            className={`${customArrow} h-3 w-3 rotate-45 bg-primary-backgroundColor`}
+          />
         )}
       </div>
     </div>

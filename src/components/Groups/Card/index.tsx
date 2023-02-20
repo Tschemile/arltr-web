@@ -19,7 +19,7 @@ export default function CardGroups(props: ICardGroups) {
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMiUvtkIL7TNaP5Md966DKyLLX8Qv-pFOpaQIPZiS-gZpnDgPa19fGVougiaSfftwtCcE&usqp=CAU'
       }
       className="text-left hover:-translate-y-1"
-      imgClassName="!min-h-[100px] cursor-pointer"
+      imgClassName="!min-h-[150px] cursor-pointer"
     >
       <h1
         className="w-full cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-lg font-bold"
@@ -27,18 +27,10 @@ export default function CardGroups(props: ICardGroups) {
       >
         {name}
       </h1>
-      <p className="text-sm">{total} Members 50 posts</p>
-      <div className="my-2 flex items-center text-sm">
-        <div className="mr-1 flex cursor-pointer -space-x-2 overflow-hidden">
-          <span className="m-auto inline-block rounded-full bg-pink-400 p-3 ring-2 ring-white hover:z-10" />
-          <span className="m-auto inline-block rounded-full bg-pink-400 p-3 ring-2 ring-white hover:z-10" />
-        </div>
-        See all Members
-      </div>
+      <p className="mb-2 text-sm">{total} Members 50 posts</p>
       <div className="flex justify-between">
-        <Button className="mr-1 h-8 w-full justify-center text-sm">Join</Button>
         <Button
-          className="ml-1 h-8 w-full justify-center bg-gray-400 text-sm text-black"
+          className="mr-1 h-8 w-full justify-center text-sm"
           onSubmit={() => router.push(`/groups/${id}`)}
         >
           View

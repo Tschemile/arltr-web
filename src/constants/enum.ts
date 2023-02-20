@@ -64,3 +64,12 @@ export namespace MEMBERS {
     MODS = 'MODS',
   }
 }
+
+export namespace ALBUMS {
+  export enum MODE {
+    PUBLIC = 'PUBLIC',
+    PRIVATE = 'PRIVATE',
+    FRIEND = 'FRIEND',
+    HIDDEN = 'HIDDEN',
+  }
+}

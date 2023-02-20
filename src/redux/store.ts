@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import { albumsReducer } from './features/albums';
 import { authReducer } from './features/auth/authSlice';
 import { commentsReducer } from './features/comments';
 import { groupsReducer } from './features/groups';
@@ -19,6 +20,7 @@ export const store = configureStore({
     relation: relationReducer,
     groups: groupsReducer,
     members: membersReducer,
+    albums: albumsReducer,
   },
   devTools: true,
   middleware: (getDefaultMiddleware) =>

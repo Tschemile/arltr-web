@@ -1,3 +1,4 @@
+import { FastAverageColor } from 'fast-average-color';
 import router, { useRouter } from 'next/router';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useEffect, useState } from 'react';
@@ -69,6 +70,7 @@ const User = () => {
   const [about, setAbout] = useState('');
   const [coverImg, setCoverImg] = useState('');
   const [avatarImg, setAvatarImg] = useState('');
+  const [backGround, setBackGround] = useState('');
 
   const options = [
     {
@@ -166,7 +168,18 @@ const User = () => {
   }, [query.slug, currentUserId]);
 
   useEffect(() => {
-    if (coverImgProps) setCoverImg(coverImgProps);
+    if (coverImgProps) {
+      setCoverImg(coverImgProps);
+      new FastAverageColor()
+        .getColorAsync(coverImgProps)
+        .then((color) => setBackGround(color.hex))
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+    return () => {
+      setBackGround('');
+    };
   }, [coverImgProps]);
 
   useEffect(() => {
@@ -179,11 +192,14 @@ const User = () => {
 
   return (
     <TimelineLayout
-      meta={
-        <Meta title={`${name} | Bé ơi ❤️`} description={`${name} | Bé ơi ❤️`} />
-      }
+      meta={<Meta title={`${name} | Roma`} description={`${name} | Roma`} />}
     >
-      <div className="w-full bg-gradient-to-t from-white to-[#4d80a4]">
+      <div
+        className="w-full"
+        style={{
+          backgroundImage: `linear-gradient(to top, white , ${backGround})`,
+        }}
+      >
         {(loadingListRelation && !isCurrentUser) ||
         loadingCurrentUser ||
         loadingUser ? (

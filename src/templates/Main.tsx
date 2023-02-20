@@ -47,7 +47,7 @@ const Main = (props: IMainProps) => {
             if (isShow) dispatch(onHideNavbar());
           }}
           className={`${
-            isShow ? 'cursor-pointer bg-[rgba(0,0,0,0.4)]' : 'bg-main'
+            isShow ? 'cursor-pointer bg-[rgba(0,0,0,0.4)]' : 'bg-primary-color'
           } z-40 mt-[60px] grid h-full w-full text-xl`}
         >
           <Navbar />

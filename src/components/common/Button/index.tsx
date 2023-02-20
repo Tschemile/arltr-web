@@ -22,7 +22,7 @@ export default function Button(props: ButtonProps) {
       onClick={onSubmit}
       type={type}
       disabled={loading}
-      className={`flex items-center whitespace-nowrap rounded  bg-pink-400 py-1 px-2 text-white disabled:cursor-not-allowed disabled:bg-slate-400 ${className}`}
+      className={`flex items-center whitespace-nowrap rounded bg-primary-backgroundColor py-1 px-2 text-white transition-all hover:bg-gray-600 disabled:cursor-not-allowed disabled:bg-slate-400 ${className}`}
     >
       {loading && (
         <span className="mr-1 flex justify-center">

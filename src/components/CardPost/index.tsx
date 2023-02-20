@@ -400,9 +400,7 @@ export default function CardPost(props: ICardPost) {
   };
 
   const handleGetListReaction = () => {
-    setReactionModal(true);
-
-    dispatch(getListReaction({ post: id, limit: 10 })).then((res) => {
+    dispatch(getListReaction({ post: id, limit: 10 })).then((res: any) => {
       if (res.payload.status === 200) {
         setReactionModal(true);
       }
@@ -548,15 +546,17 @@ export default function CardPost(props: ICardPost) {
             </div>
           )}
         </div>
-        {totalComments > 0 && (
-          <div
-            className="cursor-pointer"
-            onClick={() => getAllCommentsOfPost(id)}
-          >
-            <span className="pr-1">{totalComments}</span>
-            <span>Comment</span>
-          </div>
-        )}
+        <div>
+          {totalComments > 0 && (
+            <div
+              className="cursor-pointer"
+              onClick={() => getAllCommentsOfPost(id)}
+            >
+              <span className="pr-1">{totalComments}</span>
+              <span>Comment</span>
+            </div>
+          )}
+        </div>
       </div>
       <Divider />
       <div className="-my-3 flex">
