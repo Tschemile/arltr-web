@@ -1,4 +1,10 @@
-import React, { createRef, useCallback, useEffect, useState } from 'react';
+import React, {
+  createRef,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import ArrowLeft from '@/components/Icons/ArrowLeft';
 import ArrowPointingOut from '@/components/Icons/ArrowPointingOut';
@@ -14,6 +20,74 @@ interface PreviewProps {
   indexSelected: number;
   showTotal?: boolean;
 }
+
+interface ImageComponentProps {
+  src: string;
+  rotateImg: number;
+  scaleImg: number;
+}
+
+const ImgComponent = (props: ImageComponentProps) => {
+  const { rotateImg, scaleImg, src } = props;
+  const refImg = useRef(null);
+  const [translate, setTranslate] = useState({ x: 0, y: 0 });
+  const [pressed, setPressed] = useState(false);
+
+  const handleDrag = (e: React.PointerEvent<HTMLImageElement>) => {
+    if (pressed && refImg.current)
+      setTranslate({
+        x: translate.x + e.movementX,
+        y: translate.y + e.movementY,
+      });
+    e.stopPropagation();
+    e.preventDefault();
+  };
+  const handleDragUp = () => {
+    setTranslate({
+      x: 0,
+      y: 0,
+    });
+  };
+  useEffect(() => {
+    return () => {
+      setTranslate({ x: 0, y: 0 });
+      setPressed(false);
+    };
+  }, []);
+
+  return (
+    <img
+      src={src}
+      className={`${
+        pressed ? 'cursor-grabbing' : 'cursor-grab'
+      } absolute top-1/2 right-0 left-1/2 bottom-0 h-auto max-w-full -translate-x-1/2 -translate-y-1/2 object-contain transition-all duration-75 ease-in-out`}
+      alt="image"
+      ref={refImg}
+      style={{
+        transform: `translate(calc(-50% + ${translate.x}px), calc(-50% + ${translate.y}px)) rotate(${rotateImg}deg) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(${scaleImg}) scaleY(${scaleImg})`,
+      }}
+      draggable={false}
+      onMouseDown={(e) => {
+        setPressed(true);
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+      onMouseUp={(e) => {
+        setPressed(false);
+        if (scaleImg < 1.25) handleDragUp();
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+      onMouseLeave={(e) => {
+        setPressed(false);
+        if (scaleImg < 1.25) handleDragUp();
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+      onMouseMove={handleDrag}
+    />
+  );
+};
 
 export default function Preview(props: PreviewProps) {
   const {
@@ -183,13 +257,10 @@ export default function Preview(props: PreviewProps) {
                   >
                     <div className="absolute inset-0 bg-gray-900 opacity-95" />
                   </div>
-                  <img
+                  <ImgComponent
                     src={data![currentSlide]}
-                    className={`absolute top-1/2 right-0 left-1/2 bottom-0 h-auto max-w-full -translate-x-1/2 -translate-y-1/2 object-contain transition-all`}
-                    alt="image"
-                    style={{
-                      transform: `translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(${rotateImg}deg) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(${scaleImg}) scaleY(${scaleImg})`,
-                    }}
+                    rotateImg={rotateImg}
+                    scaleImg={scaleImg}
                   />
                 </div>
               </div>
@@ -198,11 +269,11 @@ export default function Preview(props: PreviewProps) {
           </div>
 
           <div
-            className={`z-50 hidden min-h-screen w-full max-w-[300px] bg-green-400 ${
+            className={`z-50 hidden min-h-screen w-full max-w-[300px] bg-white ${
               show ? 'sm:block' : 'sm:hidden'
             }`}
           >
-            haha
+            Comment
           </div>
         </div>
       </div>
