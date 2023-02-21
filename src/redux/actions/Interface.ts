@@ -123,6 +123,11 @@ export interface IAlbum {
   mode: keyof typeof ALBUMS.MODE;
 }
 
+export interface IEditAlbum {
+  id: string;
+  payload: IAlbum;
+}
+
 export interface IGetAlbums {
   id: string;
   createdAt?: string;

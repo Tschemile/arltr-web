@@ -31,8 +31,15 @@ export default function Headers() {
     name = '',
   } = useAppSelector((state) => state.auth.currentUser);
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   return (
-    <div className="fixed z-10 h-[60px] w-full bg-white py-2 px-4">
+    <div className="fixed z-20 h-[60px] w-full bg-white py-2 px-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           {pathname.split('/')[1] !== 'user' && (
@@ -48,7 +55,13 @@ export default function Headers() {
               </div>
             </div>
           )}
-          <Link className="hover:border-0" href="/">
+          <Link
+            className="hover:border-0"
+            href="/"
+            onClick={() => {
+              if (pathname === '/') scrollToTop();
+            }}
+          >
             <Image src={Logo} width={40} alt="logo" />
           </Link>
         </div>

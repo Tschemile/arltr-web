@@ -2,8 +2,9 @@ import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 
+import Button from '@/components/common/Button';
 import Headers from '@/components/Headers';
-import Navbar from '@/components/Navbar';
+import Sidebar from '@/components/Sidebar';
 import { getCurrentUser } from '@/redux/actions';
 import { onHideNavbar } from '@/redux/features/home/homeSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -22,6 +23,25 @@ const Main = (props: IMainProps) => {
 
   const isShow = useAppSelector((state) => state.home.isShowNavbar);
   const { currentUser } = useAppSelector((state) => state.auth);
+
+  const [showBackTopButton, setShowBackTopButton] = useState(false);
+
+  useEffect(() => {
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 400) {
+        setShowBackTopButton(true);
+      } else {
+        setShowBackTopButton(false);
+      }
+    });
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
 
   useEffect(() => {
     if (typeof window !== 'undefined' && localStorage.getItem('token'))
@@ -42,15 +62,15 @@ const Main = (props: IMainProps) => {
       <div className="h-full w-full overflow-y-auto text-gray-700 antialiased">
         {props.meta}
         <Headers />
+        <Sidebar />
         <div
           onClick={() => {
             if (isShow) dispatch(onHideNavbar());
           }}
           className={`${
             isShow ? 'cursor-pointer bg-[rgba(0,0,0,0.4)]' : 'bg-primary-color'
-          } z-40 mt-[60px] grid h-full w-full text-xl`}
+          } z-20 mt-[60px] grid h-full w-full text-xl`}
         >
-          <Navbar />
           <div
             className={`${
               isShow ? '-z-10' : ''
@@ -59,6 +79,14 @@ const Main = (props: IMainProps) => {
             {props.children}
           </div>
         </div>
+        <Button
+          onSubmit={scrollToTop}
+          className={`fixed bottom-9 right-10 !block h-10 w-10 rounded-md transition-all duration-700 ${
+            showBackTopButton ? 'visible opacity-100' : 'invisible opacity-0'
+          }`}
+        >
+          &#8679;
+        </Button>
       </div>
     );
   return (

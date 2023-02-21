@@ -22,6 +22,12 @@ export const albumsSlice = createSlice({
     createdAlbum: (state, { payload }) => {
       return { ...state, listAlbums: [...state.listAlbums, payload] };
     },
+    editedAlbum: (state, { payload }) => {
+      const newList = state.listAlbums.map((x) => {
+        return x.id === payload.id ? payload : x;
+      });
+      return { ...state, listAlbums: newList };
+    },
   },
   extraReducers: (builer) => {
     builer
@@ -49,6 +55,6 @@ export const albumsSlice = createSlice({
   },
 });
 
-export const { createdAlbum } = albumsSlice.actions;
+export const { createdAlbum, editedAlbum } = albumsSlice.actions;
 
 export const { reducer: albumsReducer } = albumsSlice;

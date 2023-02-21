@@ -11,9 +11,14 @@ import BulletList from '@/components/Icons/BulletList';
 import PencilSquare from '@/components/Icons/PenciSquare';
 import PlusIcon from '@/components/Icons/PlusIcon';
 import Trash from '@/components/Icons/Trash';
-import { createNewAlbum, deleteAlbum, getListAlbums } from '@/redux/actions';
+import {
+  createNewAlbum,
+  deleteAlbum,
+  editAlbum,
+  getListAlbums,
+} from '@/redux/actions';
 import type { IAlbum, IGetAlbums } from '@/redux/actions/Interface';
-import { createdAlbum } from '@/redux/features/albums';
+import { createdAlbum, editedAlbum } from '@/redux/features/albums';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 interface IAlbumItem {
@@ -21,6 +26,7 @@ interface IAlbumItem {
   handleDeleteAlbum: (id: string) => void;
   setIsEdit: (value: boolean) => void;
   setAlbum: (value: IAlbum) => void;
+  setAlbumId: (value: string) => void;
 }
 
 const AlbumItem = (props: IAlbumItem) => {
@@ -30,6 +36,7 @@ const AlbumItem = (props: IAlbumItem) => {
     handleDeleteAlbum = () => {},
     setIsEdit = () => {},
     setAlbum = () => {},
+    setAlbumId = () => {},
   } = props;
   const {
     presentation = '',
@@ -64,6 +71,7 @@ const AlbumItem = (props: IAlbumItem) => {
                   handleClick: () => {
                     setIsEdit(true);
                     setAlbum({ name, mode });
+                    setAlbumId(id);
                   },
                 },
                 {
@@ -103,6 +111,7 @@ export const ContentAlbums = () => {
   });
   const [listAlbums, setListAlbums] = useState<IGetAlbums[]>([]);
   const [isEdit, setIsEdit] = useState(false);
+  const [albumId, setAlbumId] = useState('');
 
   const isUpdated = useAppSelector((state) => state.albums.isUpdated);
   const { id: userId = '' } = useAppSelector(
@@ -184,6 +193,13 @@ export const ContentAlbums = () => {
           dispatch(createdAlbum(res.payload.data.album));
         }
       });
+    } else {
+      dispatch(editAlbum({ id: albumId, payload: album })).then((res: any) => {
+        if (res.payload.status === 200) {
+          onClose();
+          dispatch(editedAlbum(res.payload.data.album));
+        }
+      });
     }
   };
 
@@ -201,8 +217,8 @@ export const ContentAlbums = () => {
   }, [listAlbumsProps]);
 
   useEffect(() => {
-    dispatch(getListAlbums({ user: userId }));
-  }, []);
+    if (userId) dispatch(getListAlbums({ user: userId }));
+  }, [userId]);
 
   useEffect(() => {
     setOpenModal(isEdit);
@@ -224,6 +240,7 @@ export const ContentAlbums = () => {
               handleDeleteAlbum={() => handleDeleteAlbum(x.id)}
               setIsEdit={setIsEdit}
               setAlbum={setAlbum}
+              setAlbumId={setAlbumId}
             />
           ))}
         </div>
@@ -231,7 +248,7 @@ export const ContentAlbums = () => {
       <Modal
         showModal={openModal}
         onClose={onClose}
-        textSubmitButton={isEdit ? 'Edit noew' : 'Create now'}
+        textSubmitButton={isEdit ? 'Edit now' : 'Create now'}
         content={getContentModal()}
         title={isEdit ? 'Edit album' : 'Create new album'}
         onSubmit={onSubmit}

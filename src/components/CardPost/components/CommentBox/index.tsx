@@ -2,6 +2,8 @@ import type { ChangeEvent, FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import PreviewPost from '@/components/common/PreviewPost';
+import PencilSquare from '@/components/Icons/PenciSquare';
+import Trash from '@/components/Icons/Trash';
 import { deleteComment, editComment, uploadFile } from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
@@ -114,37 +116,51 @@ export default function CommentBox(props: IComment) {
           className="m-auto h-full w-full rounded-full"
         />
       </div>
-      <div className="relative rounded-lg bg-primary-color p-2 after:absolute after:top-3 after:-left-5 after:border-[10px] after:border-transparent after:border-r-primary-color">
-        <h3 className="text-lg font-medium">{name}</h3>
-        <p className="whitespace-pre-line text-sm">{contentCmt}</p>
+      <div className="">
+        <div className="flex">
+          <div className="relative w-fit rounded-lg bg-primary-color p-2 after:absolute after:top-3 after:-left-5 after:border-[10px] after:border-transparent after:border-r-primary-color">
+            <h3 className="text-lg font-medium">{name}</h3>
+            <p className="whitespace-pre-line text-sm">{contentCmt}</p>
+          </div>
+          {currentUser.id === authorId && (
+            <div className="">
+              <Dropdown
+                content={[
+                  {
+                    id: '1',
+                    title: (
+                      <div className="flex items-center gap-2">
+                        <PencilSquare />
+                        <span>Edit</span>
+                      </div>
+                    ),
+                    handleClick: () => setIsEdit(true),
+                  },
+                  {
+                    id: '2',
+                    title: (
+                      <div className="flex items-center gap-2">
+                        <Trash />
+                        <span>Delete</span>
+                      </div>
+                    ),
+                    handleClick: () => handleDeleteComment(),
+                  },
+                ]}
+              >
+                <button>
+                  <EllipsisHorizon />
+                </button>
+              </Dropdown>
+            </div>
+          )}
+        </div>
         {imageProps && (
           <div className="mt-2 h-[200px] w-full">
             <PreviewPost data={imageProps} classNameImg="rounded" />
           </div>
         )}
       </div>
-      {currentUser.id === authorId && (
-        <div className="">
-          <Dropdown
-            content={[
-              {
-                id: '1',
-                title: 'Edit',
-                handleClick: () => setIsEdit(true),
-              },
-              {
-                id: '2',
-                title: 'Delete',
-                handleClick: () => handleDeleteComment(),
-              },
-            ]}
-          >
-            <button>
-              <EllipsisHorizon />
-            </button>
-          </Dropdown>
-        </div>
-      )}
     </div>
   );
 }
