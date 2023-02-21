@@ -5,4 +5,4 @@ export interface SkeletonProps {
   loading: boolean;
 }
 
-export { default as Sidebar } from './Sidebar';
+export { default as Sidebar } from './SidebarSkeleton';

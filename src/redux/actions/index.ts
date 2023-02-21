@@ -5,6 +5,7 @@ import { api } from '@/api';
 import type {
   IAlbum,
   ICreatePost,
+  IEditAlbum,
   IEditComment,
   IFriendship,
   IGetGroups,
@@ -271,6 +272,14 @@ export const createNewAlbum = createAsyncThunk(
   'albums/createNewAlbum',
   async (payload: IAlbum) => {
     const res = await api.post('/album', { ...payload });
+    return res;
+  }
+);
+
+export const editAlbum = createAsyncThunk(
+  'albums/editAlbum',
+  async (arg: IEditAlbum) => {
+    const res = await api.patch(`/album/${arg.id}`, { ...arg.payload });
     return res;
   }
 );

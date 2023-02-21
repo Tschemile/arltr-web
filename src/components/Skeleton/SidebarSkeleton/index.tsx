@@ -2,7 +2,7 @@ import React from 'react';
 
 import Divider from '@/components/common/Divider';
 
-export default function Sidebar() {
+export default function SidebarSkeleton() {
   const Item = () => (
     <div className="mx-auto w-full max-w-sm px-4 py-2">
       <div className="flex space-x-4">
