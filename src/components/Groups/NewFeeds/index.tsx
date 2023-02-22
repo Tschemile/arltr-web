@@ -15,6 +15,8 @@ import Group from '@/components/Icons/Group';
 import Lock from '@/components/Icons/Lock';
 import CardPostSkeleton from '@/components/Skeleton/CardPost';
 import CreatePostSkeleton from '@/components/Skeleton/CreatePost';
+import InfoBlock from '@/components/Skeleton/ProfileBlock/Info';
+import PhotosBlock from '@/components/Skeleton/ProfileBlock/Photos';
 import {
   createPost,
   editPost,
@@ -207,42 +209,56 @@ export default function NewFeeds() {
         )}
       </div>
       <div className="row-start-1 h-full md:row-start-auto">
-        <Block title="Info" seeAll={false} showTotal={false}>
-          <div className="mb-4 flex items-center break-all text-sm">
-            <Group />
-            <span className="pl-2">1 member</span>
-          </div>
-          <div className="flex items-center break-all text-sm">
-            {getUIByMode()}
-          </div>
-        </Block>
-        {description && (
-          <Block title="About" seeAll={false} showTotal={false}>
-            <p className="text-base">{description}</p>
+        {loadingGroupById ? (
+          <InfoBlock />
+        ) : (
+          <Block title="Info" seeAll={false} showTotal={false}>
+            <div className="mb-4 flex items-center break-all text-sm">
+              <Group />
+              <span className="pl-2">1 member</span>
+            </div>
+            <div className="flex items-center break-all text-sm">
+              {getUIByMode()}
+            </div>
           </Block>
         )}
-        <Block
-          title="New shared media files"
-          seeAll={false}
-          showTotal={false}
-          total={0}
-        >
-          <div className="grid grid-cols-2 gap-2">
-            {[...Array(4)].map((_, index) => (
-              <div
-                key={index}
-                className="h-full w-full overflow-hidden rounded"
-              >
-                <PreviewPost
-                  data={
-                    'https://ss-images.saostar.vn/2017/06/04/1325225/tuhat-e1496585469861.jpg'
-                  }
-                  classNameImg="transition-all hover:scale-125"
-                />
-              </div>
-            ))}
-          </div>
-        </Block>
+        {loadingGroupById ? (
+          <InfoBlock />
+        ) : (
+          <>
+            {description && (
+              <Block title="About" seeAll={false} showTotal={false}>
+                <p className="text-base">{description}</p>
+              </Block>
+            )}
+          </>
+        )}
+        {loadingGroupById ? (
+          <PhotosBlock />
+        ) : (
+          <Block
+            title="New shared media files"
+            seeAll={false}
+            showTotal={false}
+            total={0}
+          >
+            <div className="grid grid-cols-2 gap-2">
+              {[...Array(4)].map((_, index) => (
+                <div
+                  key={index}
+                  className="h-full w-full overflow-hidden rounded"
+                >
+                  <PreviewPost
+                    data={
+                      'https://ss-images.saostar.vn/2017/06/04/1325225/tuhat-e1496585469861.jpg'
+                    }
+                    classNameImg="transition-all hover:scale-125"
+                  />
+                </div>
+              ))}
+            </div>
+          </Block>
+        )}
       </div>
       <Modal
         title={isEdit ? 'Edit Post' : 'Create New Post'}

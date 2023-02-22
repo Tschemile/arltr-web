@@ -350,7 +350,9 @@ export default function Timeline(props: ITimeline) {
                         </div>
                       )}
                     </div>
-                    <p className="mt-2 text-sm font-medium">{x.name}</p>
+                    <p className="mt-2 w-28 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium">
+                      {x.name}
+                    </p>
                   </div>
                 ))}
               </div>

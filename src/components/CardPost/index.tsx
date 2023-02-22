@@ -246,16 +246,17 @@ export default function CardPost(props: ICardPost) {
 
   const handleAddComment = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(addComment({ post: id, content: contentCmt, image })).then(
-      (res) => {
-        if (res.payload.comment) {
-          setContentCmt('');
-          setImage('');
-          dispatch(getCommentsOfPost({ post: id, limit }));
-          setTotalComments(totalComments + 1);
+    if (contentCmt)
+      dispatch(addComment({ post: id, content: contentCmt, image })).then(
+        (res) => {
+          if (res.payload.comment) {
+            setContentCmt('');
+            setImage('');
+            dispatch(getCommentsOfPost({ post: id, limit }));
+            setTotalComments(totalComments + 1);
+          }
         }
-      }
-    );
+      );
   };
 
   const handleChangeComment = (e: ChangeEvent<HTMLInputElement>) => {
@@ -285,7 +286,7 @@ export default function CardPost(props: ICardPost) {
     dispatch(makeReaction({ post: id, type } as IReaction)).then((res: any) => {
       if (res.payload.status === 200) {
         dispatch(getListReaction({ post: id })).then((result: any) => {
-          const { total: totalData = [], users = [] } = result.payload;
+          const { total: totalData = [], users = [] } = result.payload.data;
           const total = totalData.find(
             (x: Record<string, string>) => x.type === 'ALL'
           );

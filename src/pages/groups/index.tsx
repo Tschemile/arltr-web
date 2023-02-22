@@ -160,8 +160,24 @@ const Groups = () => {
   return (
     <Main meta={<Meta title="Groups | Roma" description="Groups | Roma" />}>
       <div className="grid grid-cols-8 gap-4">
-        <div className="col-span-8 lg:col-span-6 xl:mx-[10%]">
-          <TabsContent active={active} options={options} />
+        <div className="col-span-8 lg:col-span-6">
+          <div className="my-4 sm:flex sm:justify-between lg:hidden">
+            <Tabs
+              options={options}
+              optionClassName="!rounded-full text-base hover:bg-gray-400 rounded"
+              defaultKey={active}
+              handleChange={setActive}
+              activeClassName="bg-primary-backgroundColor rounded text-white !py-1"
+              className="no-scrollbar overflow-scroll whitespace-nowrap"
+            />
+            <Button
+              className="mt-2 justify-center !rounded-full bg-primary-backgroundColor text-base text-white"
+              onSubmit={() => setOpenModal(!openModal)}
+            >
+              + Create new group
+            </Button>
+          </div>
+          <TabsContent active={active} options={options} className="px-4" />
         </div>
 
         <div className="col-span-2 hidden h-fit p-2 shadow-lg lg:block">

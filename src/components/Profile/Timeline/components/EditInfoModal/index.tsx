@@ -161,10 +161,7 @@ export default function EditInfoModal(props: IEditInfoModal) {
 
   const onSubmit = () => {
     const newInfo = Object.assign(info, {
-      socialLinks:
-        socialLinks?.length >= 0 && valueSocial
-          ? [...socialLinks, valueSocial]
-          : [...socialLinks],
+      socialLinks: valueSocial ? [...socialLinks, valueSocial] : socialLinks,
     });
     dispatch(editProfile(newInfo)).then((res: any) => {
       const {
@@ -270,7 +267,7 @@ export default function EditInfoModal(props: IEditInfoModal) {
 
   useEffect(() => {
     setInfo({ work, status });
-    setSocialLinks(socialLinksProp);
+    if (socialLinksProp) setSocialLinks(socialLinksProp);
   }, [profileUser, open]);
 
   return (

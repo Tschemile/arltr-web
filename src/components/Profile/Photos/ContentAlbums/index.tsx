@@ -11,6 +11,7 @@ import BulletList from '@/components/Icons/BulletList';
 import PencilSquare from '@/components/Icons/PenciSquare';
 import PlusIcon from '@/components/Icons/PlusIcon';
 import Trash from '@/components/Icons/Trash';
+import CardSkeleton from '@/components/Skeleton/CardSkeleton';
 import {
   createNewAlbum,
   deleteAlbum,
@@ -121,6 +122,8 @@ export const ContentAlbums = () => {
     (state) => state.albums.listAlbums
   );
 
+  const isLoading = useAppSelector((state) => state.albums.isLoading);
+
   const options = [
     {
       id: '1',
@@ -229,22 +232,35 @@ export const ContentAlbums = () => {
       <Button className="!rounded-full" onSubmit={() => setOpenModal(true)}>
         <PlusIcon /> <span className="text-base">Create new album</span>
       </Button>
-      {listAlbums.length <= 0 ? (
-        <p className="text-center">Don&lsquo;t have any photo here!! 😄😄😄 </p>
-      ) : (
-        <div className="grid grid-cols-2 gap-2 px-4 py-6 sm:grid-cols-4 md:grid-cols-5 2xl:grid-cols-6">
-          {listAlbums.map((x) => (
-            <AlbumItem
-              item={x}
-              key={x.id}
-              handleDeleteAlbum={() => handleDeleteAlbum(x.id)}
-              setIsEdit={setIsEdit}
-              setAlbum={setAlbum}
-              setAlbumId={setAlbumId}
-            />
-          ))}
-        </div>
-      )}
+      <>
+        {isLoading ? (
+          <CardSkeleton
+            total={6}
+            className="grid grid-cols-2 gap-2 px-4 py-6 sm:grid-cols-4 md:grid-cols-5 2xl:grid-cols-6"
+          />
+        ) : (
+          <>
+            {listAlbums.length > 0 ? (
+              <div className="grid grid-cols-2 gap-2 px-4 py-6 sm:grid-cols-4 md:grid-cols-5 2xl:grid-cols-6">
+                {listAlbums.map((x) => (
+                  <AlbumItem
+                    item={x}
+                    key={x.id}
+                    handleDeleteAlbum={() => handleDeleteAlbum(x.id)}
+                    setIsEdit={setIsEdit}
+                    setAlbum={setAlbum}
+                    setAlbumId={setAlbumId}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="text-center">
+                Don&lsquo;t have any photo here!! 😄😄😄{' '}
+              </p>
+            )}
+          </>
+        )}
+      </>
       <Modal
         showModal={openModal}
         onClose={onClose}

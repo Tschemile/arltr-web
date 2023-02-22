@@ -2,6 +2,7 @@ import router from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import TabsContent from '@/components/common/Tabs/TabsContent';
+import CardSkeleton from '@/components/Skeleton/CardSkeleton';
 import { typeUser } from '@/constants';
 import { changeRelation, getListRelation } from '@/redux/actions';
 import type { IInRelation } from '@/redux/actions/Interface';
@@ -98,9 +99,10 @@ export default function Friends(props: TabsProps) {
     'FRIEND'
   );
   const dispatch = useAppDispatch();
-  const { listRelation: allRelation } = useAppSelector(
-    (state) => state.relation
-  );
+  const {
+    listRelation: allRelation,
+    isLoading: { loadingListRelation = false } = {},
+  } = useAppSelector((state) => state.relation);
 
   const currentRelation =
     active === 'REQUESTER'
@@ -125,27 +127,47 @@ export default function Friends(props: TabsProps) {
     {
       key: 'FRIEND',
       title: `All Friends (${profileUser.totalFriends})`,
-      content: <Grid data={listRelation} />,
+      content: loadingListRelation ? (
+        <CardSkeleton />
+      ) : (
+        <Grid data={listRelation} />
+      ),
     },
     {
       key: 'FOLLOWING',
       title: `Following (${profileUser.totalFollowing})`,
-      content: <Grid data={listRelation} />,
+      content: loadingListRelation ? (
+        <CardSkeleton />
+      ) : (
+        <Grid data={listRelation} />
+      ),
     },
     {
       key: 'FOLLOWER',
       title: `Follower (${profileUser.totalFollowers})`,
-      content: <Grid data={listRelation} />,
+      content: loadingListRelation ? (
+        <CardSkeleton />
+      ) : (
+        <Grid data={listRelation} />
+      ),
     },
     {
       key: 'REQUESTER',
       title: `Requester (${profileUser.totalBlocks})`,
-      content: <Grid data={listRelation} />,
+      content: loadingListRelation ? (
+        <CardSkeleton />
+      ) : (
+        <Grid data={listRelation} />
+      ),
     },
     {
       key: 'BLOCKED',
       title: `Blocked (${profileUser.totalBlocks})`,
-      content: <Grid data={listRelation} />,
+      content: loadingListRelation ? (
+        <CardSkeleton />
+      ) : (
+        <Grid data={listRelation} />
+      ),
     },
   ];
   return (
