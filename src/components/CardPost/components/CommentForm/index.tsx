@@ -31,7 +31,7 @@ export default function CommentForm(props: ICommentForm) {
 
   return (
     <div className="flex items-center py-3">
-      <div className="mr-4 h-[40px] w-[40px]">
+      <div className="mr-4 h-10 w-10 min-w-[40px]">
         <Avatar
           src={currentUser.avatar}
           alt="avatar"

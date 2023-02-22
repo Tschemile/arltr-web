@@ -115,7 +115,10 @@ export const getCommentsOfPost = createAsyncThunk(
   'post/getCommentsOfPost',
   async (params: Record<string | 'post', string | number>) => {
     const res = await api.get(`/comment`, { params });
-    return res.data;
+    return {
+      data: res.data,
+      postId: params.post,
+    };
   }
 );
 

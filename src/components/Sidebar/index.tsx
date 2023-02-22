@@ -26,37 +26,37 @@ const listMenu = [
     id: 1,
     title: 'Home',
     link: '/',
-    icon: <Image width={25} src={Home} alt="home-icon" />,
+    icon: <Image width={30} src={Home} alt="home-icon" />,
   },
   {
     id: 2,
     title: 'Albums',
     link: 'albums',
-    icon: <Image width={25} src={Album} alt="album-icon" />,
+    icon: <Image width={30} src={Album} alt="album-icon" />,
   },
   {
     id: 3,
     title: 'Friends',
     link: 'friends',
-    icon: <Image width={25} src={Friends} alt="friends-icon" />,
+    icon: <Image width={30} src={Friends} alt="friends-icon" />,
   },
   {
     id: 4,
     title: 'Groups',
     link: 'groups',
-    icon: <Image width={25} src={Groups} alt="groups-icon" />,
+    icon: <Image width={30} src={Groups} alt="groups-icon" />,
   },
   {
     id: 5,
     title: 'Pages',
     link: 'pages',
-    icon: <Image width={25} src={Pages} alt="pages-icon" />,
+    icon: <Image width={30} src={Pages} alt="pages-icon" />,
   },
   {
     id: 6,
     title: 'Event',
     link: 'event',
-    icon: <Image width={25} src={Event} alt="event-icon" />,
+    icon: <Image width={30} src={Event} alt="event-icon" />,
   },
 ];
 
@@ -65,37 +65,37 @@ const listExplore = [
     id: 1,
     title: 'Shop',
     link: 'shop',
-    icon: <Image width={25} src={Shop} alt="shop-icon" />,
+    icon: <Image width={30} src={Shop} alt="shop-icon" />,
   },
   {
     id: 2,
     title: 'Forum',
     link: 'forum',
-    icon: <Image width={25} src={Forum} alt="forum-icon" />,
+    icon: <Image width={30} src={Forum} alt="forum-icon" />,
   },
   {
     id: 3,
     title: 'Courses',
     link: 'courses',
-    icon: <Image width={25} src={Courses} alt="courses-icon" />,
+    icon: <Image width={30} src={Courses} alt="courses-icon" />,
   },
   {
     id: 4,
     title: 'Jobs',
     link: 'jobs',
-    icon: <Image width={25} src={Jobs} alt="jobs-icon" />,
+    icon: <Image width={30} src={Jobs} alt="jobs-icon" />,
   },
   {
     id: 5,
     title: 'Packages',
     link: 'packages',
-    icon: <Image width={25} src={Packages} alt="Packages-icon" />,
+    icon: <Image width={30} src={Packages} alt="Packages-icon" />,
   },
   {
     id: 6,
     title: 'Setting',
     link: 'setting',
-    icon: <Image width={25} src={Settings} alt="settings-icon" />,
+    icon: <Image width={30} src={Settings} alt="settings-icon" />,
   },
 ];
 
@@ -131,18 +131,16 @@ export default function Sidebar() {
                 className="h-full w-full"
               />
             </div>
-            <p>{name}</p>
+            <strong className="text-lg">{name}</strong>
           </button>
           <div className="my-4">
             {listMenu.slice(0, isVisible).map((x) => (
               <button
-                className="nav-item"
+                className="nav-item mb-4"
                 key={x.id}
                 onClick={() => router.push(`/${x.link}`)}
               >
-                <span className="rounded-full border-2 bg-primary-hover p-2">
-                  {x.icon}
-                </span>
+                <span className="rounded-full">{x.icon}</span>
                 <p className="pl-3 text-base font-medium">{x.title}</p>
               </button>
             ))}
@@ -154,7 +152,7 @@ export default function Sidebar() {
               onClick={() => setIsVisible(isVisible <= 4 ? listMenu.length : 4)}
             >
               <span
-                className={`rounded-full border-2 bg-primary-hover p-2 transition-all duration-500 ${
+                className={`rounded-full transition-all duration-500 ${
                   isVisible <= 4 ? '' : 'rotate-180'
                 }`}
               >
@@ -171,13 +169,11 @@ export default function Sidebar() {
           <div className="my-4">
             {listExplore.map((x) => (
               <button
-                className="nav-item mb-2"
+                className="nav-item mb-4"
                 key={x.id}
                 onClick={() => router.push(`/${x.link}`)}
               >
-                <span className="rounded-full border-2 bg-primary-hover p-2">
-                  {x.icon}
-                </span>
+                <span className="rounded-full">{x.icon}</span>
                 <p className="pl-3 text-base font-medium">{x.title}</p>
               </button>
             ))}

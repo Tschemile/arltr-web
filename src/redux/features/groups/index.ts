@@ -30,7 +30,7 @@ export const groupsSlice = createSlice({
   initialState,
   reducers: {
     hasEdited: (state, { payload }) => {
-      return { ...state, currentGroup: payload };
+      return { ...state, currentGroup: { ...state.currentGroup, ...payload } };
     },
     hasCreatedNewGroup: (state, { payload }) => {
       return { ...state, listGroups: [...state.listGroups, payload] };

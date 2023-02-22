@@ -109,7 +109,7 @@ export default function CommentBox(props: IComment) {
 
   return (
     <div className="group flex  py-2">
-      <div className="mr-4 h-[40px] w-[40px]">
+      <div className="mr-4 h-10 w-10 min-w-[40px]">
         <Avatar
           src={avatar}
           alt="avatar"

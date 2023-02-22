@@ -22,6 +22,7 @@ import Camera from '@/components/Icons/Camera';
 import PencilSquare from '@/components/Icons/PenciSquare';
 import PlusIcon from '@/components/Icons/PlusIcon';
 import Trash from '@/components/Icons/Trash';
+import GroupHeader from '@/components/Skeleton/GroupHeader';
 import { MEMBERS } from '@/constants/enum';
 import { Meta } from '@/layouts/Meta';
 import {
@@ -43,6 +44,7 @@ export default function DetailGroup() {
 
   const currentGroup = useAppSelector((state) => state.groups.currentGroup);
   const isUpdated = useAppSelector((state) => state.groups.isUpdated);
+  const isLoading = useAppSelector((state) => state.groups.isLoadingDetail);
   const listMembers = useAppSelector((state) => state.members.listMembers);
   const {
     name = '',
@@ -271,127 +273,135 @@ export default function DetailGroup() {
           backgroundImage: `linear-gradient(to top, white , ${backGround})`,
         }}
       >
-        <div className="lg:mx-[5%] xl:mx-[10%]">
-          <div className="relative max-h-full min-h-[285px]">
-            <div className="absolute bottom-3 left-3 z-10 h-[120px] w-[120px] ">
-              {avatarImg ? (
-                <img
-                  src={avatarImg}
-                  alt="avatar-img"
-                  className="h-full w-full rounded-full border-[3px] border-solid border-white object-cover"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center rounded-full bg-primary-backgroundColor text-white">
-                  {getFirstLetter(name as string)}
-                </div>
-              )}
+        {isLoading ? (
+          <GroupHeader />
+        ) : (
+          <div className="lg:mx-[5%] xl:mx-[10%]">
+            <div className="relative max-h-full min-h-[285px]">
+              <div className="absolute bottom-3 left-3 z-10 h-[120px] w-[120px] ">
+                {avatarImg ? (
+                  <img
+                    src={avatarImg}
+                    alt="avatar-img"
+                    className="h-full w-full rounded-full border-[3px] border-solid border-white object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center rounded-full bg-primary-backgroundColor text-white">
+                    {getFirstLetter(name as string)}
+                  </div>
+                )}
 
-              {isAdmin && (
-                <UploadButton
-                  id="upload-avatar"
-                  handleChange={handleUploadAvatar}
-                  className="absolute bottom-0 right-0  cursor-pointer rounded-full border-2 border-white bg-primary-color p-1 "
-                >
-                  <Camera />
-                </UploadButton>
-              )}
-            </div>
-            <img
-              src={
-                coverImg ||
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMiUvtkIL7TNaP5Md966DKyLLX8Qv-pFOpaQIPZiS-gZpnDgPa19fGVougiaSfftwtCcE&usqp=CAU'
-              }
-              alt="cover-img"
-              id="cover"
-              className="absolute top-1/2 right-0 bottom-0 left-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
-            />
-            {isAdmin && (
-              <div className="absolute bottom-2 right-3 z-[3]">
-                <UploadButton
-                  handleChange={handleUploadCover}
-                  id="upload-cover"
-                  className="flex cursor-pointer items-center rounded-md bg-primary-color px-2 py-1"
-                >
-                  <Camera width={24} />
-                  <span className="p-1 text-sm">Edit</span>
-                </UploadButton>
-              </div>
-            )}
-          </div>
-
-          <div className="px-6 py-4">
-            <h1 className="text-center sm:text-left">
-              <strong>{name}</strong>
-            </h1>
-            <div className="sm:flex sm:items-center sm:justify-between">
-              <div className="mt-2 flex items-center justify-center sm:justify-start">
-                {listMembers.slice(0, 5).map((x: any, index) => (
-                  <Tooltip key={x.id} description={x.user.name} direction="top">
-                    <div
-                      className={`h-12 w-12 cursor-pointer ${
-                        index === 0 ? 'z-[1]' : '-ml-3'
-                      }`}
-                      onClick={() => router.push(`/user/${x.user.domain}`)}
-                    >
-                      <Avatar
-                        src={x.user.avatar}
-                        gender={x.user.gender}
-                        alt="avatar-member"
-                        className="h-full w-full border-2"
-                      />
-                    </div>
-                  </Tooltip>
-                ))}
-              </div>
-              <div className="mt-2 flex items-center justify-center sm:mt-0">
-                <Button className="text-base">
-                  <PlusIcon /> Invite
-                </Button>
                 {isAdmin && (
-                  <Dropdown
-                    content={[
-                      {
-                        id: '1',
-                        title: (
-                          <div className="flex items-center gap-2">
-                            <PencilSquare />
-                            <span>Edit group</span>
-                          </div>
-                        ),
-                        handleClick: () => setOpenModal(true),
-                      },
-                      {
-                        id: '2',
-                        title: (
-                          <div className="flex items-center gap-2">
-                            <Trash />
-                            <span>Delete this group</span>
-                          </div>
-                        ),
-                        handleClick: () => {
-                          setIsDelete(true);
-                          setOpenModal(true);
-                        },
-                      },
-                    ]}
+                  <UploadButton
+                    id="upload-avatar"
+                    handleChange={handleUploadAvatar}
+                    className="absolute bottom-0 right-0  cursor-pointer rounded-full border-2 border-white bg-primary-color p-1 "
                   >
-                    <Button className="ml-2 !bg-gray-600">
-                      <BulletList />
-                    </Button>
-                  </Dropdown>
+                    <Camera />
+                  </UploadButton>
                 )}
               </div>
+              <img
+                src={
+                  coverImg ||
+                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMiUvtkIL7TNaP5Md966DKyLLX8Qv-pFOpaQIPZiS-gZpnDgPa19fGVougiaSfftwtCcE&usqp=CAU'
+                }
+                alt="cover-img"
+                id="cover"
+                className="absolute top-1/2 right-0 bottom-0 left-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
+              />
+              {isAdmin && (
+                <div className="absolute bottom-2 right-3 z-[3]">
+                  <UploadButton
+                    handleChange={handleUploadCover}
+                    id="upload-cover"
+                    className="flex cursor-pointer items-center rounded-md bg-primary-color px-2 py-1"
+                  >
+                    <Camera width={24} />
+                    <span className="p-1 text-sm">Edit</span>
+                  </UploadButton>
+                </div>
+              )}
             </div>
 
-            <Divider />
-            <Tabs
-              options={options}
-              defaultKey={active}
-              handleChange={setActive}
-              className="text-base"
-            />
+            <div className="px-6 py-4">
+              <h1 className="text-center sm:text-left">
+                <strong>{name}</strong>
+              </h1>
+              <div className="sm:flex sm:items-center sm:justify-between">
+                <div className="mt-2 flex items-center justify-center sm:justify-start">
+                  {listMembers.slice(0, 5).map((x: any, index) => (
+                    <Tooltip
+                      key={x.id}
+                      description={x.user.name}
+                      direction="top"
+                    >
+                      <div
+                        className={`h-12 w-12 cursor-pointer ${
+                          index === 0 ? 'z-[1]' : '-ml-3'
+                        }`}
+                        onClick={() => router.push(`/user/${x.user.domain}`)}
+                      >
+                        <Avatar
+                          src={x.user.avatar}
+                          gender={x.user.gender}
+                          alt="avatar-member"
+                          className="h-full w-full border-2"
+                        />
+                      </div>
+                    </Tooltip>
+                  ))}
+                </div>
+                <div className="mt-2 flex items-center justify-center sm:mt-0">
+                  <Button className="text-base">
+                    <PlusIcon /> Invite
+                  </Button>
+                  {isAdmin && (
+                    <Dropdown
+                      content={[
+                        {
+                          id: '1',
+                          title: (
+                            <div className="flex items-center gap-2">
+                              <PencilSquare />
+                              <span>Edit group</span>
+                            </div>
+                          ),
+                          handleClick: () => setOpenModal(true),
+                        },
+                        {
+                          id: '2',
+                          title: (
+                            <div className="flex items-center gap-2">
+                              <Trash />
+                              <span>Delete this group</span>
+                            </div>
+                          ),
+                          handleClick: () => {
+                            setIsDelete(true);
+                            setOpenModal(true);
+                          },
+                        },
+                      ]}
+                    >
+                      <Button className="ml-2 !bg-gray-600">
+                        <BulletList />
+                      </Button>
+                    </Dropdown>
+                  )}
+                </div>
+              </div>
+
+              <Divider />
+              <Tabs
+                options={options}
+                defaultKey={active}
+                handleChange={setActive}
+                className="text-base"
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
       <TabsContent
         className="py-4 lg:mx-[5%] xl:mx-[10%]"

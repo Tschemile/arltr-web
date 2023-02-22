@@ -24,18 +24,18 @@ export const commentSlice = createSlice({
       })
       .addCase(getCommentsOfPost.fulfilled, (state, { payload }) => {
         let newArr = [...state.listComment];
-        const { comments = [] } = payload;
+        const { data = [], postId = '' } = payload;
+        const { comments = [] } = data;
 
         const find = newArr.filter(
-          (x: Record<string, string>) => x.postId === comments[0].post.id
+          (x: Record<string, string>) => x.postId === postId
         );
-
         if (find.length) {
           newArr = find.map((x) => {
             return { ...x, data: comments };
           });
         } else {
-          newArr = [...newArr, { postId: comments[0].post.id, data: comments }];
+          newArr = [...newArr, { postId, data: comments }];
         }
         return {
           ...state,
