@@ -12,7 +12,7 @@ import Cry from '@/assets/sad.png';
 import Wow from '@/assets/wow.png';
 import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
 import Like from '@/components/Icons/Like';
-import { REACTION } from '@/constants/enum';
+import { POSTS, REACTION } from '@/constants/enum';
 import {
   addComment,
   deletePost,
@@ -112,6 +112,7 @@ export default function CardPost(props: ICardPost) {
   const dispatch = useAppDispatch();
   const refs = useRef<null>(null);
   const { LIKE, HEART, LAUGH, CRY, WOW, ANGRY } = REACTION.TYPE;
+  const { PUBLIC, PRIVATE, FRIEND } = POSTS.MODE;
   const {
     post = {},
     listComments = [],
@@ -135,7 +136,7 @@ export default function CardPost(props: ICardPost) {
     createdAt: datePostProps = new Date(),
     content = '',
     react = {},
-    mode: modeProps = '',
+    mode: modeProps = PUBLIC,
   } = post;
 
   const { type: typeProps = '' } = react as Record<string, string>;
@@ -227,6 +228,7 @@ export default function CardPost(props: ICardPost) {
     if (e.target.files && e.target.files.length > 0) {
       const formData = new FormData();
       formData.append('file', e.target.files[0] as string | Blob);
+      formData.append('scope', 'HIDDEN');
       dispatch(uploadFile(formData)).then((res: any) => {
         const { payload: { status = 0, data = '' } = {} } = res;
         if (status === 201) {
@@ -246,10 +248,11 @@ export default function CardPost(props: ICardPost) {
 
   const handleAddComment = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (contentCmt)
+    if (contentCmt || image)
       dispatch(addComment({ post: id, content: contentCmt, image })).then(
         (res) => {
           if (res.payload.comment) {
+            setIsClickedCmt(true);
             setContentCmt('');
             setImage('');
             dispatch(getCommentsOfPost({ post: id, limit }));
@@ -408,6 +411,20 @@ export default function CardPost(props: ICardPost) {
     });
   };
 
+  const getIconByMode = () => {
+    switch (modeProps) {
+      case PUBLIC:
+        return '🌍';
+      case PRIVATE:
+        return '🔒';
+      case FRIEND:
+        return '👭';
+
+      default:
+        return '';
+    }
+  };
+
   useEffect(() => {
     if (totalReactsProps) setTotalReacts(Number(totalReactsProps));
   }, [totalReactsProps]);
@@ -478,7 +495,9 @@ export default function CardPost(props: ICardPost) {
               {authorName}
             </h3>
             <Tooltip description={dateFormated}>
-              <p className="text-sm">{timeOfPosts}</p>
+              <p className="text-sm">
+                {timeOfPosts} {getIconByMode()}
+              </p>
             </Tooltip>
           </div>
         </div>

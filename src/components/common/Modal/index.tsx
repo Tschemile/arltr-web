@@ -52,7 +52,7 @@ export default function Modal(props: ModalProps) {
   }, []);
   return (
     <div
-      className={`fixed top-0 left-0 z-10 ${
+      className={`fixed top-0 left-0 z-50 ${
         showModal ? 'visible opacity-100' : 'invisible opacity-0'
       } w-full overflow-y-auto transition-all duration-300`}
       id="modal"
@@ -97,7 +97,7 @@ export default function Modal(props: ModalProps) {
                 )}
                 {showSubmitButton && (
                   <Button
-                    type="button"
+                    type="submit"
                     // className="mr-2 rounded bg-blue-500 py-2 px-4 text-white hover:bg-blue-700"
                     onSubmit={onSubmit}
                     loading={loading}

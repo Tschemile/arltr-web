@@ -7,8 +7,8 @@ import ArrowRight from '@/components/Icons/ArrowRight';
 import { showCarousels } from '@/constants';
 
 interface CarouselsProps {
-  children?: ReactNode | any;
-  numSlide?: 1 | 2 | 3 | 4 | 5 | 6;
+  children: ReactNode | any;
+  numSlide: 1 | 2 | 3 | 4 | 5 | 6;
   childClassName?: string;
 }
 
@@ -33,7 +33,6 @@ export default function Carousels(props: CarouselsProps) {
   };
 
   const lem = carouselData!.length || 0;
-
   const nextSlide = () => {
     if (currentSlide >= lem - 1) {
       scrollToSmooth(0);

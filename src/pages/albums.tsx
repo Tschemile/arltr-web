@@ -9,7 +9,7 @@ const Albums = () => {
   return (
     <Main meta={<Meta title="Album" description="Album" />}>
       <p>Phồtố</p>
-      <Carousels>
+      <Carousels numSlide={1}>
         {[...Array(10)].map((_, index) => (
           <Card
             key={index}

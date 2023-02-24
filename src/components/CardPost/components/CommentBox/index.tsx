@@ -37,7 +37,6 @@ export default function CommentBox(props: IComment) {
   const [isEdit, setIsEdit] = useState(false);
   const [contentCmt, setContentCmt] = useState('');
   const [image, setImage] = useState('');
-  console.log(image);
 
   const handleDeleteComment = () => {
     dispatch(deleteComment(commentId)).then((res: any) => {
@@ -53,14 +52,15 @@ export default function CommentBox(props: IComment) {
 
   const handleEditCmt = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(editComment({ commentId, payload: { content: contentCmt } })).then(
-      (res: any) => {
-        if (res.payload.status === 200) {
-          setContentCmt(res.payload.data.comment.content);
-          setIsEdit(false);
-        }
+    dispatch(
+      editComment({ commentId, payload: { content: contentCmt, image } })
+    ).then((res: any) => {
+      if (res.payload.status === 200) {
+        setContentCmt(res.payload.data.comment.content);
+        setImage(res.payload.data.comment.image);
+        setIsEdit(false);
       }
-    );
+    });
   };
 
   const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
@@ -85,6 +85,10 @@ export default function CommentBox(props: IComment) {
     if (isEdit && refs.current) (refs.current as any).focus();
   }, [isEdit]);
 
+  useEffect(() => {
+    if (imageProps) setImage(imageProps);
+  }, [imageProps]);
+
   if (isEdit)
     return (
       <>
@@ -94,6 +98,7 @@ export default function CommentBox(props: IComment) {
           refs={refs}
           onChange={(e) => handleChangeComment(e)}
           onSubmit={(e) => handleEditCmt(e)}
+          id={commentId}
         />
         <p
           className="cursor-pointer pr-4 text-right text-xs text-blue-300"
@@ -104,6 +109,11 @@ export default function CommentBox(props: IComment) {
         >
           Cancel
         </p>
+        {image && (
+          <div className="ml-14 h-20 w-20 pb-4">
+            <img className="h-full w-full rounded" src={image} alt="img" />
+          </div>
+        )}
       </>
     );
 
@@ -157,7 +167,7 @@ export default function CommentBox(props: IComment) {
         </div>
         {imageProps && (
           <div className="mt-2 h-[200px] w-full">
-            <PreviewPost data={imageProps} classNameImg="rounded" />
+            <PreviewPost data={image} classNameImg="rounded" />
           </div>
         )}
       </div>
