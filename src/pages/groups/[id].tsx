@@ -246,7 +246,7 @@ export default function DetailGroup() {
         .getColorAsync(coverImg)
         .then((color) => setBackGround(color.hex))
         .catch((e) => {
-          console.log(e);
+          throw e;
         });
   }, [coverImg]);
 

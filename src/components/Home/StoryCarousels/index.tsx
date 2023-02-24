@@ -8,7 +8,7 @@ function StoryCarousels() {
   const { avatar = '' } = useAppSelector((state) => state.auth.currentUser);
   return (
     <>
-      <Carousels childClassName="w-1/3 md:w-1/4 lg:w-1/5">
+      <Carousels numSlide={5} childClassName="w-1/3 md:w-1/4 lg:w-1/5">
         {[
           <div
             key={0}

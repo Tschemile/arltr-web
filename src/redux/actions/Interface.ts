@@ -129,12 +129,12 @@ export interface IEditAlbum {
 }
 
 export interface IGetAlbums {
-  id: string;
+  id?: string;
   createdAt?: string;
   updatedAt?: string;
   deletedAt?: string;
-  name: string;
-  mode: keyof typeof ALBUMS.MODE;
+  name?: string;
+  mode?: keyof typeof ALBUMS.MODE;
   presentation?: null;
-  user: IInfoUser;
+  user?: IInfoUser;
 }

@@ -99,6 +99,7 @@ export default function EditInfoModal(props: IEditInfoModal) {
   const dispatch = useAppDispatch();
   const { open = false, onClose = () => {} } = props;
   const profileUser = useAppSelector((state) => state.profile.profileUser);
+  const isUpdatePost = useAppSelector((state) => state.profile.isUpdated);
   const {
     status = 'NONE',
     work = '',
@@ -279,7 +280,7 @@ export default function EditInfoModal(props: IEditInfoModal) {
         content={getContentModal()}
         onClose={handleClose}
         onSubmit={onSubmit}
-        // loading={isUpdatePost}
+        loading={isUpdatePost}
       />
     </div>
   );

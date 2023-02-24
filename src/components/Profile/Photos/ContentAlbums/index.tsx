@@ -122,6 +122,8 @@ export const ContentAlbums = () => {
     (state) => state.albums.listAlbums
   );
 
+  console.log(listAlbumsProps);
+
   const isLoading = useAppSelector((state) => state.albums.isLoading);
 
   const options = [
@@ -246,7 +248,7 @@ export const ContentAlbums = () => {
                   <AlbumItem
                     item={x}
                     key={x.id}
-                    handleDeleteAlbum={() => handleDeleteAlbum(x.id)}
+                    handleDeleteAlbum={() => handleDeleteAlbum(String(x.id))}
                     setIsEdit={setIsEdit}
                     setAlbum={setAlbum}
                     setAlbumId={setAlbumId}

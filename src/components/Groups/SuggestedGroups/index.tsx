@@ -8,7 +8,7 @@ export default function suggestedGroups() {
   return (
     <>
       <p className="my-4">Popular Groups</p>
-      <Carousels childClassName="w-1/2 lg:w-1/3">
+      <Carousels numSlide={3} childClassName="w-1/2 lg:w-1/3">
         {[...Array(10)].map((_, index) => (
           <Card
             key={index}
@@ -38,7 +38,7 @@ export default function suggestedGroups() {
       </Carousels>
       <p className="mt-4">Categories</p>
       <p className="mb-4 text-sm">Find A Group By Browsing Top Categories</p>
-      <Carousels childClassName="w-1/3 sm:w-1/4">
+      <Carousels numSlide={3} childClassName="w-1/3 sm:w-1/4">
         {[...Array(10)].map((_, index) => (
           <div
             key={index}

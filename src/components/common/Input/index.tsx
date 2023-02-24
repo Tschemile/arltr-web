@@ -35,7 +35,7 @@ export default function Input(props: InputProps) {
       <input
         className={`h-[40px] py-2 pr-4 ${
           icons ? 'pl-10' : 'pl-4'
-        } rounded-lg bg-primary-color outline-none placeholder:text-[#929292] ${inpulClassName}`}
+        } rounded-lg bg-primary-color text-base outline-none placeholder:text-[#929292] ${inpulClassName}`}
         placeholder={placeholder}
         style={{ width }}
         type={type}

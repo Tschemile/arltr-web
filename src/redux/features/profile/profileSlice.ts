@@ -1,16 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { getProfileUser } from '@/redux/actions';
+import { editProfile, getProfileUser } from '@/redux/actions';
 
 export interface ProfileState {
   profileUser: Record<string, any>;
   loading: boolean;
+  isUpdated: boolean;
 }
 
 // Initial state
 const initialState: ProfileState = {
   profileUser: {},
   loading: false,
+  isUpdated: false,
 };
 
 export const profileSlice = createSlice({
@@ -31,6 +33,15 @@ export const profileSlice = createSlice({
       })
       .addCase(getProfileUser.rejected, (state) => {
         return { ...state, loading: false };
+      })
+      .addCase(editProfile.pending, (state) => {
+        return { ...state, isUpdated: true };
+      })
+      .addCase(editProfile.fulfilled, (state) => {
+        return { ...state, isUpdated: false };
+      })
+      .addCase(editProfile.rejected, (state) => {
+        return { ...state, isUpdated: false };
       });
   },
 });
