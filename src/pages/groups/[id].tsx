@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 
 import Avatar from '@/components/common/Avatar';
 import Button from '@/components/common/Button';
+import CropImage from '@/components/common/CropImage';
 import Divider from '@/components/common/Divider';
 import Dropdown from '@/components/common/Dropdown';
 import Input from '@/components/common/Input';
@@ -14,7 +15,6 @@ import Select from '@/components/common/Select';
 import Tabs from '@/components/common/Tabs';
 import TabsContent from '@/components/common/Tabs/TabsContent';
 import Tooltip from '@/components/common/Tooltip';
-import UploadButton from '@/components/common/UploadButton';
 import Members from '@/components/Groups/Members';
 import NewFeeds from '@/components/Groups/NewFeeds';
 import BulletList from '@/components/Icons/BulletList';
@@ -93,10 +93,10 @@ export default function DetailGroup() {
     },
   ];
 
-  const handleUploadCover = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
+  const handleUploadCover = (e: File) => {
+    if (e) {
       const formData = new FormData();
-      formData.append('file', e.target.files[0] as string | Blob);
+      formData.append('file', e as string | Blob);
       formData.append('scope', 'HIDDEN');
       dispatch(uploadFile(formData)).then((res: any) => {
         const { payload: { status = 0, data = '' } = {} } = res;
@@ -109,10 +109,10 @@ export default function DetailGroup() {
     }
   };
 
-  const handleUploadAvatar = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
+  const handleUploadAvatar = (e: File) => {
+    if (e) {
       const formData = new FormData();
-      formData.append('file', e.target.files[0] as string | Blob);
+      formData.append('file', e as string | Blob);
       formData.append('scope', 'HIDDEN');
       dispatch(uploadFile(formData)).then((res: any) => {
         const { payload: { status = 0, data = '' } = {} } = res;
@@ -292,13 +292,14 @@ export default function DetailGroup() {
                 )}
 
                 {isAdmin && (
-                  <UploadButton
+                  <CropImage
+                    type="AVATAR"
                     id="upload-avatar"
-                    handleChange={handleUploadAvatar}
+                    callBack={handleUploadAvatar}
                     className="absolute bottom-0 right-0  cursor-pointer rounded-full border-2 border-white bg-primary-color p-1 "
                   >
                     <Camera />
-                  </UploadButton>
+                  </CropImage>
                 )}
               </div>
               <img
@@ -312,14 +313,15 @@ export default function DetailGroup() {
               />
               {isAdmin && (
                 <div className="absolute bottom-2 right-3 z-[3]">
-                  <UploadButton
-                    handleChange={handleUploadCover}
+                  <CropImage
+                    callBack={handleUploadCover}
                     id="upload-cover"
+                    type="COVER"
                     className="flex cursor-pointer items-center rounded-md bg-primary-color px-2 py-1"
                   >
                     <Camera width={24} />
                     <span className="p-1 text-sm">Edit</span>
-                  </UploadButton>
+                  </CropImage>
                 </div>
               )}
             </div>

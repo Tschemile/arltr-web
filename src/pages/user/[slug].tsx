@@ -1,13 +1,13 @@
 import { FastAverageColor } from 'fast-average-color';
 import router, { useRouter } from 'next/router';
-import type { ChangeEvent, FormEvent } from 'react';
+import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import Avatar from '@/components/common/Avatar';
+import CropImage from '@/components/common/CropImage';
 import Tabs from '@/components/common/Tabs';
 import TabsContent from '@/components/common/Tabs/TabsContent';
-import UploadButton from '@/components/common/UploadButton';
 import Camera from '@/components/Icons/Camera';
 import Friends from '@/components/Profile/Friends';
 import Groups from '@/components/Profile/Groups';
@@ -118,10 +118,10 @@ const User = () => {
     });
   };
 
-  const handleUploadCover = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
+  const handleUploadCover = (e: File) => {
+    if (e) {
       const formData = new FormData();
-      formData.append('file', e.target.files[0] as string | Blob);
+      formData.append('file', e as string | Blob);
       formData.append('type', 'COVER');
       dispatch(uploadFile(formData)).then((res: any) => {
         const { payload: { status = 0, data = '' } = {} } = res;
@@ -133,10 +133,10 @@ const User = () => {
     }
   };
 
-  const handleUploadAvatar = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
+  const handleUploadAvatar = (e: File) => {
+    if (e) {
       const formData = new FormData();
-      formData.append('file', e.target.files[0] as string | Blob);
+      formData.append('file', e as string | Blob);
       formData.append('type', 'AVATAR');
       dispatch(uploadFile(formData)).then((res: any) => {
         const { payload: { status = 0, data = '' } = {} } = res;
@@ -217,14 +217,15 @@ const User = () => {
               />
               {isCurrentUser && (
                 <div className="absolute bottom-2 right-3 z-[3]">
-                  <UploadButton
-                    handleChange={handleUploadCover}
+                  <CropImage
+                    callBack={handleUploadCover}
+                    type="COVER"
                     id="upload-cover"
                     className="flex cursor-pointer items-center rounded-md bg-primary-color px-2 py-1"
                   >
                     <Camera width={24} />
                     <span className="p-1 text-sm">Edit</span>
-                  </UploadButton>
+                  </CropImage>
                 </div>
               )}
             </div>
@@ -240,13 +241,14 @@ const User = () => {
                   className="h-full w-full border-[3px] border-solid border-white"
                 />
                 {isCurrentUser && (
-                  <UploadButton
+                  <CropImage
                     id="upload-avatar"
-                    handleChange={handleUploadAvatar}
+                    type="AVATAR"
                     className="absolute top-[60%] left-[60%] -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 border-white bg-primary-color p-1 sm:left-[53%]"
+                    callBack={handleUploadAvatar}
                   >
                     <Camera />
-                  </UploadButton>
+                  </CropImage>
                 )}
               </div>
               <div className="">

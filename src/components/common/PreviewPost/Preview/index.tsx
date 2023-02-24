@@ -60,7 +60,7 @@ const ImgComponent = (props: ImageComponentProps) => {
       src={src}
       className={`${
         pressed ? 'cursor-grabbing' : 'cursor-grab'
-      } absolute top-1/2 right-0 left-1/2 bottom-0 h-auto max-w-full -translate-x-1/2 -translate-y-1/2 object-contain transition-all duration-75 ease-in-out`}
+      } absolute top-1/2 right-0 left-1/2 bottom-0 h-auto max-w-full -translate-x-1/2 -translate-y-1/2 object-contain transition-all duration-[0ms] ease-in-out`}
       alt="image"
       ref={refImg}
       style={{

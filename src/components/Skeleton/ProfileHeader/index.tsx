@@ -17,7 +17,7 @@ export default function ProfileHeader() {
         </div>
       </div>
       <div className="mt-16 flex flex-col-reverse items-center justify-between p-2 sm:px-4 lg:flex-row">
-        <div className="mt-2 flex w-10/12 justify-center sm:w-1/2 sm:justify-start lg:mt-0">
+        <div className="mt-2 flex w-10/12 justify-center sm:w-1/2 lg:mt-0 lg:justify-start">
           <div className="mr-3 h-5 w-16 rounded bg-slate-400" />
           <div className="mr-3 h-5 w-14 rounded bg-slate-400" />
           <div className="mr-3 h-5 w-16 rounded bg-slate-400" />
