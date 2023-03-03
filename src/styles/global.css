@@ -79,7 +79,7 @@ h6 {
 
 @layer components {
   .icon-header {
-    @apply ml-4 border-2 rounded-full p-1 bg-primary-color border-primary-border;
+    @apply ml-4 border-2 rounded-full p-1 bg-primary-color border-primary-color;
   }
   .nav-item {
     @apply flex w-full items-center rounded py-1 px-4 text-center hover:bg-gray-400  cursor-pointer;

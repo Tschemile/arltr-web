@@ -16,6 +16,7 @@ import Tooltip from '../common/Tooltip';
 import Bars from '../Icons/Bars';
 import BarsBottomLeft from '../Icons/BarsBottomLeft';
 import Bell from '../Icons/Bell';
+import Eye from '../Icons/Eye';
 import Message from '../Icons/Message';
 import PlusIcon from '../Icons/PlusIcon';
 import Search from '../Icons/Search';
@@ -115,6 +116,28 @@ export default function Headers() {
                 gender={gender}
               />
             </button>
+          </Dropdown>
+          <Dropdown
+            content={[
+              {
+                id: '1',
+                title: '💡 Light Mode',
+                handleClick: () => {
+                  localStorage.setItem('theme', 'theme-default');
+                },
+              },
+              {
+                id: '2',
+                title: '🕯️ Dark Mode',
+                handleClick: () => {
+                  localStorage.setItem('theme', 'theme-dark');
+                },
+              },
+            ]}
+          >
+            <IconButton className="h-10 w-10">
+              <Eye />
+            </IconButton>
           </Dropdown>
         </div>
       </div>

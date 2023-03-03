@@ -1,6 +1,6 @@
 import Image from 'next/dist/client/image';
 import type { ReactNode } from 'react';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Logo from '@/assets/Logo.svg';
 import Polygon1 from '@/assets/Polygon1.svg';
@@ -11,7 +11,12 @@ interface AuthLayoutProps {
 }
 
 export default function AuthLayout(props: AuthLayoutProps) {
-  document.body.classList.add('theme-default');
+  useEffect(() => {
+    if (typeof window !== 'undefined' && localStorage.getItem('token')) {
+      document.body.className =
+        localStorage.getItem('theme') || 'theme-default';
+    }
+  }, []);
 
   return (
     <div className="relative flex h-[100vh] w-full items-center justify-center bg-primary-color shadow-2xl">

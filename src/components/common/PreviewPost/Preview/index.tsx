@@ -160,14 +160,14 @@ export default function Preview(props: PreviewProps) {
   useEffect(() => {
     if (visible) {
       if (indexSelected) setCurrentSlide(indexSelected);
-      document.body.className = 'overflow-hidden';
+      document.body.className += ' overflow-hidden';
     }
     return () => {
       setShow(true);
       setRotateImg(0);
       setScaleImg(0.75);
       setCurrentSlide(0);
-      document.body.className = '';
+      document.body.classList.remove('overflow-hidden');
     };
   }, [visible]);
 
@@ -269,7 +269,7 @@ export default function Preview(props: PreviewProps) {
           </div>
 
           <div
-            className={`z-50 hidden min-h-screen w-full max-w-[300px] bg-secondary-color ${
+            className={`z-50 hidden min-h-screen w-full max-w-[300px] bg-tertiary-color ${
               show ? 'sm:block' : 'sm:hidden'
             }`}
           >
