@@ -1,14 +1,14 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
 
-import { albumsReducer } from './features/albums';
-import { authReducer } from './features/auth/authSlice';
-import { commentsReducer } from './features/comments';
-import { groupsReducer } from './features/groups';
-import { homeReducer } from './features/home/homeSlice';
-import { membersReducer } from './features/members';
-import { postsReducer } from './features/posts';
-import { profileReducer } from './features/profile/profileSlice';
-import { relationReducer } from './features/relation/relationSlice';
+import { albumsReducer } from "./features/albums";
+import { authReducer } from "./features/auth/authSlice";
+import { commentsReducer } from "./features/comments";
+import { groupsReducer } from "./features/groups";
+import { homeReducer } from "./features/home/homeSlice";
+import { membersReducer } from "./features/members";
+import { postsReducer } from "./features/posts";
+import { profileReducer } from "./features/profile/profileSlice";
+import { relationReducer } from "./features/relation/relationSlice";
 
 export const store = configureStore({
   reducer: {
