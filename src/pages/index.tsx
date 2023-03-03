@@ -1,5 +1,5 @@
 import type { ChangeEvent } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Modal from '@/components/common/Modal';
 import CreatePost from '@/components/CreatePost';
@@ -10,6 +10,7 @@ import StoryCarousels from '@/components/Home/StoryCarousels';
 import { Meta } from '@/layouts/Meta';
 import { createPost, uploadFile } from '@/redux/actions';
 import type { ICreatePost } from '@/redux/actions/Interface';
+import { clearListPosts } from '@/redux/features/posts';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Main } from '@/templates/Main';
 
@@ -56,6 +57,12 @@ const Index = () => {
   const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     setMode(e.target.value);
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearListPosts());
+    };
+  }, []);
 
   return (
     <Main meta={<Meta title="Home | Roma" description="Home | Roma" />}>

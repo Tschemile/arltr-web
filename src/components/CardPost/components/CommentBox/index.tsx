@@ -46,10 +46,6 @@ export default function CommentBox(props: IComment) {
     });
   };
 
-  const handleChangeComment = (e: ChangeEvent<HTMLInputElement>) => {
-    setContentCmt(e.target.value);
-  };
-
   const handleEditCmt = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(
@@ -96,7 +92,7 @@ export default function CommentBox(props: IComment) {
           contentCmt={contentCmt}
           handleChangeFile={handleChangeFile}
           refs={refs}
-          onChange={(e) => handleChangeComment(e)}
+          setContentCmt={setContentCmt}
           onSubmit={(e) => handleEditCmt(e)}
           id={commentId}
         />

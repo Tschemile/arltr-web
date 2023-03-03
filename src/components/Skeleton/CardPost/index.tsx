@@ -1,12 +1,17 @@
 import React from 'react';
 
-export default function CardPostSkeleton() {
+interface ICardPostSkeleton {
+  total?: number;
+}
+
+export default function CardPostSkeleton(props: ICardPostSkeleton) {
+  const { total = 3 } = props;
   return (
     <>
-      {[...Array(3)].map((_, index) => (
+      {[...Array(total)].map((_, index) => (
         <div
           key={index}
-          className="mb-4 animate-pulse rounded-lg bg-white px-4 shadow-lg"
+          className="mb-4 animate-pulse break-inside-avoid rounded-lg bg-white px-4 shadow-lg"
         >
           <div className="flex items-center gap-4 py-4">
             <div className="h-[45px] w-[45px] rounded-full bg-slate-400"></div>

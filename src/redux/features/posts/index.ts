@@ -29,7 +29,11 @@ const initialState: ProfileState = {
 export const postsSlice = createSlice({
   name: 'posts',
   initialState,
-  reducers: {},
+  reducers: {
+    clearListPosts: (state) => {
+      return { ...state, listPosts: [] };
+    },
+  },
   extraReducers: (builer) => {
     builer
       .addCase(getProfileListPosts.pending, (state) => {
@@ -80,5 +84,6 @@ export const postsSlice = createSlice({
       });
   },
 });
+export const { clearListPosts } = postsSlice.actions;
 
 export const { reducer: postsReducer } = postsSlice;

@@ -39,6 +39,7 @@ import Tooltip from '../common/Tooltip';
 import Comment from '../Icons/Comment';
 import PencilSquare from '../Icons/PenciSquare';
 import Trash from '../Icons/Trash';
+import CommentsSkeleton from '../Skeleton/Comments';
 import { ReactionSkeleton } from '../Skeleton/Reaction';
 import CommentBox from './components/CommentBox';
 import CommentForm from './components/CommentForm';
@@ -55,6 +56,7 @@ interface ICardPost {
   setFileDataURL?: (value: string[]) => void;
   setMode?: (value: string) => void;
   isPersonPage?: boolean;
+  isFirstPost?: boolean;
 }
 
 interface IUsers {
@@ -125,6 +127,7 @@ export default function CardPost(props: ICardPost) {
     listPosts = [],
     setMode = () => {},
     isPersonPage = true,
+    isFirstPost = false,
   } = props;
 
   const {
@@ -156,9 +159,7 @@ export default function CardPost(props: ICardPost) {
     (state) => state.posts.listReaction.users
   );
 
-  // const isLoadingListReaction = useAppSelector(
-  //   (state) => state.posts.loadingListRelations
-  // );
+  const isLoadingListCmt = useAppSelector((state) => state.comments.isLoading);
 
   const [isClickedCmt, setIsClickedCmt] = useState(false);
   const [comments, setComments] = useState<any[]>([]);
@@ -248,22 +249,19 @@ export default function CardPost(props: ICardPost) {
 
   const handleAddComment = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (contentCmt || image)
+    setContentCmt('');
+    setImage('');
+    if (contentCmt || image) {
       dispatch(addComment({ post: id, content: contentCmt, image })).then(
         (res) => {
           if (res.payload.comment) {
             setIsClickedCmt(true);
-            setContentCmt('');
-            setImage('');
             dispatch(getCommentsOfPost({ post: id, limit }));
             setTotalComments(totalComments + 1);
           }
         }
       );
-  };
-
-  const handleChangeComment = (e: ChangeEvent<HTMLInputElement>) => {
-    setContentCmt(e.target.value);
+    }
   };
 
   const handleEditPost = () => {
@@ -337,7 +335,7 @@ export default function CardPost(props: ICardPost) {
             }`}
           >
             <Image src={Haha} alt="haha" width={20} />
-            Haha
+            Laugh
           </p>
         );
 
@@ -598,15 +596,19 @@ export default function CardPost(props: ICardPost) {
       <Divider />
 
       {isClickedCmt &&
-        (comments || [])
-          .slice(0, limit)
-          .map((x: any) => (
-            <CommentBox
-              setIsDeletedCmtID={setIsDeletedCmtID}
-              key={x.id}
-              item={x}
-            />
-          ))}
+        (isLoadingListCmt ? (
+          <CommentsSkeleton />
+        ) : (
+          (comments || [])
+            .slice(0, limit)
+            .map((x: any) => (
+              <CommentBox
+                setIsDeletedCmtID={setIsDeletedCmtID}
+                key={x.id}
+                item={x}
+              />
+            ))
+        ))}
 
       {totalComments > 2 &&
         isClickedCmt &&
@@ -622,14 +624,14 @@ export default function CardPost(props: ICardPost) {
             View more {totalComments - limit} comments
           </div>
         )}
-
       <CommentForm
-        onChange={(e) => handleChangeComment(e)}
-        onSubmit={(e) => handleAddComment(e)}
+        setContentCmt={setContentCmt}
+        onSubmit={handleAddComment}
         contentCmt={contentCmt}
         handleChangeFile={handleChangeFile}
         refs={refs}
         id={id}
+        isFirstPost={isFirstPost}
       />
       {image && (
         <div className="ml-14 h-20 w-20 pb-4">

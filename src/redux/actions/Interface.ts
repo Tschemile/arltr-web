@@ -86,6 +86,26 @@ export interface IReaction {
   type: keyof typeof REACTION.TYPE;
 }
 
+export interface IPostItem {
+  author?: IInfoUser;
+  content?: string;
+  createdAt?: string;
+  deletedAt?: string;
+  disableComment?: boolean;
+  event?: string;
+  group?: string;
+  id?: string;
+  images?: string[];
+  mode?: keyof typeof POSTS.MODE;
+  status?: string;
+  tags?: string[];
+  totalComments?: number;
+  totalReacts?: number;
+  totalShares?: number;
+  type?: keyof typeof POSTS.TYPE;
+  updatedAt?: string;
+  video?: string;
+}
 // GROUPSs
 
 export interface IGetGroups {

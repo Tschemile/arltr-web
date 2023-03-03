@@ -39,7 +39,7 @@ function NewsFeed() {
       {loadingPosts || loadingCurrentUser ? (
         <CardPostSkeleton />
       ) : (
-        (listPosts as Record<string, string>[]).map((x) => (
+        (listPosts as Record<string, string>[]).map((x, index) => (
           <CardPost
             post={x}
             key={x.id}
@@ -47,6 +47,7 @@ function NewsFeed() {
             setListPosts={setListPosts}
             listPosts={listPosts}
             isPersonPage={false}
+            isFirstPost={index === 0}
           />
         ))
       )}
