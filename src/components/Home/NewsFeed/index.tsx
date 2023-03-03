@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import CardPost from '@/components/CardPost';
-import CardPostSkeleton from '@/components/Skeleton/CardPost';
-import { getProfileListPosts } from '@/redux/actions';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import CardPost from "@/components/CardPost";
+import CardPostSkeleton from "@/components/Skeleton/CardPost";
+import { getProfileListPosts } from "@/redux/actions";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 function NewsFeed() {
   const dispatch = useAppDispatch();
 
-  const { id: profileId = '' } = useAppSelector(
+  const { id: profileId = "" } = useAppSelector(
     (state) => state.auth.currentUser
   );
   const listPostsProps = useAppSelector((state) => state.posts.listPosts);
@@ -28,8 +28,8 @@ function NewsFeed() {
     if (profileId)
       dispatch(
         getProfileListPosts({
-          type: 'POST',
-          queryType: 'COMMUNITY',
+          type: "POST",
+          queryType: "COMMUNITY",
           limit: 10,
         })
       );
@@ -39,7 +39,7 @@ function NewsFeed() {
       {loadingPosts || loadingCurrentUser ? (
         <CardPostSkeleton />
       ) : (
-        (listPosts as Record<string, string>[]).map((x,index) => (
+        (listPosts as Record<string, string>[]).map((x, index) => (
           <CardPost
             post={x}
             key={x.id}

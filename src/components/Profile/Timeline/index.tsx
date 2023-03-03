@@ -1,39 +1,39 @@
 /* eslint-disable no-nested-ternary */
-import { useRouter } from 'next/router';
-import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import { useRouter } from "next/router";
+import type { ChangeEvent } from "react";
+import React, { useEffect, useState } from "react";
 
-import CardPost from '@/components/CardPost';
-import Block from '@/components/common/Block';
-import Button from '@/components/common/Button';
-import Divider from '@/components/common/Divider';
-import Modal from '@/components/common/Modal';
-import PreviewPost from '@/components/common/PreviewPost';
-import CreatePost from '@/components/CreatePost';
-import ContentModal from '@/components/CreatePost/ContentModal';
-import Briefcase from '@/components/Icons/Briefcase';
-import Chain from '@/components/Icons/Chain';
-import Heart from '@/components/Icons/Heart';
-import Sad from '@/components/Icons/Sad';
-import Smite from '@/components/Icons/Smite';
-import Star from '@/components/Icons/Star';
-import CardPostSkeleton from '@/components/Skeleton/CardPost';
-import CreatePostSkeleton from '@/components/Skeleton/CreatePost';
-import InfoBlock from '@/components/Skeleton/ProfileBlock/Info';
-import PhotosBlock from '@/components/Skeleton/ProfileBlock/Photos';
-import RelationShip from '@/components/Skeleton/ProfileBlock/Relationship';
+import CardPost from "@/components/CardPost";
+import Block from "@/components/common/Block";
+import Button from "@/components/common/Button";
+import Divider from "@/components/common/Divider";
+import Modal from "@/components/common/Modal";
+import PreviewPost from "@/components/common/PreviewPost";
+import CreatePost from "@/components/CreatePost";
+import ContentModal from "@/components/CreatePost/ContentModal";
+import Briefcase from "@/components/Icons/Briefcase";
+import Chain from "@/components/Icons/Chain";
+import Heart from "@/components/Icons/Heart";
+import Sad from "@/components/Icons/Sad";
+import Smite from "@/components/Icons/Smite";
+import Star from "@/components/Icons/Star";
+import CardPostSkeleton from "@/components/Skeleton/CardPost";
+import CreatePostSkeleton from "@/components/Skeleton/CreatePost";
+import InfoBlock from "@/components/Skeleton/ProfileBlock/Info";
+import PhotosBlock from "@/components/Skeleton/ProfileBlock/Photos";
+import RelationShip from "@/components/Skeleton/ProfileBlock/Relationship";
 import {
   createPost,
   editPost,
   getProfileListPosts,
   uploadFile,
-} from '@/redux/actions';
-import type { ICreatePost } from '@/redux/actions/Interface';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { getFirstLetter } from '@/utils/func';
+} from "@/redux/actions";
+import type { ICreatePost } from "@/redux/actions/Interface";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { getFirstLetter } from "@/utils/func";
 
-import EditInfoModal from './components/EditInfoModal';
-import InfoContent from './components/InfoContent';
+import EditInfoModal from "./components/EditInfoModal";
+import InfoContent from "./components/InfoContent";
 
 interface ITimeline {
   setIsActive?: (value: string) => void;
@@ -61,10 +61,10 @@ export default function Timeline(props: ITimeline) {
   );
 
   const {
-    gender = '',
+    gender = "",
     socialLinks = [],
     hobbies = [],
-    work = '',
+    work = "",
     albums = [],
     followings = [],
     totalFollowing = 0,
@@ -73,25 +73,25 @@ export default function Timeline(props: ITimeline) {
     totalFollowers = 0,
     groups = [],
     followers = [],
-    id: profileId = '',
-    status = '',
+    id: profileId = "",
+    status = "",
   } = profileUser;
 
   const [openModal, setOpenModal] = useState(false);
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
   const [listPosts, setListPosts] = useState<Record<string, string>[]>([]);
   const [isEdit, setIsEdit] = useState(false);
-  const [postIdEdit, setPostIdEdit] = useState('');
+  const [postIdEdit, setPostIdEdit] = useState("");
   const [fileDataURL, setFileDataURL] = useState<string[]>([]);
-  const [mode, setMode] = useState('PUBLIC');
+  const [mode, setMode] = useState("PUBLIC");
   const [openModalEditInfo, setOpenModalEditInfo] = useState(false);
 
   const onClose = () => {
     setOpenModal(false);
     setIsEdit(false);
-    setContent('');
+    setContent("");
     setFileDataURL([]);
-    setMode('PUBLIC');
+    setMode("PUBLIC");
   };
 
   const onSubmit = () => {
@@ -100,7 +100,7 @@ export default function Timeline(props: ITimeline) {
         editPost({
           postId: postIdEdit,
           payload: {
-            type: 'POST',
+            type: "POST",
             content,
             images: fileDataURL,
             tags: [],
@@ -110,7 +110,7 @@ export default function Timeline(props: ITimeline) {
       ).then((res: any) => {
         if (res.payload?.status === 200) {
           setOpenModal(false);
-          setContent('');
+          setContent("");
           setIsEdit(false);
           setFileDataURL([]);
           const index = listPosts.findIndex(
@@ -122,11 +122,11 @@ export default function Timeline(props: ITimeline) {
         }
       });
     } else {
-      const newPost = { type: 'POST', content, images: fileDataURL, mode };
+      const newPost = { type: "POST", content, images: fileDataURL, mode };
       dispatch(createPost(newPost as ICreatePost)).then((res: any) => {
         if (res.payload?.status === 201) {
           setOpenModal(false);
-          setContent('');
+          setContent("");
           setFileDataURL([]);
           setListPosts([res.payload.data.post, ...listPosts]);
         }
@@ -137,9 +137,9 @@ export default function Timeline(props: ITimeline) {
   const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const formData = new FormData();
-      formData.append('file', e.target.files[0] as string | Blob);
+      formData.append("file", e.target.files[0] as string | Blob);
       dispatch(uploadFile(formData)).then((res: any) => {
-        const { payload: { status: statusCode = 200, data = '' } = {} } = res;
+        const { payload: { status: statusCode = 200, data = "" } = {} } = res;
         if (statusCode === 201) {
           setFileDataURL([...fileDataURL, data.url]);
         }
@@ -159,8 +159,8 @@ export default function Timeline(props: ITimeline) {
     if (profileId)
       dispatch(
         getProfileListPosts({
-          type: 'POST',
-          queryType: 'USER',
+          type: "POST",
+          queryType: "USER",
           limit: 10,
           user: profileId,
         })
@@ -208,9 +208,9 @@ export default function Timeline(props: ITimeline) {
             <Block title="Info" seeAll={false} showTotal={false}>
               <InfoContent
                 icon={
-                  gender === 'male' ? <Smite width={30} /> : <Sad width={30} />
+                  gender === "male" ? <Smite width={30} /> : <Sad width={30} />
                 }
-                content={gender === 'male' ? 'Male' : 'Female'}
+                content={gender === "male" ? "Male" : "Female"}
               />
               {socialLinks &&
                 socialLinks.map((x: string) => (
@@ -221,7 +221,7 @@ export default function Timeline(props: ITimeline) {
                     icon={<Chain width={30} />}
                   />
                 ))}
-              {status !== 'NONE' && (
+              {status !== "NONE" && (
                 <InfoContent icon={<Heart width={30} />} content={status} />
               )}
               {hobbies && (
@@ -253,7 +253,7 @@ export default function Timeline(props: ITimeline) {
             <Block
               total={totalAlbums}
               title="Photos"
-              onClickSeeAll={() => setIsActive('3')}
+              onClickSeeAll={() => setIsActive("3")}
             >
               <div className="grid grid-cols-3 gap-4">
                 {(albums as []).slice(0, 9).map((x: Record<string, string>) => (
@@ -271,7 +271,7 @@ export default function Timeline(props: ITimeline) {
             <Block
               title="Following"
               total={totalFollowing}
-              onClickSeeAll={() => setIsActive('2')}
+              onClickSeeAll={() => setIsActive("2")}
             >
               <div className="grid grid-cols-3 gap-2">
                 {(followings as []).map((x: any) => (
@@ -300,7 +300,7 @@ export default function Timeline(props: ITimeline) {
             <Block
               title="Followers"
               total={totalFollowers}
-              onClickSeeAll={() => setIsActive('2')}
+              onClickSeeAll={() => setIsActive("2")}
             >
               <div className="grid grid-cols-3 gap-4">
                 {(followers as []).map((x: Record<string, string>) => (
@@ -329,7 +329,7 @@ export default function Timeline(props: ITimeline) {
             <Block
               title="Groups"
               total={totalGroups}
-              onClickSeeAll={() => setIsActive('4')}
+              onClickSeeAll={() => setIsActive("4")}
             >
               <div className="grid grid-cols-3 gap-4">
                 {(groups as []).map((x: Record<string, string>) => (
@@ -362,8 +362,8 @@ export default function Timeline(props: ITimeline) {
         </div>
       </div>
       <Modal
-        title={isEdit ? 'Edit Post' : 'Create New Post'}
-        textSubmitButton={isEdit ? 'Edit Post' : 'Create Post'}
+        title={isEdit ? "Edit Post" : "Create New Post"}
+        textSubmitButton={isEdit ? "Edit Post" : "Create Post"}
         showModal={openModal}
         content={
           <ContentModal

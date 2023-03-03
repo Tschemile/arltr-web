@@ -80,7 +80,11 @@ export default function CommentForm(props: ICommentForm) {
               <Smite />
             </div>
             {showEmojiPicker && (
-              <div className={`absolute ${isFirstPost ? 'top-full' : 'bottom-full'}  z-10 -translate-x-1/2 transition-all`}>
+              <div
+                className={`absolute ${
+                  isFirstPost ? "top-full" : "bottom-full"
+                }  z-10 -translate-x-1/2 transition-all`}
+              >
                 <Picker
                   data={data}
                   onEmojiSelect={onClick}

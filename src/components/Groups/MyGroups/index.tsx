@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import CardPost from '@/components/CardPost';
-import Carousels from '@/components/common/Carousels';
-import Divider from '@/components/common/Divider';
-import Input from '@/components/common/Input';
-import CardPostSkeleton from '@/components/Skeleton/CardPost';
-import CardSkeleton from '@/components/Skeleton/CardSkeleton';
-import { GROUPS } from '@/constants/enum';
-import useDebounce from '@/hooks/useDebounce';
-import { getListGroups, getProfileListPosts } from '@/redux/actions';
-import { clearListPosts } from '@/redux/features/posts';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import CardPost from "@/components/CardPost";
+import Carousels from "@/components/common/Carousels";
+import Divider from "@/components/common/Divider";
+import Input from "@/components/common/Input";
+import CardPostSkeleton from "@/components/Skeleton/CardPost";
+import CardSkeleton from "@/components/Skeleton/CardSkeleton";
+import { GROUPS } from "@/constants/enum";
+import useDebounce from "@/hooks/useDebounce";
+import { getListGroups, getProfileListPosts } from "@/redux/actions";
+import { clearListPosts } from "@/redux/features/posts";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
-import CardGroups from '../Card';
+import CardGroups from "../Card";
 
 export default function MyGroups() {
   const dispatch = useAppDispatch();
-  const { id: userId = '' } = useAppSelector((state) => state.auth.currentUser);
+  const { id: userId = "" } = useAppSelector((state) => state.auth.currentUser);
   const listMyGroups = useAppSelector((state) => state.groups.listGroups);
   const isLoading = useAppSelector((state) => state.groups.loading);
   const isLoadingCurrentUser = useAppSelector(
@@ -27,9 +27,9 @@ export default function MyGroups() {
   const isLoadingListPost = useAppSelector((state) => state.posts.loadingPosts);
   const firstGroupId = listMyGroups.length > 0 && listMyGroups[0]?.id;
 
-  const [searchKey, setSearchKey] = useState('');
+  const [searchKey, setSearchKey] = useState("");
   const debounceValue = useDebounce(searchKey, 700);
-  const [groupsId, setGroupId] = useState('');
+  const [groupsId, setGroupId] = useState("");
   const [listPosts, setListPosts] = useState([]);
   useEffect(() => {
     if (userId)
@@ -57,8 +57,8 @@ export default function MyGroups() {
     if (groupsId) {
       dispatch(
         getProfileListPosts({
-          type: 'POST',
-          queryType: 'GROUP',
+          type: "POST",
+          queryType: "GROUP",
           limit: 10,
           group: groupsId,
         })
@@ -104,10 +104,7 @@ export default function MyGroups() {
             <>
               {listPosts.length > 0 ? (
                 (listPosts as Record<string, string>[]).map((x, index) => (
-                  <div
-                    key={x.id}
-                    className="h-full w-full break-inside-avoid"
-                  >
+                  <div key={x.id} className="h-full w-full break-inside-avoid">
                     <CardPost
                       post={x}
                       listComments={listComments}
