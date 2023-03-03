@@ -1,17 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 import {
   createPost,
   editPost,
   getListReaction,
   getProfileListPosts,
-} from "@/redux/actions";
+} from '@/redux/actions';
 
 export interface ProfileState {
   totalRelation: Record<string, number>;
   listPosts: Record<string, string>[];
   loadingPosts: boolean;
-  listReaction: Record<"users" | "total" | string, any | undefined[]>;
+  listReaction: Record<'users' | 'total' | string, any | undefined[]>;
   isUpdatePost: boolean;
   loadingListRelations: boolean;
 }
@@ -27,7 +27,7 @@ const initialState: ProfileState = {
 };
 
 export const postsSlice = createSlice({
-  name: "posts",
+  name: 'posts',
   initialState,
   reducers: {
     clearListPosts: (state) => {

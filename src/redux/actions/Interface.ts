@@ -5,7 +5,7 @@ import type {
   POSTS,
   REACTION,
   RELATIONSHIPS,
-} from "@/constants/enum";
+} from '@/constants/enum';
 
 export interface IUser {
   firstName: string;
@@ -42,14 +42,14 @@ export interface IInfoUser {
 
 export interface IRelation {
   user?: string;
-  type: "FOLLOW" | "FRIEND" | "BLOCKED" | "OWNER" | "LIKED" | "SNOOZE";
+  type: 'FOLLOW' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED' | 'SNOOZE';
   status?: keyof typeof RELATIONSHIPS.STATUS;
   expiredAt?: string;
 }
 
 export interface IInRelation {
   status?: (keyof typeof RELATIONSHIPS.STATUS)[];
-  type: "FOLLOWING" | "FOLLOWER" | "FRIEND" | "BLOCKED" | "OWNER" | "LIKED";
+  type: 'FOLLOWING' | 'FOLLOWER' | 'FRIEND' | 'BLOCKED' | 'OWNER' | 'LIKED';
 }
 
 export interface IFriendship {

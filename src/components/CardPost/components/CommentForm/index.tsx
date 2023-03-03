@@ -1,15 +1,15 @@
-import data from "@emoji-mart/data";
-import Picker from "@emoji-mart/react";
-import type { ChangeEvent, FormEvent } from "react";
-import React, { useState } from "react";
+import data from '@emoji-mart/data';
+import Picker from '@emoji-mart/react';
+import type { ChangeEvent, FormEvent } from 'react';
+import React, { useState } from 'react';
 
-import Avatar from "@/components/common/Avatar";
-import UploadButton from "@/components/common/UploadButton";
-import Chain from "@/components/Icons/Chain";
-import EllipsisHorizon from "@/components/Icons/EllipsisHorizon";
-import Smite from "@/components/Icons/Smite";
-import useClickOutside from "@/hooks/useClickOutside";
-import { useAppSelector } from "@/redux/hooks";
+import Avatar from '@/components/common/Avatar';
+import UploadButton from '@/components/common/UploadButton';
+import Chain from '@/components/Icons/Chain';
+import EllipsisHorizon from '@/components/Icons/EllipsisHorizon';
+import Smite from '@/components/Icons/Smite';
+import useClickOutside from '@/hooks/useClickOutside';
+import { useAppSelector } from '@/redux/hooks';
 
 interface ICommentForm {
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
@@ -25,10 +25,10 @@ export default function CommentForm(props: ICommentForm) {
   const {
     onSubmit = () => {},
     setContentCmt = () => {},
-    contentCmt = "",
+    contentCmt = '',
     refs = {},
     handleChangeFile = () => {},
-    id = "",
+    id = '',
     isFirstPost = false,
   } = props;
 
@@ -53,7 +53,7 @@ export default function CommentForm(props: ICommentForm) {
       </div>
       <form
         onKeyDown={(e) => {
-          if (e.key === "Enter") onSubmit(e);
+          if (e.key === 'Enter') onSubmit(e);
         }}
         className="flex w-full items-center justify-between rounded-full bg-primary-color px-4"
       >
@@ -82,7 +82,7 @@ export default function CommentForm(props: ICommentForm) {
             {showEmojiPicker && (
               <div
                 className={`absolute ${
-                  isFirstPost ? "top-full" : "bottom-full"
+                  isFirstPost ? 'top-full' : 'bottom-full'
                 }  z-10 -translate-x-1/2 transition-all`}
               >
                 <Picker

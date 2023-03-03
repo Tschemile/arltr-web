@@ -1,6 +1,6 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { api } from "@/api";
+import { api } from '@/api';
 
 import type {
   IAlbum,
@@ -17,50 +17,50 @@ import type {
   IReaction,
   IRelation,
   IUser,
-} from "./Interface";
+} from './Interface';
 
 // AUTH
 
 export const register = createAsyncThunk(
-  "auth/register",
+  'auth/register',
   async (payload: IUser) => {
-    const res = await api.post("/user", { ...payload });
+    const res = await api.post('/user', { ...payload });
     return res;
   }
 );
 
 export const verifyOTPCode = createAsyncThunk(
-  "auth/register",
-  async (payload: Record<"code", string>) => {
-    const res = await api.post("/verify", { ...payload });
+  'auth/register',
+  async (payload: Record<'code', string>) => {
+    const res = await api.post('/verify', { ...payload });
     return res;
   }
 );
 
 export const resendOTPCode = createAsyncThunk(
-  "auth/register",
-  async (payload: Record<"email", string>) => {
-    const res = await api.post("/verify/generate-code", { ...payload });
+  'auth/register',
+  async (payload: Record<'email', string>) => {
+    const res = await api.post('/verify/generate-code', { ...payload });
     return res;
   }
 );
 
-export const login = createAsyncThunk("auth/login", async (payload: ILogin) => {
-  const res = await api.post("/user/login", { ...payload });
+export const login = createAsyncThunk('auth/login', async (payload: ILogin) => {
+  const res = await api.post('/user/login', { ...payload });
   return res;
 });
 
 export const getCurrentUser = createAsyncThunk(
-  "auth/getCurrentUser",
+  'auth/getCurrentUser',
   async () => {
-    const res = await api.get("/profile/me");
+    const res = await api.get('/profile/me');
     return res;
   }
 );
 
 // Profile
 export const getProfileUser = createAsyncThunk(
-  "profile/getProfile",
+  'profile/getProfile',
   async (domain: string | string[] | undefined) => {
     const res = await api.get(`/profile/${domain}`);
     return res.data;
@@ -68,15 +68,15 @@ export const getProfileUser = createAsyncThunk(
 );
 
 export const getProfileListPosts = createAsyncThunk(
-  "profile/getListPosts",
+  'profile/getListPosts',
   async (params: IGetListPosts) => {
-    const res = await api.get("/post", { params });
+    const res = await api.get('/post', { params });
     return res.data;
   }
 );
 
 export const editProfile = createAsyncThunk(
-  "profile/editProfile",
+  'profile/editProfile',
   async (payload: Record<string, string | string[]>) => {
     const res = await api.patch(`/profile`, { ...payload });
     return res;
@@ -86,7 +86,7 @@ export const editProfile = createAsyncThunk(
 // relationship ❤️
 
 export const changeRelation = createAsyncThunk(
-  "relation/changeRelation",
+  'relation/changeRelation',
   async (payload: IRelation) => {
     const res = await api.put(`/relation`, { ...payload });
     return res;
@@ -94,7 +94,7 @@ export const changeRelation = createAsyncThunk(
 );
 
 export const getListRelation = createAsyncThunk(
-  "relation/getListRelation",
+  'relation/getListRelation',
   async (params: IInRelation) => {
     const res = await api.get(`/relation`, { params });
     return res.data;
@@ -102,7 +102,7 @@ export const getListRelation = createAsyncThunk(
 );
 
 export const setFriendship = createAsyncThunk(
-  "relation/setFriendship",
+  'relation/setFriendship',
   async (payload: IFriendship) => {
     const res = await api.post(`/relation/friend`, { ...payload });
     return res.data;
@@ -112,8 +112,8 @@ export const setFriendship = createAsyncThunk(
 // POST
 
 export const getCommentsOfPost = createAsyncThunk(
-  "post/getCommentsOfPost",
-  async (params: Record<string | "post", string | number>) => {
+  'post/getCommentsOfPost',
+  async (params: Record<string | 'post', string | number>) => {
     const res = await api.get(`/comment`, { params });
     return {
       data: res.data,
@@ -123,23 +123,23 @@ export const getCommentsOfPost = createAsyncThunk(
 );
 
 export const addComment = createAsyncThunk(
-  "post/addComment",
+  'post/addComment',
   async (payload: Record<string, string | undefined>) => {
-    const res = await api.post("/comment", { ...payload });
+    const res = await api.post('/comment', { ...payload });
     return res.data;
   }
 );
 
 export const createPost = createAsyncThunk(
-  "post/createPost",
+  'post/createPost',
   async (payload: ICreatePost) => {
-    const res = await api.post("/post", { ...payload });
+    const res = await api.post('/post', { ...payload });
     return res;
   }
 );
 
 export const editPost = createAsyncThunk(
-  "post/editPost",
+  'post/editPost',
   async (arg: Record<string, ICreatePost | any>) => {
     const res = await api.patch(`/post/${arg.postId}`, {
       ...arg.payload,
@@ -149,7 +149,7 @@ export const editPost = createAsyncThunk(
 );
 
 export const deletePost = createAsyncThunk(
-  "post/deletePost",
+  'post/deletePost',
   async (postId: string) => {
     const res = await api.delete(`/post/${postId}`);
     return res;
@@ -157,7 +157,7 @@ export const deletePost = createAsyncThunk(
 );
 
 export const deleteComment = createAsyncThunk(
-  "post/deleteComment",
+  'post/deleteComment',
   async (commentId: string) => {
     const res = await api.delete(`/comment/${commentId}`);
     return res;
@@ -165,7 +165,7 @@ export const deleteComment = createAsyncThunk(
 );
 
 export const editComment = createAsyncThunk(
-  "post/editComment",
+  'post/editComment',
   async (arg: Record<string, IEditComment | any>) => {
     const res = await api.patch(`/comment/${arg.commentId}`, {
       ...arg.payload,
@@ -176,34 +176,34 @@ export const editComment = createAsyncThunk(
 
 // Reaction post
 export const makeReaction = createAsyncThunk(
-  "post/makeReaction",
+  'post/makeReaction',
   async (payload: IReaction) => {
-    const res = await api.put("/react", { ...payload });
+    const res = await api.put('/react', { ...payload });
     return res;
   }
 );
 
 export const getListReaction = createAsyncThunk(
-  "post/getListReaction",
+  'post/getListReaction',
   async (params: any) => {
-    const res = await api.get("/react", { params });
+    const res = await api.get('/react', { params });
     return res;
   }
 );
 
 // Upload File
 export const uploadFile = createAsyncThunk(
-  "upload/uploadFile",
+  'upload/uploadFile',
   async (payload: FormData) => {
-    const res = await api.post("/upload/image", payload);
+    const res = await api.post('/upload/image', payload);
     return res;
   }
 );
 
 export const uploadMultiFile = createAsyncThunk(
-  "upload/uploadMultiFile",
+  'upload/uploadMultiFile',
   async (payload: FormData) => {
-    const res = await api.post("/upload/image/multiple", payload);
+    const res = await api.post('/upload/image/multiple', payload);
     return res;
   }
 );
@@ -211,23 +211,23 @@ export const uploadMultiFile = createAsyncThunk(
 // GROUPS
 
 export const getListGroups = createAsyncThunk(
-  "groups/getListGroups",
+  'groups/getListGroups',
   async (params: IGetGroups) => {
-    const res = await api.get("/group", { params });
+    const res = await api.get('/group', { params });
     return res.data;
   }
 );
 
 export const createNewGroups = createAsyncThunk(
-  "groups/createNewGroups",
+  'groups/createNewGroups',
   async (payload: IGroups) => {
-    const res = await api.post("/group", { ...payload });
+    const res = await api.post('/group', { ...payload });
     return res;
   }
 );
 
 export const getGroupsById = createAsyncThunk(
-  "groups/getGroupsById",
+  'groups/getGroupsById',
   async (id: string) => {
     const res = await api.get(`/group/${id}`);
     return res.data;
@@ -235,8 +235,8 @@ export const getGroupsById = createAsyncThunk(
 );
 
 export const editGroup = createAsyncThunk(
-  "groups/editGroup",
-  async (arg: Record<"id" | "payload", IGroups | string>) => {
+  'groups/editGroup',
+  async (arg: Record<'id' | 'payload', IGroups | string>) => {
     const res = await api.patch(`/group/${arg.id}`, {
       ...(arg.payload as IGroups),
     });
@@ -245,7 +245,7 @@ export const editGroup = createAsyncThunk(
 );
 
 export const deleteGroup = createAsyncThunk(
-  "groups/deleteGroup",
+  'groups/deleteGroup',
   async (id: string) => {
     const res = await api.delete(`/group/${id}`);
     return res;
@@ -255,14 +255,14 @@ export const deleteGroup = createAsyncThunk(
 // Member
 
 export const getListMembers = createAsyncThunk(
-  "members/getListMembers",
+  'members/getListMembers',
   async (params: IMembers) => {
-    const res = await api.get("/member", { params });
+    const res = await api.get('/member', { params });
     return res.data;
   }
 );
 export const outOfGroup = createAsyncThunk(
-  "members/outOfGroup",
+  'members/outOfGroup',
   async (idMember: string) => {
     const res = await api.delete(`/member/${idMember}`);
     return res;
@@ -272,15 +272,15 @@ export const outOfGroup = createAsyncThunk(
 // Albums
 
 export const createNewAlbum = createAsyncThunk(
-  "albums/createNewAlbum",
+  'albums/createNewAlbum',
   async (payload: IAlbum) => {
-    const res = await api.post("/album", { ...payload });
+    const res = await api.post('/album', { ...payload });
     return res;
   }
 );
 
 export const editAlbum = createAsyncThunk(
-  "albums/editAlbum",
+  'albums/editAlbum',
   async (arg: IEditAlbum) => {
     const res = await api.patch(`/album/${arg.id}`, { ...arg.payload });
     return res;
@@ -288,15 +288,15 @@ export const editAlbum = createAsyncThunk(
 );
 
 export const getListAlbums = createAsyncThunk(
-  "albums/getListAlbums",
-  async (params: Record<"user", string>) => {
-    const res = await api.get("/album", { params });
+  'albums/getListAlbums',
+  async (params: Record<'user', string>) => {
+    const res = await api.get('/album', { params });
     return res.data;
   }
 );
 
 export const deleteAlbum = createAsyncThunk(
-  "albums/deleteAlbum",
+  'albums/deleteAlbum',
   async (id: string) => {
     const res = await api.delete(`/album/${id}`);
     return res;

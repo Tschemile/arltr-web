@@ -1,16 +1,16 @@
-import type { ChangeEvent, FormEvent } from "react";
-import React, { useEffect, useRef, useState } from "react";
+import type { ChangeEvent, FormEvent } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import PreviewPost from "@/components/common/PreviewPost";
-import PencilSquare from "@/components/Icons/PenciSquare";
-import Trash from "@/components/Icons/Trash";
-import { deleteComment, editComment, uploadFile } from "@/redux/actions";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import PreviewPost from '@/components/common/PreviewPost';
+import PencilSquare from '@/components/Icons/PenciSquare';
+import Trash from '@/components/Icons/Trash';
+import { deleteComment, editComment, uploadFile } from '@/redux/actions';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
-import Avatar from "../../../common/Avatar";
-import Dropdown from "../../../common/Dropdown";
-import EllipsisHorizon from "../../../Icons/EllipsisHorizon";
-import CommentForm from "../CommentForm";
+import Avatar from '../../../common/Avatar';
+import Dropdown from '../../../common/Dropdown';
+import EllipsisHorizon from '../../../Icons/EllipsisHorizon';
+import CommentForm from '../CommentForm';
 
 interface IComment {
   item: Record<string, string>;
@@ -22,21 +22,21 @@ export default function CommentBox(props: IComment) {
   const refs = useRef<null>(null);
   const { item = {}, setIsDeletedCmtID = () => {} } = props;
   const {
-    image: imageProps = "",
+    image: imageProps = '',
     user = {},
-    content: contentProps = "",
-    id: commentId = "",
+    content: contentProps = '',
+    id: commentId = '',
   } = item;
   const {
-    name = "",
-    id: authorId = "",
-    avatar = "",
+    name = '',
+    id: authorId = '',
+    avatar = '',
   } = user as Record<string, string>;
   const currentUser = useAppSelector((state) => state.auth.currentUser);
 
   const [isEdit, setIsEdit] = useState(false);
-  const [contentCmt, setContentCmt] = useState("");
-  const [image, setImage] = useState("");
+  const [contentCmt, setContentCmt] = useState('');
+  const [image, setImage] = useState('');
 
   const handleDeleteComment = () => {
     dispatch(deleteComment(commentId)).then((res: any) => {
@@ -62,10 +62,10 @@ export default function CommentBox(props: IComment) {
   const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const formData = new FormData();
-      formData.append("file", e.target.files[0] as string | Blob);
-      formData.append("scope", "HIDDEN");
+      formData.append('file', e.target.files[0] as string | Blob);
+      formData.append('scope', 'HIDDEN');
       dispatch(uploadFile(formData)).then((res: any) => {
-        const { payload: { status = 0, data = "" } = {} } = res;
+        const { payload: { status = 0, data = '' } = {} } = res;
         if (status === 201) {
           setImage(data.url);
         }
@@ -133,7 +133,7 @@ export default function CommentBox(props: IComment) {
               <Dropdown
                 content={[
                   {
-                    id: "1",
+                    id: '1',
                     title: (
                       <div className="flex items-center gap-2">
                         <PencilSquare />
@@ -143,7 +143,7 @@ export default function CommentBox(props: IComment) {
                     handleClick: () => setIsEdit(true),
                   },
                   {
-                    id: "2",
+                    id: '2',
                     title: (
                       <div className="flex items-center gap-2">
                         <Trash />
