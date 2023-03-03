@@ -12,7 +12,7 @@ import Wow from '@/assets/wow.png';
 import Tooltip from '../Tooltip';
 
 interface IEmoji {
-  type: 'Like' | 'Haha' | 'Heart' | 'Cry' | 'Wow' | 'Angry';
+  type: 'Like' | 'Laugh' | 'Heart' | 'Cry' | 'Wow' | 'Angry';
   value: 'LIKE' | 'HEART' | 'LAUGH' | 'CRY' | 'WOW' | 'ANGRY';
   onClick?: (value: string) => void;
 }
@@ -38,14 +38,14 @@ function Emoji(props: IEmoji) {
             onClick={() => onClick(value)}
           />
         );
-      case 'Haha':
+      case 'Laugh':
         return (
           <Image
             className="cursor-pointer transition-all hover:scale-125"
             width={40}
             height={40}
             src={Haha}
-            alt="haha"
+            alt="laugh"
             onClick={() => onClick(value)}
           />
         );
@@ -114,7 +114,7 @@ export default function ReactButton(props: IActionButton) {
         <div className="flex items-center gap-2 rounded-full bg-primary-color px-4 py-2">
           <Emoji type="Like" value="LIKE" onClick={onClick} />
           <Emoji type="Heart" value="HEART" onClick={onClick} />
-          <Emoji type="Haha" value="LAUGH" onClick={onClick} />
+          <Emoji type="Laugh" value="LAUGH" onClick={onClick} />
           <Emoji type="Cry" value="CRY" onClick={onClick} />
           <Emoji type="Wow" value="WOW" onClick={onClick} />
           <Emoji type="Angry" value="ANGRY" onClick={onClick} />

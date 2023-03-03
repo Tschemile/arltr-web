@@ -4,10 +4,12 @@ import CardPost from '@/components/CardPost';
 import Carousels from '@/components/common/Carousels';
 import Divider from '@/components/common/Divider';
 import Input from '@/components/common/Input';
+import CardPostSkeleton from '@/components/Skeleton/CardPost';
 import CardSkeleton from '@/components/Skeleton/CardSkeleton';
 import { GROUPS } from '@/constants/enum';
 import useDebounce from '@/hooks/useDebounce';
 import { getListGroups, getProfileListPosts } from '@/redux/actions';
+import { clearListPosts } from '@/redux/features/posts';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 import CardGroups from '../Card';
@@ -22,13 +24,13 @@ export default function MyGroups() {
   );
   const listPostsProps = useAppSelector((state) => state.posts.listPosts);
   const listComments = useAppSelector((state) => state.comments.listComment);
+  const isLoadingListPost = useAppSelector((state) => state.posts.loadingPosts);
   const firstGroupId = listMyGroups.length > 0 && listMyGroups[0]?.id;
 
   const [searchKey, setSearchKey] = useState('');
   const debounceValue = useDebounce(searchKey, 700);
   const [groupsId, setGroupId] = useState('');
   const [listPosts, setListPosts] = useState([]);
-
   useEffect(() => {
     if (userId)
       dispatch(
@@ -44,6 +46,12 @@ export default function MyGroups() {
   useEffect(() => {
     if (listPostsProps) setListPosts(listPostsProps as []);
   }, [JSON.stringify(listPostsProps)]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearListPosts());
+    };
+  }, []);
 
   useEffect(() => {
     if (groupsId) {
@@ -67,7 +75,7 @@ export default function MyGroups() {
       <div className="my-4 flex items-center justify-between ">
         <h1>My Groups</h1>
         <Input
-          inpulClassName="bg-white text-base !rounded-full !w-[300px]"
+          inpulClassName="!bg-white text-base !rounded-full !w-[300px]"
           placeholder="Search here..."
           value={searchKey}
           onChange={(e) => setSearchKey(e.target.value)}
@@ -87,21 +95,33 @@ export default function MyGroups() {
       <Divider />
       <div className="my-4">
         <h1>Recently Activities</h1>
-        {listPosts.length < 0 ? (
-          <p>This group has no posts yet</p>
-        ) : (
-          <div className="my-2 h-full columns-2 gap-4">
-            {(listPosts as Record<string, string>[]).map((x) => (
-              <div key={x.id} className="mb-4 h-full w-full break-inside-avoid">
-                <CardPost
-                  post={x}
-                  listComments={listComments}
-                  listPosts={listPosts}
-                />
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="my-2 h-full sm:columns-2 gap-2">
+          {(isLoading && !searchKey) ||
+          isLoadingCurrentUser ||
+          isLoadingListPost ? (
+            <CardPostSkeleton total={4} />
+          ) : (
+            <>
+              {listPosts.length > 0 ? (
+                (listPosts as Record<string, string>[]).map((x, index) => (
+                  <div
+                    key={x.id}
+                    className="h-full w-full break-inside-avoid"
+                  >
+                    <CardPost
+                      post={x}
+                      listComments={listComments}
+                      listPosts={listPosts}
+                      isFirstPost={index === 0}
+                    />
+                  </div>
+                ))
+              ) : (
+                <p>This group has no posts yet</p>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </>
   );

@@ -181,7 +181,7 @@ export default function Timeline(props: ITimeline) {
           ) : listPosts.length <= 0 && !loadingListPost && !loadingProfile ? (
             <p className="text-center">Don&apos;t have any post! </p>
           ) : (
-            (listPosts as Record<string, string>[]).map((x) => (
+            (listPosts as Record<string, string>[]).map((x, index) => (
               <CardPost
                 setIsEdit={setIsEdit}
                 post={x}
@@ -195,6 +195,7 @@ export default function Timeline(props: ITimeline) {
                 listPosts={listPosts}
                 setMode={setMode}
                 isPersonPage={isCurrentUser}
+                isFirstPost={index === 0}
               />
             ))
           )}
@@ -237,7 +238,7 @@ export default function Timeline(props: ITimeline) {
               )}
               {isCurrentUser && (
                 <Button
-                  className="!block w-full bg-pink-400 text-center text-base"
+                  className="!block w-full text-center text-base"
                   onSubmit={() => setOpenModalEditInfo(true)}
                 >
                   Edit detail
@@ -350,7 +351,7 @@ export default function Timeline(props: ITimeline) {
                         </div>
                       )}
                     </div>
-                    <p className="mt-2 w-28 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium">
+                    <p className="mt-2 w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium">
                       {x.name}
                     </p>
                   </div>
