@@ -20,7 +20,7 @@ const Block = (props: BlockProps) => {
     onClickSeeAll = () => {},
   } = props;
   return (
-    <div className="mb-4 w-full rounded-md bg-white p-4">
+    <div className="mb-4 w-full rounded-md bg-tertiary-color p-4">
       <div className="flex items-center justify-between">
         <div>
           <h4 className="mb-2 inline-block font-medium text-black">{title}</h4>

@@ -80,7 +80,7 @@ export default function CreatePost(props: ICreatePost) {
   const { name = '', gender = '', avatar = '' } = currentUser;
 
   return (
-    <div className="mb-4 rounded-md bg-white p-4">
+    <div className="mb-4 rounded-md bg-tertiary-color p-4">
       <div className="flex items-center ">
         <div className="mr-4 h-10 w-10 min-w-[40px]">
           <Avatar

@@ -47,7 +47,7 @@ export default function Carousels(props: CarouselsProps) {
   };
 
   const arrowStyle =
-    'absolute bg-white drop-shadow text-2xl z-10 h-8 w-8 rounded-full opacity-75 flex items-center justify-center';
+    'absolute bg-tertiary-color drop-shadow text-2xl z-[1] h-8 w-8 rounded-full opacity-75 flex items-center justify-center';
 
   const sliderControl = (isLeft: Boolean = false) => (
     <button
@@ -75,11 +75,13 @@ export default function Carousels(props: CarouselsProps) {
       // onMouseLeave={() => setPaused(false)}
     >
       <div className="relative w-full">
-        <div className="inline-flex w-full items-center overflow-x-hidden">
+        <div
+          className={` inline-flex w-full snap-x items-center overflow-x-hidden `}
+        >
           {currentSlide !== 0 && sliderControl(true)}
           {carouselData?.map((val, i) => (
             <div
-              className={`${showCarousels[numSlide]} shrink-0 object-contain text-center ${childClassName}`}
+              className={`${showCarousels[numSlide]} shrink-0 snap-start object-contain text-center ${childClassName} `}
               key={i}
               ref={refs[i]}
             >

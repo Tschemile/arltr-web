@@ -470,7 +470,7 @@ export default function CardPost(props: ICardPost) {
   }, [tabsKey]);
 
   return (
-    <div className={`mb-4 rounded-lg bg-white px-4 shadow-lg`}>
+    <div className={`mb-4 rounded-lg bg-tertiary-color px-4 shadow-lg`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center py-2">
           <div

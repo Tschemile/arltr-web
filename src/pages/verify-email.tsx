@@ -48,7 +48,7 @@ export default function VerifyEmail() {
             />
           </div>
           <Button
-            className="mt-12 mb-4 !block w-full !rounded-full !bg-primary-backgroundColor py-2"
+            className="mt-12 mb-4 !block w-full !rounded-full !bg-secondary-color py-2"
             // loading={isLoading}
             onSubmit={handleSubmit}
           >

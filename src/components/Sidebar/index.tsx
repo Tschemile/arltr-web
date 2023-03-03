@@ -70,7 +70,7 @@ const listExplore = [
   {
     id: 2,
     title: 'Forum',
-    link: 'forum',
+    link: 'blog',
     icon: <Image width={30} src={Forum} alt="forum-icon" />,
   },
   {

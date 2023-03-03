@@ -14,8 +14,6 @@ import ContentModal from '@/components/CreatePost/ContentModal';
 import Briefcase from '@/components/Icons/Briefcase';
 import Chain from '@/components/Icons/Chain';
 import Heart from '@/components/Icons/Heart';
-import Sad from '@/components/Icons/Sad';
-import Smite from '@/components/Icons/Smite';
 import Star from '@/components/Icons/Star';
 import CardPostSkeleton from '@/components/Skeleton/CardPost';
 import CreatePostSkeleton from '@/components/Skeleton/CreatePost';
@@ -207,9 +205,7 @@ export default function Timeline(props: ITimeline) {
           ) : (
             <Block title="Info" seeAll={false} showTotal={false}>
               <InfoContent
-                icon={
-                  gender === 'male' ? <Smite width={30} /> : <Sad width={30} />
-                }
+                icon={gender === 'male' ? <>🤦‍♂️</> : <>🤦‍♀️</>}
                 content={gender === 'male' ? 'Male' : 'Female'}
               />
               {socialLinks &&
@@ -346,7 +342,7 @@ export default function Timeline(props: ITimeline) {
                           className="h-full w-full rounded-lg object-cover"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center rounded-lg bg-primary-backgroundColor text-white">
+                        <div className="flex h-full w-full items-center justify-center rounded-lg bg-secondary-color text-white">
                           {getFirstLetter(x.name as string)}
                         </div>
                       )}

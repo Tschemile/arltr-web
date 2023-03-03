@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function ProfileHeader() {
   return (
-    <div className="animate-pulse bg-white lg:mx-[10%] xl:mx-[15%]">
+    <div className="animate-pulse bg-tertiary-color lg:mx-[10%] xl:mx-[15%]">
       <div className="relative max-h-full min-h-[285px] bg-slate-700">
         <div className="absolute bottom-2 right-3 z-[3] h-3 rounded bg-slate-400 px-7 py-4" />
       </div>

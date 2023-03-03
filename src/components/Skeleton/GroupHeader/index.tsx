@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function GroupHeader() {
   return (
-    <div className="animate-pulse bg-white lg:mx-[5%] xl:mx-[10%]">
+    <div className="animate-pulse bg-tertiary-color lg:mx-[5%] xl:mx-[10%]">
       <div className="relative max-h-full min-h-[285px] bg-slate-700">
         <div className="absolute bottom-2 right-3 z-10">
           <div className="flex h-10 w-20 cursor-pointer items-center rounded-md bg-slate-400 px-2 py-1"></div>

@@ -219,7 +219,7 @@ function OptionAction(props: OptionProps) {
           </Button>
         </div>
         <div>
-          <ul className="absolute z-[2] hidden w-52 bg-white p-2 group-hover:block">
+          <ul className="absolute z-[2] hidden w-52 bg-tertiary-color p-2 group-hover:block">
             {isCurrentUser ? (
               <li>
                 <a href="#"> View as guest </a>

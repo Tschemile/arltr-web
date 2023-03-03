@@ -39,7 +39,7 @@ export default function Headers() {
   };
 
   return (
-    <div className="fixed z-20 h-[60px] w-full bg-white py-2 px-4">
+    <div className="fixed z-20 h-[60px] w-full bg-tertiary-color py-2 px-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           {pathname.split('/')[1] !== 'user' && (

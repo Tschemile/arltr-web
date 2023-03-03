@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function RelationShip() {
   return (
-    <div className="mb-4 w-full animate-pulse rounded-md bg-white p-4">
+    <div className="mb-4 w-full animate-pulse rounded-md bg-tertiary-color p-4">
       <div className="mb-2 flex items-center gap-2">
         <div className="h-6 w-28 rounded bg-slate-400"></div>
       </div>

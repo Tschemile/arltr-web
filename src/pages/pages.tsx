@@ -121,11 +121,11 @@ const Pages = () => {
             optionClassName="!rounded-full text-base hover:bg-gray-400 rounded"
             defaultKey={tabsKey}
             handleChange={setTabsKey}
-            activeClassName="bg-primary-backgroundColor rounded text-white !py-1"
+            activeClassName="bg-secondary-color rounded text-white !py-1"
             className="no-scrollbar overflow-scroll whitespace-nowrap"
           />
           <Button
-            className="mt-2 justify-center !rounded-full bg-primary-backgroundColor text-base text-white"
+            className="mt-2 justify-center !rounded-full bg-secondary-color text-base text-white"
             onSubmit={() => setOpenModal(!openModal)}
           >
             <PlusIcon /> Create new group
@@ -155,14 +155,14 @@ const Pages = () => {
         </div>
       </div>
 
-      <div className="fixed right-0 top-[60px] hidden h-full bg-white p-2 shadow-2xl lg:block lg:min-w-[350px]">
+      <div className="fixed right-0 top-[60px] hidden h-full bg-secondary-color p-2 shadow-2xl lg:block lg:min-w-[350px]">
         <h1 className="text-xl">Pages</h1>
         <Tabs
           options={options}
           optionClassName="text-base hover:bg-gray-400 rounded !block my-2"
           defaultKey={tabsKey}
           handleChange={setTabsKey}
-          activeClassName="bg-primary-backgroundColor rounded text-white !py-1"
+          activeClassName="bg-secondary-color rounded text-white !py-1"
           // className="no-scrollbar  overflow-scroll whitespace-nowrap"
         />
         <Divider />

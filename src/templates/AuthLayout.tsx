@@ -11,11 +11,13 @@ interface AuthLayoutProps {
 }
 
 export default function AuthLayout(props: AuthLayoutProps) {
+  document.body.classList.add('theme-default');
+
   return (
     <div className="relative flex h-[100vh] w-full items-center justify-center bg-primary-color shadow-2xl">
       <div className="z-10 w-full overflow-hidden rounded-lg border border-solid shadow-lg sm:w-[65%] lg:h-[80vh]">
         <div className="lg:flex lg:h-full lg:items-center lg:justify-center">
-          <div className=" hidden h-full w-full flex-col justify-between bg-primary-backgroundColor py-4 px-12 text-white lg:flex">
+          <div className=" hidden h-full w-full flex-col justify-between bg-secondary-color py-4 px-12 text-white lg:flex">
             <h1 className="mt-4 text-4xl xl:text-5xl">
               Connect to the virtual world!
             </h1>
@@ -29,7 +31,7 @@ export default function AuthLayout(props: AuthLayoutProps) {
             </div>
             <div />
           </div>
-          <div className=" h-full w-full overflow-auto bg-white px-12 py-4">
+          <div className=" h-full w-full overflow-auto bg-tertiary-color px-12 py-4">
             {props.children}
           </div>
         </div>

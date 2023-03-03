@@ -4,7 +4,7 @@ import Divider from '@/components/common/Divider';
 
 export default function CreatePostSkeleton() {
   return (
-    <div className="mb-4 animate-pulse rounded-md bg-white p-4">
+    <div className="mb-4 animate-pulse rounded-md bg-tertiary-color p-4">
       <div className="flex items-center">
         <div className="mr-4 h-[40px] w-[40px] rounded-full bg-slate-400"></div>
         <div className="h-8 w-1/2 cursor-pointer rounded-full bg-slate-400 px-4 py-2"></div>

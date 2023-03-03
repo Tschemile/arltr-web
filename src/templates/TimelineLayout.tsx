@@ -18,6 +18,7 @@ const TimelineLayout = (props: ITimelineProps) => {
   const [isValid, setIsValid] = useState(false);
   const { currentUser } = useAppSelector((state) => state.auth);
 
+  document.body.classList.add('theme-default');
   useEffect(() => {
     if (typeof window !== 'undefined' && localStorage.getItem('token'))
       setIsValid(true);

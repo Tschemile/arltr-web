@@ -39,12 +39,29 @@ module.exports = {
           800: '#2c5282',
           900: '#2a4365',
         },
+        // soft white
         primary: {
-          color: '#f1f3f4',
-          border: '#d6d6d6',
-          hover: '#c4c4c4',
-          backgroundColor: '#081D24',
+          color: 'var(--color-primary)',
+          border: 'var(--color-primary-border)',
+          hover: 'var(--color-primary-hover)',
         },
+        // gray
+        secondary: {
+          color: 'var(--color-secondary)',
+          border: 'var(--color-secondary-border)',
+          hover: 'var(--color-secondary-hover)',
+        },
+        // white
+        tertiary: {
+          color: 'var(--color-tertiary)',
+          border: 'var(--color-tertiary-border)',
+          hover: 'var(--color-tertiary-hover)',
+        },
+      },
+      textColor: {
+        primary: 'var(--color-text-primary)',
+        secondary: 'var(--color-text-secondary)',
+        tertiary: 'var(--color-text-tertiary)',
       },
       keyframes: {
         help: {

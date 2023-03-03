@@ -155,11 +155,11 @@ const Groups = () => {
           optionClassName="!rounded-full text-base hover:bg-gray-400 rounded"
           defaultKey={active}
           handleChange={setActive}
-          activeClassName="bg-primary-backgroundColor rounded text-white !py-1"
+          activeClassName="bg-secondary-color rounded text-white !py-1"
           className="no-scrollbar overflow-scroll whitespace-nowrap"
         />
         <Button
-          className="mt-2 justify-center !rounded-full bg-primary-backgroundColor text-base text-white"
+          className="mt-2 justify-center !rounded-full bg-secondary-color text-base text-white"
           onSubmit={() => setOpenModal(!openModal)}
         >
           <PlusIcon /> Create new group

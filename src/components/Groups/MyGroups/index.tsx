@@ -75,7 +75,7 @@ export default function MyGroups() {
       <div className="my-4 flex items-center justify-between ">
         <h1>My Groups</h1>
         <Input
-          inpulClassName="!bg-white text-base !rounded-full !w-[300px]"
+          inpulClassName="!bg-secondary-color text-base !rounded-full !w-[300px]"
           placeholder="Search here..."
           value={searchKey}
           onChange={(e) => setSearchKey(e.target.value)}

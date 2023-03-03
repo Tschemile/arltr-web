@@ -139,7 +139,7 @@ export default function Preview(props: PreviewProps) {
   };
 
   const arrowStyle =
-    'absolute bg-white drop-shadow text-2xl z-10 h-8 w-8 sm:h-10 sm:w-10 rounded-full opacity-75 flex items-center justify-center';
+    'absolute bg-tertiary-color drop-shadow text-2xl z-10 h-8 w-8 sm:h-10 sm:w-10 rounded-full opacity-75 flex items-center justify-center';
 
   const sliderControl = (isLeft: Boolean = false) => (
     <button
@@ -269,7 +269,7 @@ export default function Preview(props: PreviewProps) {
           </div>
 
           <div
-            className={`z-50 hidden min-h-screen w-full max-w-[300px] bg-white ${
+            className={`z-50 hidden min-h-screen w-full max-w-[300px] bg-secondary-color ${
               show ? 'sm:block' : 'sm:hidden'
             }`}
           >

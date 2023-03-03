@@ -108,7 +108,7 @@ export default function Login() {
           </i>
         </div>
         <Button
-          className="my-4 w-full justify-center !rounded-full !bg-primary-backgroundColor py-2"
+          className="my-4 w-full justify-center !rounded-full !bg-secondary-color py-2"
           loading={isLoading}
           onSubmit={handleSubmit}
         >

@@ -43,9 +43,11 @@ const Main = (props: IMainProps) => {
     });
   };
 
+  document.body.classList.add('theme-default');
   useEffect(() => {
-    if (typeof window !== 'undefined' && localStorage.getItem('token'))
+    if (typeof window !== 'undefined' && localStorage.getItem('token')) {
       setIsValid(true);
+    }
   }, []);
 
   useEffect(() => {

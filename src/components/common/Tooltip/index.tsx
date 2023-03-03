@@ -33,15 +33,15 @@ export default function Tooltip(props: TooltipProps) {
       >
         {showArrow && ['bottom', 'right'].includes(direction) && (
           <div
-            className={`${customArrow} h-3 w-3 rotate-45 bg-primary-backgroundColor`}
+            className={`${customArrow} h-3 w-3 rotate-45 bg-secondary-color`}
           />
         )}
-        <span className="relative z-10 bg-primary-backgroundColor p-2 text-xs leading-none text-white shadow-lg">
+        <span className="relative z-10 bg-secondary-color p-2 text-xs leading-none text-white shadow-lg">
           {description}
         </span>
         {showArrow && ['top', 'left'].includes(direction) && (
           <div
-            className={`${customArrow} h-3 w-3 rotate-45 bg-primary-backgroundColor`}
+            className={`${customArrow} h-3 w-3 rotate-45 bg-secondary-color`}
           />
         )}
       </div>

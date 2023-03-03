@@ -286,7 +286,7 @@ export default function DetailGroup() {
                     className="h-full w-full rounded-full border-[3px] border-solid border-white object-cover"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center rounded-full bg-primary-backgroundColor text-white">
+                  <div className="flex h-full w-full items-center justify-center rounded-full bg-secondary-color text-white">
                     {getFirstLetter(name as string)}
                   </div>
                 )}

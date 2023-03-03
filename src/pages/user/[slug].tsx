@@ -205,7 +205,7 @@ const User = () => {
         loadingUser ? (
           <ProfileHeader />
         ) : (
-          <div className="bg-white lg:mx-[10%] xl:mx-[15%]">
+          <div className="bg-tertiary-color lg:mx-[10%] xl:mx-[15%]">
             <div className="relative max-h-full min-h-[285px]">
               <img
                 src={

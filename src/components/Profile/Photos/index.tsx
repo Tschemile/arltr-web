@@ -6,7 +6,7 @@ import TabsContent from '@/components/common/Tabs/TabsContent';
 import { useAppSelector } from '@/redux/hooks';
 
 import { ContentAlbums } from './ContentAlbums';
-import { ContentPhotots } from './ContentPhotos';
+import { ContentPhotos } from './ContentPhotos';
 
 export default function Photos() {
   const [activeTab, setActiveTab] = useState('PHOTOS');
@@ -22,7 +22,7 @@ export default function Photos() {
     {
       key: 'PHOTOS',
       title: 'Photos',
-      content: <ContentPhotots data={albums} />,
+      content: <ContentPhotos data={albums} />,
     },
   ];
 

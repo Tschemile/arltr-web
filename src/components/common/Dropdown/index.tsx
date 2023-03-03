@@ -17,7 +17,7 @@ export default function Dropdown(props: IDropdown) {
   return (
     <div className="group relative flex text-base">
       {children}
-      <ul className="invisible absolute top-8 right-0 z-10 rounded border bg-white opacity-0 shadow-lg transition-all group-focus-within:visible group-focus-within:translate-y-1 group-focus-within:opacity-100">
+      <ul className="invisible absolute top-8 right-0 z-10 rounded border bg-tertiary-color opacity-0 shadow-lg transition-all group-focus-within:visible group-focus-within:translate-y-1 group-focus-within:opacity-100">
         {content.map((x: IItem) => (
           <li key={x.id}>
             <button
