@@ -269,7 +269,7 @@ export default function Preview(props: PreviewProps) {
           </div>
 
           <div
-            className={`z-50 hidden min-h-screen w-full max-w-[300px] bg-tertiary-color ${
+            className={`z-50 hidden min-h-screen w-full max-w-[300px] bg-tertiary-color text-primary ${
               show ? 'sm:block' : 'sm:hidden'
             }`}
           >

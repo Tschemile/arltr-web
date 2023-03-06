@@ -17,7 +17,9 @@ export default function Card(props: CardProps) {
     imgClassName = '',
   } = props;
   return (
-    <div className={`rounded-lg bg-tertiary-color shadow-lg ${className}`}>
+    <div
+      className={`rounded-lg bg-tertiary-color text-primary shadow-lg ${className}`}
+    >
       {!!img && (
         <div
           className={`relative max-h-[185px] min-h-[185px] overflow-hidden rounded-t-lg lg:min-h-[200px] 2xl:min-h-[15rem] ${imgClassName}`}

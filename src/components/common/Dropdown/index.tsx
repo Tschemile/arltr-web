@@ -15,7 +15,7 @@ interface IItem {
 export default function Dropdown(props: IDropdown) {
   const { children = '', content = [] } = props;
   return (
-    <div className="group relative flex text-base">
+    <div className="group relative flex text-base text-primary">
       {children}
       <ul className="invisible absolute top-8 right-0 z-10 rounded border bg-tertiary-color opacity-0 shadow-lg transition-all group-focus-within:visible group-focus-within:translate-y-1 group-focus-within:opacity-100">
         {content.map((x: IItem) => (

@@ -19,7 +19,7 @@ export default function Select(props: ISelect) {
   } = props;
   return (
     <select
-      className={`cursor-pointer rounded border border-primary-border px-2 py-1 text-base outline-none ${className}`}
+      className={`cursor-pointer rounded border border-primary-border bg-primary-color px-2 py-1 text-base text-primary outline-none ${className}`}
       name={name}
       id={name}
       value={defaultValue}

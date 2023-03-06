@@ -17,13 +17,13 @@ export default function Tabs(props: TabsProps) {
     handleChange = () => {},
     border = false,
     className = '',
-    activeClassName = 'border-b-2 border-black text-black',
+    activeClassName = 'border-b-2 border-primary-border text-primary',
     optionClassName = '',
   } = props;
   return (
     <>
       <ul
-        className={`whitespace-normal ${
+        className={`whitespace-normal text-secondary ${
           border && 'border-b-[1px] border-b-[#ddd]'
         } ${className}`}
       >

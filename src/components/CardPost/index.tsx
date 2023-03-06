@@ -97,7 +97,7 @@ const Users = (props: IUsers) => {
               </div>
               <div className="">
                 <h3
-                  className="cursor-pointer text-lg font-medium"
+                  className="cursor-pointer text-lg font-medium text-primary"
                   onClick={() => router.push(`/user/${domain}`)}
                 >
                   {name}
@@ -306,8 +306,8 @@ export default function CardPost(props: ICardPost) {
       case 'LIKE':
         return (
           <p
-            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base ${
-              emoji ? 'text-blue-700' : ''
+            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base text-primary ${
+              emoji ? '!text-blue-700' : ''
             }`}
           >
             <Image src={LikeIcons} alt="like" width={20} />
@@ -318,8 +318,8 @@ export default function CardPost(props: ICardPost) {
       case 'HEART':
         return (
           <p
-            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base ${
-              emoji ? 'text-red-500' : ''
+            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base text-primary ${
+              emoji ? '!text-red-500' : ''
             }`}
           >
             <Image src={Heart} alt="heart" width={20} />
@@ -330,8 +330,8 @@ export default function CardPost(props: ICardPost) {
       case 'LAUGH':
         return (
           <p
-            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base ${
-              emoji ? 'text-yellow-500' : ''
+            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base text-primary ${
+              emoji ? '!text-yellow-500' : ''
             }`}
           >
             <Image src={Haha} alt="haha" width={20} />
@@ -342,8 +342,8 @@ export default function CardPost(props: ICardPost) {
       case 'CRY':
         return (
           <p
-            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base ${
-              emoji ? 'text-yellow-500' : ''
+            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base text-primary ${
+              emoji ? '!text-yellow-500' : ''
             }`}
           >
             <Image src={Cry} alt="cry" width={20} />
@@ -354,8 +354,8 @@ export default function CardPost(props: ICardPost) {
       case 'WOW':
         return (
           <p
-            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base ${
-              emoji ? 'text-yellow-500' : ''
+            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base text-primary ${
+              emoji ? '!text-yellow-500' : ''
             }`}
           >
             <Image src={Wow} alt="wow" width={20} />
@@ -366,8 +366,8 @@ export default function CardPost(props: ICardPost) {
       case 'ANGRY':
         return (
           <p
-            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base ${
-              emoji ? 'text-orange-700' : ''
+            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base text-primary ${
+              emoji ? '!text-orange-700' : ''
             }`}
           >
             <Image src={Angry} alt="angry" width={20} />
@@ -378,7 +378,7 @@ export default function CardPost(props: ICardPost) {
       default:
         return (
           <p
-            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base text-[#929292]`}
+            className={`flex items-center gap-2 whitespace-nowrap pl-2 text-base text-primary`}
           >
             <Like />
             Like
@@ -391,7 +391,7 @@ export default function CardPost(props: ICardPost) {
     return (
       <>
         <Tabs
-          className="flex items-center text-base"
+          className="flex items-center text-base text-primary"
           options={options}
           defaultKey={tabsKey}
           handleChange={setTabsKey}
@@ -470,7 +470,9 @@ export default function CardPost(props: ICardPost) {
   }, [tabsKey]);
 
   return (
-    <div className={`mb-4 rounded-lg bg-tertiary-color px-4 shadow-lg`}>
+    <div
+      className={`mb-4 rounded-lg bg-tertiary-color px-4 text-primary shadow-lg`}
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center py-2">
           <div

@@ -113,7 +113,7 @@ export default function Sidebar() {
     <div
       className={`fixed top-[60px] h-[calc(100vh-60px)] w-[300px] ${
         !isShow ? '-translate-x-full' : 'translate-x-0'
-      } no-scrollbar z-30 overflow-y-auto overscroll-contain bg-primary-color py-2 px-4 text-black transition-all duration-200 ease-in-out xl:block xl:translate-x-0`}
+      } no-scrollbar z-30 overflow-y-auto overscroll-contain bg-primary-color py-2 px-4 text-secondary transition-all duration-200 ease-in-out xl:block xl:translate-x-0`}
     >
       {loadingCurrentUser ? (
         <SidebarSkeleton />

@@ -1,7 +1,7 @@
 import Image from 'next/dist/client/image';
 import Link from 'next/dist/client/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Logo from '@/assets/Logo.svg';
 import { logOut } from '@/redux/features/auth/authSlice';
@@ -31,6 +31,22 @@ export default function Headers() {
     domain = '',
     name = '',
   } = useAppSelector((state) => state.auth.currentUser);
+
+  const [mode, setMode] = useState<
+    'theme-default' | 'theme-dark' | 'theme-pink'
+  >(
+    (localStorage.getItem('theme') as
+      | 'theme-default'
+      | 'theme-dark'
+      | 'theme-pink') || 'theme-default'
+  );
+
+  useEffect(() => {
+    if (mode) {
+      document.body.className = mode;
+      localStorage.setItem('theme', mode);
+    }
+  }, [mode]);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -123,14 +139,21 @@ export default function Headers() {
                 id: '1',
                 title: '💡 Light Mode',
                 handleClick: () => {
-                  localStorage.setItem('theme', 'theme-default');
+                  setMode('theme-default');
                 },
               },
               {
                 id: '2',
                 title: '🕯️ Dark Mode',
                 handleClick: () => {
-                  localStorage.setItem('theme', 'theme-dark');
+                  setMode('theme-dark');
+                },
+              },
+              {
+                id: '3',
+                title: '🫀 Pink Mode',
+                handleClick: () => {
+                  setMode('theme-pink');
                 },
               },
             ]}

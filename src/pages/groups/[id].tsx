@@ -268,9 +268,9 @@ export default function DetailGroup() {
       meta={<Meta title={`${name}`} description={`${name}`} />}
     >
       <div
-        className={`w-full`}
+        className={`w-full text-primary`}
         style={{
-          backgroundImage: `linear-gradient(to top, white , ${backGround})`,
+          backgroundImage: `linear-gradient(to top, var(--color-primary) , ${backGround})`,
         }}
       >
         {isLoading ? (
