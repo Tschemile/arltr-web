@@ -29,13 +29,13 @@ export default function Input(props: InputProps) {
 
   return (
     <div className={`relative ${className}`}>
-      <div className="absolute top-[50%] left-2 translate-y-[-50%] text-[#929292]">
+      <div className="absolute top-[50%] left-2 translate-y-[-50%] text-primary">
         {icons || ''}
       </div>
       <input
         className={`h-[40px] py-2 pr-4 ${
           icons ? 'pl-10' : 'pl-4'
-        } rounded-lg bg-primary-color text-base outline-none placeholder:text-[#929292] ${inpulClassName}`}
+        } rounded-lg bg-primary-color text-base outline-none placeholder:text-primary ${inpulClassName}`}
         placeholder={placeholder}
         style={{ width }}
         type={type}

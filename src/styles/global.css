@@ -60,24 +60,42 @@ a:hover {
 }
 
 .theme-pink{
-  --color-primary: #ff2aa7;
+  --color-primary: #F56EB3;
   --color-primary-border: #d6d6d6;
   --color-primary-hover: #c4c4c4;
 
-  --color-secondary: #081D24;
+  --color-secondary: #CB1C8D;
   --color-secondary-border: #d6d6d6;
   --color-secondary-hover: #c4c4c4;
 
-  --color-tertiary: #ffffff;
+  --color-tertiary: #460C68;
   --color-tertiary-border: #d6d6d6;
   --color-tertiary-hover: #c4c4c4;
 
-  --color-quaternary: #f1f3f4;
+  --color-quaternary: #460C68;
   --color-quaternary-border: #d6d6d6;
   --color-quaternary-hover: #c4c4c4;
   
-  --color-text-primary: #081D24;
+  --color-text-primary: #f1f3f4;
   --color-text-secondary: #f1f3f4;
+  --color-text-tertiary: #f1f3f4;
+}
+
+.theme-soviet{
+  --color-primary: #FFDE00;
+  --color-primary-border: #d6d6d6;
+  --color-primary-hover: #c4c4c4;
+
+  --color-secondary: #64CCDA;
+  --color-secondary-border: #d6d6d6;
+  --color-secondary-hover: #c4c4c4;
+
+  --color-tertiary: #D2001A;
+  --color-tertiary-border: #d6d6d6;
+  --color-tertiary-hover: #c4c4c4;
+  
+  --color-text-primary: #000;
+  --color-text-secondary: #D2001A;
   --color-text-tertiary: #f1f3f4;
 }
 

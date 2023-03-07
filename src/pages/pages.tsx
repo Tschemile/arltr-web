@@ -155,8 +155,8 @@ const Pages = () => {
         </div>
       </div>
 
-      <div className="fixed right-0 top-[60px] hidden h-full bg-secondary-color p-2 shadow-2xl lg:block lg:min-w-[350px]">
-        <h1 className="text-xl">Pages</h1>
+      <div className="fixed right-0 top-[60px] hidden h-full bg-primary-color p-2 shadow-2xl lg:block lg:min-w-[350px]">
+        <h1 className="text-xl text-primary">Pages</h1>
         <Tabs
           options={options}
           optionClassName="text-base hover:bg-gray-400 rounded !block my-2"
@@ -167,7 +167,7 @@ const Pages = () => {
         />
         <Divider />
         <Button
-          className="mt-4 w-full justify-center text-base text-white"
+          className="mt-4 w-full justify-center bg-secondary-color text-base text-tertiary"
           onSubmit={() => setOpenModal(!openModal)}
         >
           + Create

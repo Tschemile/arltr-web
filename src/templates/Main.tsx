@@ -62,7 +62,7 @@ const Main = (props: IMainProps) => {
 
   if (isValid)
     return (
-      <div className="h-full w-full overflow-y-auto text-gray-700 antialiased">
+      <div className="h-full w-full overflow-y-auto text-primary antialiased">
         {props.meta}
         <Headers />
         <Sidebar />
@@ -71,13 +71,15 @@ const Main = (props: IMainProps) => {
             if (isShow) dispatch(onHideNavbar());
           }}
           className={`${
-            isShow ? 'cursor-pointer bg-[rgba(0,0,0,0.4)]' : 'bg-primary-color'
+            isShow ? 'cursor-pointer  bg-[rgba(0,0,0,0.4)]' : ''
           } z-20 mt-[60px] grid h-full w-full text-xl`}
         >
           <div
             className={`${
               isShow ? '-z-10' : ''
-            } min-h-[95vh] py-2 px-4 xl:pl-[320px] ${props.className}`}
+            } min-h-[95vh] bg-primary-color py-2 px-4 xl:pl-[320px] ${
+              props.className
+            }`}
           >
             {props.children}
           </div>

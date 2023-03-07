@@ -56,7 +56,7 @@ export default function DetailGroup() {
     member = {},
   } = currentGroup;
 
-  const isAdmin = member.role === MEMBERS.ROLE.ADMIN;
+  const isAdmin = member ? member.role === MEMBERS.ROLE.ADMIN : false;
 
   const [active, setActive] = useState('1');
   const [coverImg, setCoverImg] = useState('');

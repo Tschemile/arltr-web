@@ -93,7 +93,7 @@ export default function CreatePost(props: ICreatePost) {
           />
         </div>
         <div
-          className="w-full cursor-pointer rounded-full bg-primary-color px-4 py-2 text-base text-gray-500 outline-none"
+          className="w-full cursor-pointer rounded-full bg-primary-color px-4 py-2 text-base text-primary outline-none"
           onClick={() => setOpenModal(true)}
         >
           What is your mind? {name} !

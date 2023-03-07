@@ -9,6 +9,7 @@ import { membersReducer } from './features/members';
 import { postsReducer } from './features/posts';
 import { profileReducer } from './features/profile/profileSlice';
 import { relationReducer } from './features/relation/relationSlice';
+import { uploadsReducer } from './features/uploads';
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
     groups: groupsReducer,
     members: membersReducer,
     albums: albumsReducer,
+    uploads: uploadsReducer,
   },
   devTools: true,
   middleware: (getDefaultMiddleware) =>

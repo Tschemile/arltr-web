@@ -35,7 +35,7 @@ export default function ContentModal(props: IContentModal) {
   const getLayout = () => {
     if (fileDataURL.length <= 2) {
       return fileDataURL.map((x: any) => (
-        <div key={x} className="h-[150px] w-full">
+        <div key={x} className="mb-2 h-[150px] w-full">
           <img
             className="h-full w-full rounded object-cover"
             src={x}
@@ -112,7 +112,7 @@ export default function ContentModal(props: IContentModal) {
         </div>
         <div className="my-4">
           <textarea
-            className="no-scrollbar h-fit w-full resize-none rounded bg-primary-color p-1  outline-none placeholder:text-base placeholder:text-gray-500"
+            className="no-scrollbar h-fit w-full resize-none rounded bg-primary-color p-1  outline-none placeholder:text-base placeholder:text-primary"
             placeholder={`What is your mind? ${name} !`}
             onChange={(e) => setContent(e.target.value)}
             value={content}
