@@ -63,7 +63,7 @@ export default function CommentForm(props: ICommentForm) {
           ref={refs}
           onChange={(e) => setContentCmt(e.target.value)}
           onClick={() => setShowEmojiPicker(false)}
-          className="w-full bg-primary-color p-2 text-sm outline-none placeholder:text-sm placeholder:text-gray-500"
+          className="w-full bg-primary-color p-2 text-sm outline-none placeholder:text-sm placeholder:text-primary"
         />
         <ul className=" flex items-center">
           <li className="cursor-pointer">

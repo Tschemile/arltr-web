@@ -33,12 +33,13 @@ export default function Headers() {
   } = useAppSelector((state) => state.auth.currentUser);
 
   const [mode, setMode] = useState<
-    'theme-default' | 'theme-dark' | 'theme-pink'
+    'theme-default' | 'theme-dark' | 'theme-pink' | 'theme-soviet'
   >(
     (localStorage.getItem('theme') as
       | 'theme-default'
       | 'theme-dark'
-      | 'theme-pink') || 'theme-default'
+      | 'theme-pink'
+      | 'theme-soviet') || 'theme-default'
   );
 
   useEffect(() => {
@@ -99,11 +100,48 @@ export default function Headers() {
               <Message />
             </Tooltip>
           </IconButton>
-          <IconButton className="mr-4">
+          <IconButton className="">
             <Tooltip description="Notifications">
               <Bell />
             </Tooltip>
           </IconButton>
+
+          <Dropdown
+            content={[
+              {
+                id: '1',
+                title: '💡 Light Mode',
+                handleClick: () => {
+                  setMode('theme-default');
+                },
+              },
+              {
+                id: '2',
+                title: '🕯️ Dark Mode',
+                handleClick: () => {
+                  setMode('theme-dark');
+                },
+              },
+              {
+                id: '3',
+                title: '🏳‍🌈 Pink Mode',
+                handleClick: () => {
+                  setMode('theme-pink');
+                },
+              },
+              {
+                id: '4',
+                title: '⚒ SOVIET Mode',
+                handleClick: () => {
+                  setMode('theme-soviet');
+                },
+              },
+            ]}
+          >
+            <IconButton className="h-10 w-10">
+              <Eye />
+            </IconButton>
+          </Dropdown>
           <Dropdown
             content={[
               {
@@ -124,7 +162,7 @@ export default function Headers() {
               },
             ]}
           >
-            <button className="h-10 w-10">
+            <button className="ml-4 h-10 w-10">
               <Avatar
                 src={avatar}
                 alt="avatar"
@@ -132,35 +170,6 @@ export default function Headers() {
                 gender={gender}
               />
             </button>
-          </Dropdown>
-          <Dropdown
-            content={[
-              {
-                id: '1',
-                title: '💡 Light Mode',
-                handleClick: () => {
-                  setMode('theme-default');
-                },
-              },
-              {
-                id: '2',
-                title: '🕯️ Dark Mode',
-                handleClick: () => {
-                  setMode('theme-dark');
-                },
-              },
-              {
-                id: '3',
-                title: '🫀 Pink Mode',
-                handleClick: () => {
-                  setMode('theme-pink');
-                },
-              },
-            ]}
-          >
-            <IconButton className="h-10 w-10">
-              <Eye />
-            </IconButton>
           </Dropdown>
         </div>
       </div>

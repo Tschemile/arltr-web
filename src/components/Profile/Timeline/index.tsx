@@ -24,7 +24,7 @@ import {
   createPost,
   editPost,
   getProfileListPosts,
-  uploadFile,
+  uploadMultiFile,
 } from '@/redux/actions';
 import type { ICreatePost } from '@/redux/actions/Interface';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -57,6 +57,7 @@ export default function Timeline(props: ITimeline) {
   const loadingCurrentUser = useAppSelector(
     (state) => state.auth.isLoading.loadingCurrentUser
   );
+  const loadingUploadFile = useAppSelector((state) => state.uploads.loading);
 
   const {
     gender = '',
@@ -83,6 +84,7 @@ export default function Timeline(props: ITimeline) {
   const [fileDataURL, setFileDataURL] = useState<string[]>([]);
   const [mode, setMode] = useState('PUBLIC');
   const [openModalEditInfo, setOpenModalEditInfo] = useState(false);
+  const [sourceFile, setSourceFile] = useState<File[]>([]);
 
   const onClose = () => {
     setOpenModal(false);
@@ -90,58 +92,128 @@ export default function Timeline(props: ITimeline) {
     setContent('');
     setFileDataURL([]);
     setMode('PUBLIC');
+    setSourceFile([]);
   };
 
   const onSubmit = () => {
+    const hasNewImage = sourceFile.length > 0;
+    const formData = new FormData();
+    if (hasNewImage) {
+      sourceFile.forEach((file: File) => {
+        formData.append('files', file);
+      });
+    }
     if (isEdit) {
-      dispatch(
-        editPost({
-          postId: postIdEdit,
-          payload: {
+      if (hasNewImage) {
+        dispatch(uploadMultiFile(formData)).then((res: any) => {
+          const { payload: { status: statusCode = 200, data = '' } = {} } = res;
+          const oldListImg = fileDataURL.filter(
+            (item) => !item.includes('base64')
+          );
+          if (statusCode === 201 && data) {
+            dispatch(
+              editPost({
+                postId: postIdEdit,
+                payload: {
+                  type: 'POST',
+                  content,
+                  images: oldListImg.concat(data.map((item: any) => item.path)),
+                  tags: [],
+                  mode,
+                },
+              })
+            ).then((result: any) => {
+              if (result.payload?.status === 200) {
+                setOpenModal(false);
+                setContent('');
+                setIsEdit(false);
+                setFileDataURL([]);
+                setSourceFile([]);
+                const index = listPosts.findIndex(
+                  (x) => x.id === result.payload.data.post.id
+                );
+                const newArr = [...listPosts];
+                newArr[index] = result.payload.data.post;
+                setListPosts(newArr);
+              }
+            });
+          }
+        });
+      } else {
+        dispatch(
+          editPost({
+            postId: postIdEdit,
+            payload: {
+              type: 'POST',
+              content,
+              mode,
+              images: fileDataURL,
+              tags: [],
+            },
+          })
+        ).then((result: any) => {
+          if (result.payload?.status === 200) {
+            setOpenModal(false);
+            setContent('');
+            setIsEdit(false);
+            setFileDataURL([]);
+            setSourceFile([]);
+            const index = listPosts.findIndex(
+              (x) => x.id === result.payload.data.post.id
+            );
+            const newArr = [...listPosts];
+            newArr[index] = result.payload.data.post;
+            setListPosts(newArr);
+          }
+        });
+      }
+    } else if (hasNewImage) {
+      dispatch(uploadMultiFile(formData)).then((res: any) => {
+        const { payload: { status: statusCode = 200, data = '' } = {} } = res;
+        if (statusCode === 201) {
+          const newPost = {
             type: 'POST',
             content,
-            images: fileDataURL,
-            tags: [],
+            images: data.map((x: Record<string, string>) => x.path),
             mode,
-          },
-        })
-      ).then((res: any) => {
-        if (res.payload?.status === 200) {
-          setOpenModal(false);
-          setContent('');
-          setIsEdit(false);
-          setFileDataURL([]);
-          const index = listPosts.findIndex(
-            (x) => x.id === res.payload.data.post.id
-          );
-          const newArr = [...listPosts];
-          newArr[index] = res.payload.data.post;
-          setListPosts(newArr);
+          };
+          dispatch(createPost(newPost as ICreatePost)).then((result: any) => {
+            if (result.payload?.status === 201) {
+              setOpenModal(false);
+              setContent('');
+              setFileDataURL([]);
+              setSourceFile([]);
+              setListPosts([result.payload.data.post, ...listPosts]);
+            }
+          });
         }
       });
     } else {
-      const newPost = { type: 'POST', content, images: fileDataURL, mode };
-      dispatch(createPost(newPost as ICreatePost)).then((res: any) => {
-        if (res.payload?.status === 201) {
+      const newPost = {
+        type: 'POST',
+        content,
+        mode,
+      };
+      dispatch(createPost(newPost as ICreatePost)).then((result: any) => {
+        if (result.payload?.status === 201) {
           setOpenModal(false);
           setContent('');
           setFileDataURL([]);
-          setListPosts([res.payload.data.post, ...listPosts]);
+          setSourceFile([]);
+          setListPosts([result.payload.data.post, ...listPosts]);
         }
       });
     }
   };
 
   const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const formData = new FormData();
-      formData.append('file', e.target.files[0] as string | Blob);
-      dispatch(uploadFile(formData)).then((res: any) => {
-        const { payload: { status: statusCode = 200, data = '' } = {} } = res;
-        if (statusCode === 201) {
-          setFileDataURL([...fileDataURL, data.url]);
-        }
-      });
+    if (e.target.files && e.target.files.length > 0 && e.target.files[0]) {
+      setSourceFile([...sourceFile, e.target.files[0]]);
+      const reader = new FileReader();
+      reader.addEventListener('load', () =>
+        setFileDataURL([...fileDataURL, reader.result?.toString() || ''])
+      );
+      reader.readAsDataURL(e.target.files[0]);
     }
   };
 
@@ -373,7 +445,7 @@ export default function Timeline(props: ITimeline) {
         }
         onClose={onClose}
         onSubmit={onSubmit}
-        loading={isUpdatePost}
+        loading={isUpdatePost || loadingUploadFile}
       />
 
       <EditInfoModal
