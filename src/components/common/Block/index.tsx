@@ -23,11 +23,11 @@ const Block = (props: BlockProps) => {
     <div className="mb-4 w-full rounded-md bg-tertiary-color p-4 text-primary">
       <div className="flex items-center justify-between">
         <div>
-          <h4 className="mb-2 inline-block font-medium text-secondary">
-            {title}
-          </h4>
+          <h4 className="mb-2 inline-block font-medium ">{title}</h4>
           {showTotal && (
-            <span className="pl-2 text-base">{`(${total || 0})`}</span>
+            <span className="pl-2 text-base text-secondary">{`(${
+              total || 0
+            })`}</span>
           )}
         </div>
         {seeAll && (

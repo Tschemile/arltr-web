@@ -21,7 +21,7 @@ a:hover {
 
 .theme-default{
   --color-primary: #f1f3f4;
-  --color-primary-border: #d6d6d6;
+  --color-primary-border: #000000;
   --color-primary-hover: #c4c4c4;
 
   --color-secondary: #081D24;
@@ -31,6 +31,10 @@ a:hover {
   --color-tertiary: #ffffff;
   --color-tertiary-border: #d6d6d6;
   --color-tertiary-hover: #c4c4c4;
+
+  --color-quaternary: #7b7d80;
+  --color-quaternary-border: #d6d6d6;
+  --color-quaternary-hover: #c4c4c4;
   
   --color-text-primary: #000000;
   --color-text-secondary: #929292;
@@ -50,7 +54,7 @@ a:hover {
   --color-tertiary-border: #d6d6d6;
   --color-tertiary-hover: #c4c4c4;
 
-  --color-quaternary: #f1f3f4;
+  --color-quaternary: #7b7d80;
   --color-quaternary-border: #d6d6d6;
   --color-quaternary-hover: #c4c4c4;
   
@@ -72,12 +76,12 @@ a:hover {
   --color-tertiary-border: #d6d6d6;
   --color-tertiary-hover: #c4c4c4;
 
-  --color-quaternary: #460C68;
+  --color-quaternary: #ff5dbc;
   --color-quaternary-border: #d6d6d6;
   --color-quaternary-hover: #c4c4c4;
   
   --color-text-primary: #f1f3f4;
-  --color-text-secondary: #f1f3f4;
+  --color-text-secondary: #818181;
   --color-text-tertiary: #f1f3f4;
 }
 
@@ -94,8 +98,12 @@ a:hover {
   --color-tertiary-border: #d6d6d6;
   --color-tertiary-hover: #c4c4c4;
   
+  --color-quaternary: #ff822a;
+  --color-quaternary-border: #d6d6d6;
+  --color-quaternary-hover: #c4c4c4;
+
   --color-text-primary: #000;
-  --color-text-secondary: #D2001A;
+  --color-text-secondary: #64CCDA;
   --color-text-tertiary: #f1f3f4;
 }
 

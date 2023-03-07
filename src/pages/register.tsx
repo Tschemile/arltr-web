@@ -12,6 +12,7 @@ import Select from '@/components/common/Select';
 import Envelope from '@/components/Icons/Envelope';
 import Lock from '@/components/Icons/Lock';
 import User from '@/components/Icons/User';
+import { Meta } from '@/layouts/Meta';
 import { register } from '@/redux/actions';
 import { getEmailRegister } from '@/redux/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -103,7 +104,14 @@ export default function Register() {
 
   const { errors = {}, submitCount = 0 } = formik;
   return (
-    <AuthLayout>
+    <AuthLayout
+      meta={
+        <Meta
+          title="Register | Roma"
+          description="Register | All road lead to Rome"
+        />
+      }
+    >
       <form onSubmit={formik.handleSubmit} className="">
         <div className="text-center">
           <h2 className="mb-2 text-3xl font-medium">Welcome to Roma</h2>

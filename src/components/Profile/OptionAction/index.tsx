@@ -85,7 +85,10 @@ function OptionAction(props: OptionProps) {
             },
           ]}
         >
-          <Button loading={loadingChangeRelation}>
+          <Button
+            loading={loadingChangeRelation}
+            className="!bg-quaternary-color"
+          >
             <Earth className="fill-sky-600" />
             Respond
           </Button>
@@ -93,7 +96,7 @@ function OptionAction(props: OptionProps) {
       );
     return makeFriend ? (
       <Button
-        className=" bg-gray-600"
+        className=" !bg-quaternary-color"
         loading={loadingChangeRelation}
         onSubmit={() => {
           dispatch(
@@ -113,7 +116,7 @@ function OptionAction(props: OptionProps) {
       </Button>
     ) : (
       <Button
-        className=" bg-gray-600"
+        className=" !bg-quaternary-color"
         loading={loadingChangeRelation}
         onSubmit={() => {
           dispatch(
@@ -161,14 +164,14 @@ function OptionAction(props: OptionProps) {
             <PlusIcon /> Add your story
           </Button>
           <div className="ml-1">
-            <Button className="bg-gray-400">
+            <Button className="!bg-quaternary-color">
               <BulletList />
             </Button>
           </div>
         </div>
       ) : (
         <div className="flex items-center space-x-1 text-sm">
-          <Button className="bg-gray-600">
+          <Button className="!bg-quaternary-color">
             <Message />
             Chat
           </Button>
@@ -185,13 +188,14 @@ function OptionAction(props: OptionProps) {
                 );
                 setFollowing(false);
               }}
+              className="!bg-quaternary-color"
             >
               <Heart />
               Follow
             </Button>
           ) : (
             <Button
-              className="text-pink-200"
+              className="!text-pink-200"
               loading={loadingChangeRelation}
               onSubmit={() => {
                 dispatch(
@@ -214,7 +218,7 @@ function OptionAction(props: OptionProps) {
       )}
       <div className="group flex flex-col">
         <div className="ml-1">
-          <Button className="bg-gray-400">
+          <Button className="!bg-quaternary-color">
             <EllipsisHorizon />
           </Button>
         </div>

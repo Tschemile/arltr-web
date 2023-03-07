@@ -8,6 +8,7 @@ import Polygon2 from '@/assets/Polygon2.svg';
 
 interface AuthLayoutProps {
   children: ReactNode;
+  meta: ReactNode;
 }
 
 export default function AuthLayout(props: AuthLayoutProps) {
@@ -20,6 +21,7 @@ export default function AuthLayout(props: AuthLayoutProps) {
 
   return (
     <div className="relative flex h-[100vh] w-full items-center justify-center bg-primary-color shadow-2xl">
+      {props.meta}
       <div className="z-10 w-full overflow-hidden rounded-lg border border-solid shadow-lg sm:w-[65%] lg:h-[80vh]">
         <div className="lg:flex lg:h-full lg:items-center lg:justify-center">
           <div className=" hidden h-full w-full flex-col justify-between bg-secondary-color py-4 px-12 text-white lg:flex">

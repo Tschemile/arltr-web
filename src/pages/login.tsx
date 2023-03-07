@@ -7,6 +7,7 @@ import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import Lock from '@/components/Icons/Lock';
 import User from '@/components/Icons/User';
+import { Meta } from '@/layouts/Meta';
 import { login } from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import AuthLayout from '@/templates/AuthLayout';
@@ -53,7 +54,9 @@ export default function Login() {
   }, []);
 
   return (
-    <AuthLayout>
+    <AuthLayout
+      meta={<Meta title="Roma" description="All road lead to Rome" />}
+    >
       <form onSubmit={handleSubmit} className="">
         <div className="my-12 text-center lg:my-24">
           <h2 className="mb-2 text-3xl font-medium">Welcome to Roma</h2>

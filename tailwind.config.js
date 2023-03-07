@@ -57,6 +57,12 @@ module.exports = {
           border: 'var(--color-tertiary-border)',
           hover: 'var(--color-tertiary-hover)',
         },
+        // Random
+        quaternary: {
+          color: 'var(--color-quaternary)',
+          border: 'var(--color-quaternary-border)',
+          hover: 'var(--color-quaternary-hover)',
+        },
       },
       textColor: {
         primary: 'var(--color-text-primary)',

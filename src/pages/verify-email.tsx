@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import Button from '@/components/common/Button';
 import OTPInput from '@/components/common/OPTInput';
+import { Meta } from '@/layouts/Meta';
 import { resendOTPCode, verifyOTPCode } from '@/redux/actions';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import AuthLayout from '@/templates/AuthLayout';
@@ -29,7 +30,9 @@ export default function VerifyEmail() {
   }, []);
 
   return (
-    <AuthLayout>
+    <AuthLayout
+      meta={<Meta title="Verify | Roma" description="Verify | Roma" />}
+    >
       <form onSubmit={(e) => handleSubmit(e)} className="">
         <div className="my-12 px-4 text-center lg:my-24 xl:px-12">
           <h2 className="mb-2 text-3xl font-medium">Welcome to Roma</h2>

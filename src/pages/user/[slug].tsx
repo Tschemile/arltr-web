@@ -197,7 +197,7 @@ const User = () => {
       <div
         className="w-full"
         style={{
-          backgroundImage: `linear-gradient(to top, white , ${backGround})`,
+          backgroundImage: `linear-gradient(to top, var(--color-primary) , ${backGround})`,
         }}
       >
         {(loadingListRelation && !isCurrentUser) ||
@@ -252,7 +252,9 @@ const User = () => {
                 )}
               </div>
               <div className="">
-                <h1 className="text-xl font-medium sm:text-2xl">{name}</h1>
+                <h1 className="text-xl font-medium text-primary sm:text-2xl">
+                  {name}
+                </h1>
                 <div className="text-sm">
                   {isEditIntro ? (
                     <form
